@@ -17,15 +17,16 @@ namespace TerminalMasterWPF.ViewModel
           
         }
 
-        public ObservableCollection<Cartridge> _cartridges = new ObservableCollection<Cartridge>();
-        public ObservableCollection<CashRegister> _cashRegister = new ObservableCollection<CashRegister>();
-        public ObservableCollection<PhoneBook> _phoneBook = new ObservableCollection<PhoneBook>();
-        public ObservableCollection<Printer> _printer = new ObservableCollection<Printer>();
-        public ObservableCollection<SimCard> _simCard = new ObservableCollection<SimCard>();
-        public ObservableCollection<Holder> _holder = new ObservableCollection<Holder>();
-        public ObservableCollection<User> _user = new ObservableCollection<User>();
-        public ObservableCollection<IndividualEntrepreneur> _individual = new ObservableCollection<IndividualEntrepreneur>();
-        public ObservableCollection<Waybill> _waybill = new ObservableCollection<Waybill>();
+        private ObservableCollection<Cartridge> _cartridges = new ObservableCollection<Cartridge>();
+        private ObservableCollection<CashRegister> _cashRegister = new ObservableCollection<CashRegister>();
+        private ObservableCollection<PhoneBook> _phoneBook = new ObservableCollection<PhoneBook>();
+        private ObservableCollection<Printer> _printer = new ObservableCollection<Printer>();
+        private ObservableCollection<SimCard> _simCard = new ObservableCollection<SimCard>();
+        private ObservableCollection<Holder> _holder = new ObservableCollection<Holder>();
+        private ObservableCollection<User> _user = new ObservableCollection<User>();
+        private ObservableCollection<IndividualEntrepreneur> _individual = new ObservableCollection<IndividualEntrepreneur>();
+        private ObservableCollection<Waybill> _waybill = new ObservableCollection<Waybill>();
+        private int _selectedXIndex;
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -118,5 +119,14 @@ namespace TerminalMasterWPF.ViewModel
             }
         }
 
+        public int SelectedXIndex
+        {
+            get => _selectedXIndex;
+            set
+            {
+                _selectedXIndex = value;
+                OnPropertyChanged("SelectedXIndex");
+            }
+        }
     }
 }

@@ -78,7 +78,6 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "UpdateTable");
             }
         }
-
         /// <summary>
         /// Event to Printer
         /// </summary>
@@ -146,25 +145,26 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void PrinterDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void PrinterDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void PrinterDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void PrinterDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
+        }
+        private void PrinterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = PrinterDataGrid.Items.IndexOf(PrinterDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
         }
         /// <summary>
         /// Event to Cartidge
@@ -211,27 +211,22 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void CartridgeDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void CartridgeDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void CartridgeDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void CartridgeDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
         }
-
         /// <summary>
         /// Event to CashRegister
         /// </summary>
@@ -340,22 +335,18 @@ namespace TerminalMasterWPF
         {
 
         }
-
         private void CashRegisterDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void CashRegisterDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void CashRegisterDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
         }
-
         /// <summary>
         /// Event to SimCard
         /// </summary>
@@ -430,22 +421,18 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void SimCardDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void SimCardDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void SimCardDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void SimCardDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
@@ -501,22 +488,18 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void PhoneBookDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void PhoneBookDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void PhoneBookDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void PhoneBookDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
@@ -569,22 +552,18 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void HolderDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void HolderDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void HolderDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void HolderDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
@@ -637,22 +616,18 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void UserDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void UserDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void UserDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void UserDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
@@ -708,22 +683,18 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void IndividualEntrepreneurDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void IndividualEntrepreneurDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void IndividualEntrepreneurDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void IndividualEntrepreneurDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
@@ -797,27 +768,22 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
             }
         }
-
         private void WaybillDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void WaybillDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
         }
-
         private void WaybillDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
 
         }
-
         private void WaybillDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
         }
-
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string tabItem = ((sender as TabControl).SelectedItem as TabItem).Header as string;
@@ -981,7 +947,6 @@ namespace TerminalMasterWPF
                 logFile.WriteLogAsync(ex.Message, "UpdateTable");
             }
         }
-
         /// <summary>
         /// Click Button Add, Edit, Update, Delete, Dowloand
         /// </summary>
@@ -997,15 +962,13 @@ namespace TerminalMasterWPF
                 switch (NameNavigationItem)
                 {
                     case "printer":
-                        PrinterWindows printer = new PrinterWindows();
+                        PrinterWindows printer = new PrinterWindows()
+                        {
+                            SelectData = "ADD"
+                        };
                         printer.ShowDialog();
-                        //PrinterContentDialog printer = new PrinterContentDialog
-                        //{
-                        //    SelectData = "ADD"
-                        //};
-                        //await printer.ShowAsync();
-                        //dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "cartrides":
                         //CartridgeContentDialog cartridge = new CartridgeContentDialog
@@ -1092,11 +1055,334 @@ namespace TerminalMasterWPF
             }
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private void CartridgeDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
         {
 
         }
 
+        private void CashRegisterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SimCardDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void PhoneBookDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void HolderDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void UserDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void IndividualEntrepreneurDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void WaybillDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SettingsDataBase_Click(object sender, RoutedEventArgs e)
+        {
+            ConnectWindows connectWindows = new ConnectWindows();
+            connectWindows.ShowDialog();
+        }
+
+        private void ConnectItem_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                triggerPropertyNameList = false;
+                triggerHeader = false;
+                switch (NameNavigationItem)
+                {
+                    case "printer":
+                        if (dataGets.SelectedXIndex >= 0)
+                        {
+                            PrinterWindows printer = new PrinterWindows
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.PrinterList[dataGets.SelectedXIndex].Id,
+                                SelectPrinter = dataGets.PrinterList
+                            };
+                            printer.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "cartrides":
+                        if (CartridgeDataGrid.SelectedIndex >= 0)
+                        {
+                            //CartridgeContentDialog cartridge = new CartridgeContentDialog
+                            //{
+                            //    SelectData = "GET",
+                            //    SelectIndex = MainDataGrid.SelectedIndex,
+                            //    SelectId = dataGets.CartridgesList[MainDataGrid.SelectedIndex].Id,
+                            //    SelectCartrides = dataGets.CartridgesList
+                            //};
+                            //await cartridge.ShowAsync();
+                            //if (CheckASCorDesc.Equals("Ascending"))
+                            //{
+                            //    dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                            //}
+                            //else if (CheckASCorDesc.Equals("Descending"))
+                            //{
+                            //    dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, "Descending", CheckTag);
+                            //}
+                            //else
+                            //{
+                            //    dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                            //}
+                            //UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "cashRegister":
+                        if (CashRegisterDataGrid.SelectedIndex >= 0)
+                        {
+                            //CashRegisterContentDialog cashRegister = new CashRegisterContentDialog
+                            //{
+                            //    SelectData = "GET",
+                            //    SelectIndex = MainDataGrid.SelectedIndex,
+                            //    SelectId = dataGets.CashRegisterList[MainDataGrid.SelectedIndex].Id,
+                            //    SelectCashRegister = dataGets.CashRegisterList
+                            //};
+                            //await cashRegister.ShowAsync();
+                            //if (CheckASCorDesc.Equals("Ascending"))
+                            //{
+                            //    dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                            //}
+                            //else if (CheckASCorDesc.Equals("Descending"))
+                            //{
+                            //    dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, "Descending", CheckTag);
+                            //}
+                            //else
+                            //{
+                            //    dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                            //}
+                            //UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "simCard":
+                        if (SimCardDataGrid.SelectedIndex >= 0)
+                        {
+                            //SimCardContentDialog simCard = new SimCardContentDialog
+                            //{
+                            //    SelectData = "GET",
+                            //    SelectIndex = MainDataGrid.SelectedIndex,
+                            //    SelectId = dataGets.SimCardList[MainDataGrid.SelectedIndex].Id,
+                            //    SelectSimCard = dataGets.SimCardList
+                            //};
+                            //await simCard.ShowAsync();
+                            //if (CheckASCorDesc.Equals("Ascending"))
+                            //{
+                            //    dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                            //}
+                            //else if (CheckASCorDesc.Equals("Descending"))
+                            //{
+                            //    dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, "Descending", CheckTag);
+                            //}
+                            //else
+                            //{
+                            //    dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                            //}
+                            //UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "phoneBook":
+                        if (PhoneBookDataGrid.SelectedIndex >= 0)
+                        {
+                            //PhoneBookContentDialog phoneBook = new PhoneBookContentDialog
+                            //{
+                            //    SelectData = "GET",
+                            //    SelectIndex = MainDataGrid.SelectedIndex,
+                            //    SelectId = dataGets.PhoneBookList[MainDataGrid.SelectedIndex].Id,
+                            //    SelectPhoneBook = dataGets.PhoneBookList
+                            //};
+                            //await phoneBook.ShowAsync();
+                            //if (CheckASCorDesc.Equals("Ascending"))
+                            //{
+                            //    dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                            //}
+                            //else if (CheckASCorDesc.Equals("Descending"))
+                            //{
+                            //    dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, "Descending", CheckTag);
+                            //}
+                            //else
+                            //{
+                            //    dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                            //}
+                            //UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "holder":
+                        if (HolderDataGrid.SelectedIndex >= 0)
+                        {
+                            //PeopleContentDialog holder = new PeopleContentDialog
+                            //{
+                            //    SelectData = "GET",
+                            //    SelectIndex = MainDataGrid.SelectedIndex,
+                            //    SelectId = dataGets.HolderList[MainDataGrid.SelectedIndex].Id,
+                            //    SelectHolder = dataGets.HolderList,
+                            //    People = NameNavigationItem
+                            //};
+                            //await holder.ShowAsync();
+                            //if (CheckASCorDesc.Equals("Ascending"))
+                            //{
+                            //    dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                            //}
+                            //else if (CheckASCorDesc.Equals("Descending"))
+                            //{
+                            //    dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, "Descending", CheckTag);
+                            //}
+                            //else
+                            //{
+                            //    dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                            //}
+                            //UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "user":
+                        if (UserDataGrid.SelectedIndex >= 0)
+                        {
+                            //PeopleContentDialog user = new PeopleContentDialog
+                            //{
+                            //    SelectData = "GET",
+                            //    SelectIndex = MainDataGrid.SelectedIndex,
+                            //    SelectId = dataGets.UserList[MainDataGrid.SelectedIndex].Id,
+                            //    SelectUser = dataGets.UserList,
+                            //    People = NameNavigationItem
+                            //};
+                            //await user.ShowAsync();
+                            //if (CheckASCorDesc.Equals("Ascending"))
+                            //{
+                            //    dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                            //}
+                            //else if (CheckASCorDesc.Equals("Descending"))
+                            //{
+                            //    dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, "Descending", CheckTag);
+                            //}
+                            //else
+                            //{
+                            //    dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                            //}
+                            //UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "ie":
+                        if (IndividualEntrepreneurDataGrid.SelectedIndex >= 0)
+                        {
+                        //    indContentDialog individual = new indContentDialog
+                        //    {
+                        //        SelectData = "GET",
+                        //        SelectIndex = MainDataGrid.SelectedIndex,
+                        //        SelectId = dataGets.IndividualEntrepreneurList[MainDataGrid.SelectedIndex].Id,
+                        //        SelectInd = dataGets.IndividualEntrepreneurList,
+                        //        People = NameNavigationItem
+                        //    };
+                        //    await individual.ShowAsync();
+                        //    if (CheckASCorDesc.Equals("Ascending"))
+                        //    {
+                        //        dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                        //    }
+                        //    else if (CheckASCorDesc.Equals("Descending"))
+                        //    {
+                        //        dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, "Descending", CheckTag);
+                        //    }
+                        //    else
+                        //    {
+                        //        dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                        //    }
+                        //    UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    case "waybill":
+                        if (WaybillDataGrid.SelectedIndex >= 0)
+                        {
+                        //    WaybillContentDialog waybill = new WaybillContentDialog
+                        //    {
+                        //        SelectData = "GET",
+                        //        SelectIndex = MainDataGrid.SelectedIndex,
+                        //        SelectId = dataGets.WaybillList[MainDataGrid.SelectedIndex].Id,
+                        //        SelectWaybill = dataGets.WaybillList
+                        //    };
+                        //    await waybill.ShowAsync();
+                        //    if (CheckASCorDesc.Equals("Ascending"))
+                        //    {
+                        //        dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, "Ascending", CheckTag);
+                        //    }
+                        //    else if (CheckASCorDesc.Equals("Descending"))
+                        //    {
+                        //        dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, "Descending", CheckTag);
+                        //    }
+                        //    else
+                        //    {
+                        //        dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                        //    }
+                        //    UpdateTable(NameNavigationItem);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                logFile.WriteLogAsync(ex.Message, "AppBarButtonEdit_Tapped");
+            }
+        }
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1105,63 +1391,72 @@ namespace TerminalMasterWPF
                 triggerPropertyNameList = false;
                 triggerHeader = false;
 
-                if (MessageBox.Show("Вы точно хотите удалить этот элемент.", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if(dataGets.SelectedXIndex >= 0)
                 {
-                    switch (NameNavigationItem)
+                    if (MessageBox.Show("Вы точно хотите удалить этот элемент.", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        case "printer":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PrinterList[PrinterDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "cartrides":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CartridgesList[CartridgeDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "cashRegister":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CashRegisterList[CashRegisterDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "simCard":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SimCardList[SimCardDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "phoneBook":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PhoneBookList[PhoneBookDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "holder":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.HolderList[HolderDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "user":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.UserList[UserDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "ie":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.IndividualEntrepreneurList[IndividualEntrepreneurDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "waybill":
-                            Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].Id, NameNavigationItem);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        default:
-                            break;
+                        switch (NameNavigationItem)
+                        {
+                            case "printer":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PrinterList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "cartrides":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CartridgesList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "cashRegister":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CashRegisterList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "simCard":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SimCardList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "phoneBook":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PhoneBookList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "holder":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.HolderList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "user":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.UserList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "ie":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.IndividualEntrepreneurList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            case "waybill":
+                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].Id, NameNavigationItem);
+                                dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                                UpdateTable(NameNavigationItem);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
                 else
                 {
-                   
+                    MessageBox.Show("Выберите строку для удаления", "Удаление", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-
-                //MessageBox.Show("Выберите строку для удаления", "Удаление", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
                 logFile.WriteLogAsync(ex.Message, "AppBarButtonDelete_Tapped");
             }
         }
-
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1172,30 +1467,39 @@ namespace TerminalMasterWPF
                 {
                     case "printer":
                         dataGets.PrinterList= Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "cartrides":
                         dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "cashRegister":
                         dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "simCard":
                         dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "phoneBook":
                         dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "holder":
                         dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "user":
                         dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "ie":
                         dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "waybill":
                         dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     default:
                         break;
@@ -1206,7 +1510,6 @@ namespace TerminalMasterWPF
                logFile.WriteLogAsync(ex.Message, "AppBarButtonUpdate_Tapped");
             }
         }
-
         private void DowloandButton_Click(object sender, RoutedEventArgs e)
         {
             try

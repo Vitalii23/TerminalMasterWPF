@@ -1,4 +1,4 @@
-﻿<Window x:Class="TerminalMasterWPF.ElementContentDialog.PrinterWindows"
+﻿<Window x:Class="TerminalMasterWPF.ElementContentDialog.CashRegisterWindows"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStyle="None"
-        Title="Принтеры" Height="700" Width="250">
-    <Grid x:Name="PrinterGrid" Height="Auto" Width="Auto">
+        Title="ККМ" Height="780" Width="250">
+    <Grid x:Name="CashRegisterGrid" Height="Auto" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="525*"/>
             <RowDefinition Height="60*"/>
@@ -28,7 +28,7 @@
                 </Style>
                 <Style TargetType="ComboBox">
                     <Setter Property="Margin" Value="0,0,0,5"/>
-                    <Setter Property="Padding" Value="5,0,0,0"/>
+                    <Setter Property="Padding" Value="5,5,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -51,24 +51,28 @@
                     <Setter Property="BorderThickness" Value="2,2,2,2"/>
                 </Style>
             </StackPanel.Resources>
-            <TextBlock x:Name="BrandTextBlock" Text="Бренд"/>
-            <TextBox x:Name="BrandTextBox"/>
-            <TextBlock x:Name="ModelTextBlock" Text="Модель"/>
-            <TextBox x:Name="ModelTextBox"/>
-            <TextBlock x:Name="CartridgeTextBlock" Text="Картридж"/>
-            <TextBox x:Name="CartridgeTextBox"/>
-            <TextBlock x:Name="NamePortTextBlock" Text="Имя порта"/>
-            <TextBox x:Name="NamePortTextBox"/>
-            <TextBlock x:Name="LocationTextBlock" Text="Место расположения"/>
+            <TextBlock x:Name="NameTextBlock" Text="ККМ"/>
+            <TextBox x:Name="NameTextBox"/>
+            <TextBlock x:Name="BrandTextBlock" Text="Бренд устройства"/>
+            <ComboBox x:Name="BrandComboBox"/>
+            <TextBlock x:Name="FactoryNumberTextBlock" Text="Заводской номер"/>
+            <TextBox x:Name="FactoryNumberTextBox"/>
+            <TextBlock x:Name="SerialNumberTextBlock" Text="Серийный номер"/>
+            <TextBox x:Name="SerialNumberTextBox"/>
+            <TextBlock x:Name="PaymentNumberTextBlock" Text="Номер счета"/>
+            <TextBox x:Name="PaymentNumberTextBox"/>
+            <TextBlock x:Name="HolderTextBlock" Text="Владелец"/>
+            <ComboBox x:Name="HolderComboBox" IsTextSearchEnabled="False" IsEditable="True"/>
+            <TextBlock x:Name="UserTextBlock" Text="Пользователь"/>
+            <ComboBox x:Name="UserComboBox" IsTextSearchEnabled="False" IsEditable="True"/>
+            <TextBlock x:Name="DateReceptioTextBlock" Text="Дата получения"/>
+            <DatePicker x:Name="DateReceptionDatePicker"/>
+            <TextBlock x:Name="DateEndFiscalMemoryTextBlock" Text="Дата активация ОФД"/>
+            <DatePicker x:Name="DateEndFiscalMemoryDatePicker"/>
+            <TextBlock x:Name="DateKeyActivationFiscalDataOperatorTextBlock" Text="Дата окончания ФН"/>
+            <DatePicker x:Name="DateKeyActivationFiscalDataOperatorDatePicker"/>
+            <TextBlock x:Name="LocationTextBlock" Text="Место нахождения"/>
             <TextBox x:Name="LocationTextBox"/>
-            <TextBlock x:Name="StatusTextBlock" Text="Статус"/>
-            <ComboBox x:Name="StatusComboBox"/>
-            <TextBlock x:Name="VendorCodeTextBlock" Text="Артикули"/>
-            <TextBox x:Name="VendorCodeTextBox"/>
-            <TextBlock x:Name="PaperTextBlock" Text="Распеч.страниц"/>
-            <TextBox x:Name="PaperTextBox"/>
-            <TextBlock x:Name="DateTextBlock" Text="Дата"/>
-            <DatePicker x:Name="DatePrinterDatePicker"/>
         </StackPanel>
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Grid.Row="1">
             <StackPanel.Resources>

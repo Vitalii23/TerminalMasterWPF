@@ -9,33 +9,22 @@ namespace TerminalMasterWPF.Settings
 {
     class ConnectSQL
     {
-        public void ConnectWrite(string connect)
-        {
-            //ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            //localSettings.Values["setting connect"] = "a device specific setting";
-
-            //ApplicationDataCompositeValue composite = new ApplicationDataCompositeValue();
-            //composite["connectionString"] = connect;
-            //localSettings.Values["Connect"] = composite;
-        }
-
         public void ConnectRead()
         {
-            (App.Current as App).ConnectionString = bulder.ConnectionString;
+            SqlConnectionStringBuilder bulder = new SqlConnectionStringBuilder
+            {
+                DataSource = SettingsUser.Default.DataSource,
+                InitialCatalog = SettingsUser.Default.InitialCatalog,
+                UserID = SettingsUser.Default.UserID,
+                Password = SettingsUser.Default.Password,
+                IntegratedSecurity = SettingsUser.Default.IntegratedSecurity,
+                ConnectTimeout = SettingsUser.Default.ConnectTimeout,
+                Encrypt = SettingsUser.Default.Encrypt,
+                TrustServerCertificate = SettingsUser.Default.TrustServerCertificate,
+                ApplicationIntent = ApplicationIntent.ReadWrite,
+                MultiSubnetFailover = SettingsUser.Default.MultiSubnetFailover
+            };
+           (App.Current as App).ConnectionString = bulder.ConnectionString;
         }
-
-        SqlConnectionStringBuilder bulder = new SqlConnectionStringBuilder
-        {
-            DataSource = @"tcp:192.168.0.223\SQL223",
-            InitialCatalog = @"TerminalMasterDB",
-            UserID = @"DVA",
-            Password = @"Kolizey$",
-            IntegratedSecurity = false,
-            ConnectTimeout = 30,
-            Encrypt = false,
-            TrustServerCertificate = false,
-            ApplicationIntent = ApplicationIntent.ReadWrite,
-            MultiSubnetFailover = false
-        };
     }
 }

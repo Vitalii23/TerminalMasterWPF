@@ -15,9 +15,27 @@
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="1035"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="1080*"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="MainStackPanel" Orientation="Horizontal">
+
+        <DockPanel>
+            <Menu DockPanel.Dock="Top" MinHeight="25">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Сохранить"/>
+                    <MenuItem Header="Сохранить Как"/>
+                    <Separator/>
+                    <MenuItem Header="Выход"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Настройка">
+                    <MenuItem x:Name="SettingsDataBase" Header="Настройка подключение базы данных" Click="SettingsDataBase_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="ConnectItem" Header="Подкдючено" Checked="ConnectItem_Checked"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <StackPanel x:Name="MainStackPanel" Grid.Row="1" Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="10,10,0,10"/>
@@ -43,178 +61,112 @@
             <Button x:Name="UpdateButton" Click="UpdateButton_Click">Обновить</Button>
             <Button x:Name="DowloandButton" Click="DowloandButton_Click">Скачать</Button>
         </StackPanel>
-        <TabControl x:Name="MainTabControl" Grid.Row="2" SelectionChanged="MainTabControl_SelectionChanged">
-            <TabItem x:Name="PrinterTabItem" Header="Принтеры" Background="#FFE5E5E5">
-                <DataGrid x:Name="PrinterDataGrid" 
+
+        <Grid Grid.Row="2">
+            <Grid.Resources>
+                <Style TargetType="DataGrid">
+                    <Setter Property="CanUserSortColumns" Value="True"/>
+                    <Setter Property="CanUserReorderColumns" Value="True"/>
+                    <Setter Property="CanUserResizeColumns" Value="True"/>
+                    <Setter Property="ColumnWidth" Value="*"/>
+                    <Setter Property="IsSynchronizedWithCurrentItem" Value="True"/>
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="Height" Value="Auto"/>
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+                    <Setter Property="SelectionUnit" Value="Cell"/>
+                    <Setter Property="SelectionMode" Value="Extended"/>
+                    <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
+                    <Setter Property="SelectedIndex" Value="{Binding SelectedXIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </Style>
+            </Grid.Resources>
+            <TabControl x:Name="MainTabControl"  SelectionChanged="MainTabControl_SelectionChanged">
+                <TabItem x:Name="PrinterTabItem" Header="Принтеры" Background="#FFE5E5E5">
+                    <DataGrid x:Name="PrinterDataGrid" 
                                   AutoGeneratingColumn="PrinterDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="PrinterDataGrid_BeginningEdit"
                                   CellEditEnding="PrinterDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="PrinterDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="PrinterDataGrid_Sorting"
-                                  ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
-                <DataGrid x:Name="CartridgeDataGrid" 
+                                  MouseUp="PrinterDataGrid_MouseUp"/>
+
+                </TabItem>
+                <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
+                    <DataGrid x:Name="CartridgeDataGrid" 
                                   AutoGeneratingColumn="CartridgeDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="CartridgeDataGrid_BeginningEdit"
                                   CellEditEnding="CartridgeDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="CartridgeDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="CartridgeDataGrid_Sorting"
-                                  ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="CashRegisterTabItem" Header="Контрольная-кассовая машина (ККМ)" Background="#FFE5E5E5">
-                <DataGrid x:Name="CashRegisterDataGrid" 
+                                  MouseUp="CartridgeDataGrid_MouseUp"/>
+
+                </TabItem>
+                <TabItem x:Name="CashRegisterTabItem" Header="Контрольная-кассовая машина (ККМ)" Background="#FFE5E5E5">
+                    <DataGrid x:Name="CashRegisterDataGrid" 
                                   AutoGeneratingColumn="CashRegisterDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="CashRegisterDataGrid_BeginningEdit"
                                   CellEditEnding="CashRegisterDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding CashRegisterList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="CashRegisterDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="CashRegisterDataGrid_Sorting"
-                                  ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="SimCardTabItem" Header="Sim-карты" Background="#FFE5E5E5">
-                <DataGrid x:Name="SimCardDataGrid" 
+                                  MouseUp="CashRegisterDataGrid_MouseUp"/>
+
+                </TabItem>
+                <TabItem x:Name="SimCardTabItem" Header="Sim-карты" Background="#FFE5E5E5">
+                    <DataGrid x:Name="SimCardDataGrid" 
                                   AutoGeneratingColumn="SimCardDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="SimCardDataGrid_BeginningEdit"
                                   CellEditEnding="SimCardDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="SimCardDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="SimCardDataGrid_Sorting"
-                                  ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="PhoneBookTabItem" Header="Телефоны сотрудников" Background="#FFE5E5E5">
-                <DataGrid x:Name="PhoneBookDataGrid" 
+                                  MouseUp="SimCardDataGrid_MouseUp"/>
+                </TabItem>
+                <TabItem x:Name="PhoneBookTabItem" Header="Телефоны сотрудников" Background="#FFE5E5E5">
+                    <DataGrid x:Name="PhoneBookDataGrid" 
                                   AutoGeneratingColumn="PhoneBookDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="PhoneBookDataGrid_BeginningEdit"
                                   CellEditEnding="PhoneBookDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="PhoneBookDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="PhoneBookDataGrid_Sorting"
-                                  ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="HolderTabItem" Header="Владельцы" Background="#FFE5E5E5">
-                <DataGrid x:Name="HolderDataGrid" 
+                                  MouseUp="PhoneBookDataGrid_MouseUp"/>
+                </TabItem>
+                <TabItem x:Name="HolderTabItem" Header="Владельцы" Background="#FFE5E5E5">
+                    <DataGrid x:Name="HolderDataGrid" 
                                   AutoGeneratingColumn="HolderDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="HolderDataGrid_BeginningEdit"
                                   CellEditEnding="HolderDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="HolderDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="HolderDataGrid_Sorting"
-                                  ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="UserTabItem" Header="Пользователи" Background="#FFE5E5E5">
-                <DataGrid x:Name="UserDataGrid" 
+                                  MouseUp="HolderDataGrid_MouseUp"/>
+                </TabItem>
+                <TabItem x:Name="UserTabItem" Header="Пользователи" Background="#FFE5E5E5">
+                    <DataGrid x:Name="UserDataGrid" 
                                   AutoGeneratingColumn="UserDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="UserDataGrid_BeginningEdit"
                                   CellEditEnding="UserDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="UserDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="UserDataGrid_Sorting"
-                                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="IndividualEntrepreneurTabItem" Header="Индивидуальные предприниматели" Background="#FFE5E5E5">
-                <DataGrid x:Name="IndividualEntrepreneurDataGrid" 
+                                  MouseUp="UserDataGrid_MouseUp"/>
+                </TabItem>
+                <TabItem x:Name="IndividualEntrepreneurTabItem" Header="Индивидуальные предприниматели" Background="#FFE5E5E5">
+                    <DataGrid x:Name="IndividualEntrepreneurDataGrid" 
                                   AutoGeneratingColumn="IndividualEntrepreneurDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="IndividualEntrepreneurDataGrid_BeginningEdit"
                                   CellEditEnding="IndividualEntrepreneurDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="IndividualEntrepreneurDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="IndividualEntrepreneurDataGrid_Sorting"
-                                  ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-            <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
-                <DataGrid x:Name="WaybillDataGrid" 
+                                  MouseUp="IndividualEntrepreneurDataGrid_MouseUp"/>
+                </TabItem>
+                <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
+                    <DataGrid x:Name="WaybillDataGrid" 
                                   AutoGeneratingColumn="WaybillDataGrid_AutoGeneratingColumn"
-                                  CanUserSortColumns="True"
                                   BeginningEdit="WaybillDataGrid_BeginningEdit"
                                   CellEditEnding="WaybillDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="WaybillDataGrid_RowEditEnding"
-                                  ColumnWidth="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.CanContentScroll="True"
-                                  CanUserReorderColumns="True" 
-                                  CanUserResizeColumns="True"
-                                  Margin="0,0,0,0"
-                                  IsReadOnly="True" 
-                                  Sorting="WaybillDataGrid_Sorting"
-                                  ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}">
-                </DataGrid>
-            </TabItem>
-        </TabControl>
+                                  MouseUp="WaybillDataGrid_MouseUp"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>

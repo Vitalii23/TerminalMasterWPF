@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using TerminalMasterWPF.Logging;
 
 namespace TerminalMasterWPF.ViewModel
@@ -61,11 +62,10 @@ namespace TerminalMasterWPF.ViewModel
                             "', cartridge = '" + element[2] +
                             "', name_port = '" + element[3] +
                             "', location = '" + element[4] +
-                            "', operation_system = '" + element[5] +
-                            "', status = '" + element[6] +
-                           "', vendor_code = '" + element[7] +
-                           "', counters = '" + element[8] +
-                           "', date = '" + element[9] +
+                            "', status = '" + element[5] +
+                           "', vendor_code = '" + element[6] +
+                           "', counters = '" + element[7] +
+                           "', date = '" + element[8] +
                            "' WHERE id = " + id;
                         break;
                     default:
@@ -85,6 +85,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             catch (Exception eSql)
             {
+                Debug.WriteLine("Error: " + eSql.Message);
                 await logFile.WriteLogAsync(eSql.Message, items + "_UpdateDataElement");
             }
 
