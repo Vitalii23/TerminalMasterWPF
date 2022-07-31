@@ -53,17 +53,17 @@
                 </Style>
             </StackPanel.Resources>
             <TextBlock x:Name="LastNameTextBlock" Text="Фамилия"/>
-            <TextBox x:Name="LastNameTextBox"/>
+            <TextBox x:Name="LastNameTextBox" TextChanged="LastNameTextBox_TextChanged"/>
             <TextBlock x:Name="FirstNameTextBlock" Text="Имя"/>
-            <TextBox x:Name="FirstNameTextBox"/>
+            <TextBox x:Name="FirstNameTextBox" TextChanged="FirstNameTextBox_TextChanged"/>
             <TextBlock x:Name="MiddleNameTextBlock" Text="Отчество"/>
-            <TextBox x:Name="MiddleNameTextBox"/>
+            <TextBox x:Name="MiddleNameTextBox" TextChanged="MiddleNameTextBox_TextChanged"/>
             <TextBlock x:Name="PostTextBlock" Text="Должность"/>
-            <TextBox x:Name="PostTextBox"/>
+            <TextBox x:Name="PostTextBox" TextChanged="PostTextBox_TextChanged"/>
             <TextBlock x:Name="LocationNumberTextBlock" Text="Внутренний номер"/>
             <TextBox x:Name="LocationNumberTextBox" MaxLength="3"/>
             <TextBlock x:Name="MobileNumberTextBlock" Text="Мобильный номер"/>
-            <xctk:MaskedTextBox x:Name="MobileNumberTextBox" Mask="8-999-999-99-99"/>
+            <xctk:MaskedTextBox x:Name="MobileNumberMaskedTextBox" Mask="8-999-999-99-99"/>
         </StackPanel>
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Grid.Row="1">
             <StackPanel.Resources>

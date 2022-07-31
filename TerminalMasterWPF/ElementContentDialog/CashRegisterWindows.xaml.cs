@@ -30,6 +30,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         public CashRegisterWindows()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             holders = get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
             users = get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
 

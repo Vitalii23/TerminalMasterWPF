@@ -27,6 +27,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         public CartridgeWindow()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             string[] brand = { "Kyocera", "Sakura", "HP LaserJat", "NetProduct" };
             AddComboxItem(brand, BrandComboBox);

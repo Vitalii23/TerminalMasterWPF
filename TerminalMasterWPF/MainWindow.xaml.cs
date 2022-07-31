@@ -227,6 +227,11 @@ namespace TerminalMasterWPF
         {
 
         }
+        private void CartridgeDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = CartridgeDataGrid.Items.IndexOf(CartridgeDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
+        }
         /// <summary>
         /// Event to CashRegister
         /// </summary>
@@ -347,6 +352,11 @@ namespace TerminalMasterWPF
         {
 
         }
+        private void CashRegisterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = CashRegisterDataGrid.Items.IndexOf(CashRegisterDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
+        }
         /// <summary>
         /// Event to SimCard
         /// </summary>
@@ -437,6 +447,11 @@ namespace TerminalMasterWPF
         {
 
         }
+        private void SimCardDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = SimCardDataGrid.Items.IndexOf(SimCardDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
+        }
         /// <summary>
         /// Event to PhoneBook
         /// </summary>
@@ -504,6 +519,11 @@ namespace TerminalMasterWPF
         {
 
         }
+        private void PhoneBookDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = PhoneBookDataGrid.Items.IndexOf(PhoneBookDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
+        }
         /// <summary>
         /// Event to Holder
         /// </summary>
@@ -568,6 +588,11 @@ namespace TerminalMasterWPF
         {
 
         }
+        private void HolderDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = HolderDataGrid.Items.IndexOf(HolderDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
+        }
         /// <summary>
         /// Event to User
         /// </summary>
@@ -631,6 +656,11 @@ namespace TerminalMasterWPF
         private void UserDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
+        }
+        private void UserDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = UserDataGrid.Items.IndexOf(UserDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
         }
         /// <summary>
         /// Event to Individual Entrepreneur
@@ -698,6 +728,11 @@ namespace TerminalMasterWPF
         private void IndividualEntrepreneurDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
+        }
+        private void IndividualEntrepreneurDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = IndividualEntrepreneurDataGrid.Items.IndexOf(IndividualEntrepreneurDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
         }
         /// <summary>
         /// Event to Waybill
@@ -783,6 +818,11 @@ namespace TerminalMasterWPF
         private void WaybillDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
 
+        }
+        private void WaybillDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = WaybillDataGrid.Items.IndexOf(WaybillDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
         }
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -971,79 +1011,79 @@ namespace TerminalMasterWPF
                         UpdateTable(NameNavigationItem);
                         break;
                     case "cartrides":
-                        //CartridgeContentDialog cartridge = new CartridgeContentDialog
-                        //{
-                        //    SelectData = "ADD"
-                        //};
-                        //await cartridge.ShowAsync();
-                        //dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        CartridgeWindow cartridge = new CartridgeWindow
+                        {
+                            SelectData = "ADD"
+                        };
+                        cartridge.ShowDialog();
+                        dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "cashRegister":
-                        //CashRegisterContentDialog cashRegister = new CashRegisterContentDialog
-                        //{
-                        //    SelectData = "ADD"
-                        //};
-                        //await cashRegister.ShowAsync();
-                        //dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        CashRegisterWindows cashRegister = new CashRegisterWindows
+                        {
+                            SelectData = "ADD"
+                        };
+                        cashRegister.ShowDialog();
+                        dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "simCard":
-                        //SimCardContentDialog simCard = new SimCardContentDialog
-                        //{
-                        //    SelectData = "ADD"
-                        //};
-                        //await simCard.ShowAsync();
-                        //dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        SimCardWindows simCard = new SimCardWindows
+                        {
+                            SelectData = "ADD"
+                        };
+                        simCard.ShowDialog();
+                        dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "phoneBook":
-                        //PhoneBookContentDialog phoneBook = new PhoneBookContentDialog
-                        //{
-                        //    SelectData = "ADD"
-                        //};
-                        //await phoneBook.ShowAsync();
-                        //dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        PhoneBookWindows phoneBook = new PhoneBookWindows
+                        {
+                            SelectData = "ADD"
+                        };
+                        phoneBook.ShowDialog();
+                        dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "holder":
-                        //PeopleContentDialog holder = new PeopleContentDialog
-                        //{
-                        //    SelectData = "ADD",
-                        //    People = NameNavigationItem
-                        //};
-                        //await holder.ShowAsync();
-                        //dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        PeopleWindow holder = new PeopleWindow
+                        {
+                            SelectData = "ADD",
+                            People = NameNavigationItem
+                        };
+                        holder.ShowDialog();
+                        dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "user":
-                        //PeopleContentDialog user = new PeopleContentDialog
-                        //{
-                        //    SelectData = "ADD",
-                        //    People = NameNavigationItem
-                        //};
-                        //await user.ShowAsync();
-                        //dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        PeopleWindow user = new PeopleWindow
+                        {
+                            SelectData = "ADD",
+                            People = NameNavigationItem
+                        };
+                        user.ShowDialog();
+                        dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "ie":
-                        //indContentDialog individual = new indContentDialog
-                        //{
-                        //    SelectData = "ADD",
-                        //    People = NameNavigationItem
-                        //};
-                        //await individual.ShowAsync();
-                        //dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        IndWindow individual = new IndWindow
+                        {
+                            SelectData = "ADD",
+                            People = NameNavigationItem
+                        };
+                        individual.ShowDialog();
+                        dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     case "waybill":
-                        //WaybillContentDialog waybill = new WaybillContentDialog
-                        //{
-                        //    SelectData = "ADD"
-                        //};
-                        //await waybill.ShowAsync();
-                        //dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                        //UpdateTable(NameNavigationItem);
+                        WaybillWindow waybill = new WaybillWindow
+                        {
+                            SelectData = "ADD"
+                        };
+                        waybill.ShowDialog();
+                        dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                        UpdateTable(NameNavigationItem);
                         break;
                     default:
                         break;
@@ -1053,46 +1093,6 @@ namespace TerminalMasterWPF
             {
                logFile.WriteLogAsync(ex.Message, "AppBarButtonAdd_Tapped");
             }
-        }
-
-        private void CartridgeDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void CashRegisterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void SimCardDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void PhoneBookDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void HolderDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void UserDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void IndividualEntrepreneurDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void WaybillDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
         }
 
         private void SettingsDataBase_Click(object sender, RoutedEventArgs e)
@@ -1132,29 +1132,16 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "cartrides":
-                        if (CartridgeDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                            //CartridgeContentDialog cartridge = new CartridgeContentDialog
-                            //{
-                            //    SelectData = "GET",
-                            //    SelectIndex = MainDataGrid.SelectedIndex,
-                            //    SelectId = dataGets.CartridgesList[MainDataGrid.SelectedIndex].Id,
-                            //    SelectCartrides = dataGets.CartridgesList
-                            //};
-                            //await cartridge.ShowAsync();
-                            //if (CheckASCorDesc.Equals("Ascending"))
-                            //{
-                            //    dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                            //}
-                            //else if (CheckASCorDesc.Equals("Descending"))
-                            //{
-                            //    dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, "Descending", CheckTag);
-                            //}
-                            //else
-                            //{
-                            //    dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                            //}
-                            //UpdateTable(NameNavigationItem);
+                            CartridgeWindow cartridge = new CartridgeWindow
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.CartridgesList[dataGets.SelectedXIndex].Id,
+                                SelectCartrides = dataGets.CartridgesList
+                            };
+                            cartridge.Show();
                         }
                         else
                         {
@@ -1162,29 +1149,16 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "cashRegister":
-                        if (CashRegisterDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                            //CashRegisterContentDialog cashRegister = new CashRegisterContentDialog
-                            //{
-                            //    SelectData = "GET",
-                            //    SelectIndex = MainDataGrid.SelectedIndex,
-                            //    SelectId = dataGets.CashRegisterList[MainDataGrid.SelectedIndex].Id,
-                            //    SelectCashRegister = dataGets.CashRegisterList
-                            //};
-                            //await cashRegister.ShowAsync();
-                            //if (CheckASCorDesc.Equals("Ascending"))
-                            //{
-                            //    dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                            //}
-                            //else if (CheckASCorDesc.Equals("Descending"))
-                            //{
-                            //    dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, "Descending", CheckTag);
-                            //}
-                            //else
-                            //{
-                            //    dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                            //}
-                            //UpdateTable(NameNavigationItem);
+                            CashRegisterWindows cashRegister = new CashRegisterWindows
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.CashRegisterList[dataGets.SelectedXIndex].Id,
+                                SelectCashRegister = dataGets.CashRegisterList
+                            };
+                            cashRegister.Show();
                         }
                         else
                         {
@@ -1192,29 +1166,16 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "simCard":
-                        if (SimCardDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                            //SimCardContentDialog simCard = new SimCardContentDialog
-                            //{
-                            //    SelectData = "GET",
-                            //    SelectIndex = MainDataGrid.SelectedIndex,
-                            //    SelectId = dataGets.SimCardList[MainDataGrid.SelectedIndex].Id,
-                            //    SelectSimCard = dataGets.SimCardList
-                            //};
-                            //await simCard.ShowAsync();
-                            //if (CheckASCorDesc.Equals("Ascending"))
-                            //{
-                            //    dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                            //}
-                            //else if (CheckASCorDesc.Equals("Descending"))
-                            //{
-                            //    dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, "Descending", CheckTag);
-                            //}
-                            //else
-                            //{
-                            //    dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                            //}
-                            //UpdateTable(NameNavigationItem);
+                            SimCardWindows simCard = new SimCardWindows
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.SimCardList[dataGets.SelectedXIndex].Id,
+                                SelectSimCard = dataGets.SimCardList
+                            };
+                            simCard.Show();
                         }
                         else
                         {
@@ -1222,29 +1183,16 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "phoneBook":
-                        if (PhoneBookDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                            //PhoneBookContentDialog phoneBook = new PhoneBookContentDialog
-                            //{
-                            //    SelectData = "GET",
-                            //    SelectIndex = MainDataGrid.SelectedIndex,
-                            //    SelectId = dataGets.PhoneBookList[MainDataGrid.SelectedIndex].Id,
-                            //    SelectPhoneBook = dataGets.PhoneBookList
-                            //};
-                            //await phoneBook.ShowAsync();
-                            //if (CheckASCorDesc.Equals("Ascending"))
-                            //{
-                            //    dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                            //}
-                            //else if (CheckASCorDesc.Equals("Descending"))
-                            //{
-                            //    dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, "Descending", CheckTag);
-                            //}
-                            //else
-                            //{
-                            //    dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                            //}
-                            //UpdateTable(NameNavigationItem);
+                            PhoneBookWindows phoneBook = new PhoneBookWindows
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.PhoneBookList[dataGets.SelectedXIndex].Id,
+                                SelectPhoneBook = dataGets.PhoneBookList
+                            };
+                            phoneBook.Show();
                         }
                         else
                         {
@@ -1252,30 +1200,17 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "holder":
-                        if (HolderDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                            //PeopleContentDialog holder = new PeopleContentDialog
-                            //{
-                            //    SelectData = "GET",
-                            //    SelectIndex = MainDataGrid.SelectedIndex,
-                            //    SelectId = dataGets.HolderList[MainDataGrid.SelectedIndex].Id,
-                            //    SelectHolder = dataGets.HolderList,
-                            //    People = NameNavigationItem
-                            //};
-                            //await holder.ShowAsync();
-                            //if (CheckASCorDesc.Equals("Ascending"))
-                            //{
-                            //    dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                            //}
-                            //else if (CheckASCorDesc.Equals("Descending"))
-                            //{
-                            //    dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, "Descending", CheckTag);
-                            //}
-                            //else
-                            //{
-                            //    dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                            //}
-                            //UpdateTable(NameNavigationItem);
+                            PeopleWindow holder = new PeopleWindow
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.HolderList[dataGets.SelectedXIndex].Id,
+                                SelectHolder = dataGets.HolderList,
+                                People = NameNavigationItem
+                            };
+                            holder.Show();
                         }
                         else
                         {
@@ -1283,30 +1218,17 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "user":
-                        if (UserDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                            //PeopleContentDialog user = new PeopleContentDialog
-                            //{
-                            //    SelectData = "GET",
-                            //    SelectIndex = MainDataGrid.SelectedIndex,
-                            //    SelectId = dataGets.UserList[MainDataGrid.SelectedIndex].Id,
-                            //    SelectUser = dataGets.UserList,
-                            //    People = NameNavigationItem
-                            //};
-                            //await user.ShowAsync();
-                            //if (CheckASCorDesc.Equals("Ascending"))
-                            //{
-                            //    dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                            //}
-                            //else if (CheckASCorDesc.Equals("Descending"))
-                            //{
-                            //    dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, "Descending", CheckTag);
-                            //}
-                            //else
-                            //{
-                            //    dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                            //}
-                            //UpdateTable(NameNavigationItem);
+                            PeopleWindow user = new PeopleWindow
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.UserList[dataGets.SelectedXIndex].Id,
+                                SelectUser = dataGets.UserList,
+                                People = NameNavigationItem
+                            };
+                            user.Show();
                         }
                         else
                         {
@@ -1314,30 +1236,17 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "ie":
-                        if (IndividualEntrepreneurDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                        //    indContentDialog individual = new indContentDialog
-                        //    {
-                        //        SelectData = "GET",
-                        //        SelectIndex = MainDataGrid.SelectedIndex,
-                        //        SelectId = dataGets.IndividualEntrepreneurList[MainDataGrid.SelectedIndex].Id,
-                        //        SelectInd = dataGets.IndividualEntrepreneurList,
-                        //        People = NameNavigationItem
-                        //    };
-                        //    await individual.ShowAsync();
-                        //    if (CheckASCorDesc.Equals("Ascending"))
-                        //    {
-                        //        dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                        //    }
-                        //    else if (CheckASCorDesc.Equals("Descending"))
-                        //    {
-                        //        dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, "Descending", CheckTag);
-                        //    }
-                        //    else
-                        //    {
-                        //        dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                        //    }
-                        //    UpdateTable(NameNavigationItem);
+                            IndWindow individual = new IndWindow
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.IndividualEntrepreneurList[dataGets.SelectedXIndex].Id,
+                                SelectInd = dataGets.IndividualEntrepreneurList,
+                                People = NameNavigationItem
+                            };
+                            individual.Show();
                         }
                         else
                         {
@@ -1345,29 +1254,16 @@ namespace TerminalMasterWPF
                         }
                         break;
                     case "waybill":
-                        if (WaybillDataGrid.SelectedIndex >= 0)
+                        if (dataGets.SelectedXIndex >= 0)
                         {
-                        //    WaybillContentDialog waybill = new WaybillContentDialog
-                        //    {
-                        //        SelectData = "GET",
-                        //        SelectIndex = MainDataGrid.SelectedIndex,
-                        //        SelectId = dataGets.WaybillList[MainDataGrid.SelectedIndex].Id,
-                        //        SelectWaybill = dataGets.WaybillList
-                        //    };
-                        //    await waybill.ShowAsync();
-                        //    if (CheckASCorDesc.Equals("Ascending"))
-                        //    {
-                        //        dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, "Ascending", CheckTag);
-                        //    }
-                        //    else if (CheckASCorDesc.Equals("Descending"))
-                        //    {
-                        //        dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, "Descending", CheckTag);
-                        //    }
-                        //    else
-                        //    {
-                        //        dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                        //    }
-                        //    UpdateTable(NameNavigationItem);
+                            WaybillWindow waybill = new WaybillWindow
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.WaybillList[dataGets.SelectedXIndex].Id,
+                                SelectWaybill = dataGets.WaybillList
+                            };
+                            waybill.Show();
                         }
                         else
                         {

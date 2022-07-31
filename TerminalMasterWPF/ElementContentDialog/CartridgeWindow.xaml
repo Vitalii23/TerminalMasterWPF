@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStyle="None"
-        Title="Картриджи" Height="320" Width="250">
+        Title="Владелец" Height="320" Width="250">
     <Grid x:Name="CartridgeGrid" Height="Auto" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="525*"/>

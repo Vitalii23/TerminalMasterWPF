@@ -1,4 +1,5 @@
-﻿<Window x:Class="TerminalMasterWPF.ElementContentDialog.SimCardWindows"
+﻿<Window x:Class="TerminalMasterWPF.ElementContentDialog.PeopleWindow"
+        x:Name="PeopleCD"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,8 +9,8 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStyle="None"
-        Title="Симкарты" Height="600" Width="250">
-    <Grid x:Name="SimCardGrid" Height="Auto" Width="Auto">
+        Title="" Height="370" Width="250">
+    <Grid x:Name="PeopleGrid" Height="Auto" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="525*"/>
             <RowDefinition Height="60*"/>
@@ -52,20 +53,14 @@
                     <Setter Property="BorderThickness" Value="2,2,2,2"/>
                 </Style>
             </StackPanel.Resources>
-            <TextBlock x:Name="NameCashRegisterTextBlock" Text="Имя терминала"/>
-            <ComboBox x:Name="NameCashRegisterComboBox"/>
-            <TextBlock x:Name="OperatorTextBlock" Text="Операторы связи"/>
-            <ComboBox x:Name="OperatorComboBox" FontWeight="SemiBold"/>
-            <TextBlock x:Name="IdentNumberTextBlock" Text="Индентификационный номер (ИН)"/>
-            <TextBox x:Name="IdentNumberTextBox" MaxLength="15"/>
-            <TextBlock x:Name="TypeDeviceTextBlock" Text="Тип устройства"/>
-            <ComboBox x:Name="TypeDeviceComboBox"/>
-            <TextBlock x:Name="TmsTextBlock" Text="Номер телефона (TMS)"/>
-            <xctk:MaskedTextBox x:Name="TmsMaskedTextBox" Mask="8-999-999-99-99"/>
-            <TextBlock x:Name="IccTextBlock" Text="Уникальный серийный номер (ICC)"/>
-            <TextBox x:Name="IccTextBox" MaxLength="18" />
-            <TextBlock x:Name="IndividualEntrepreneurTextBlock" Text="Индивидульный предприниматель (ИП)"/>
-            <ComboBox x:Name="IndividualEntrepreneurComboBox"/>
+            <TextBlock x:Name="LastNameTextBlock" Text="Фамилия"/>
+            <TextBox x:Name="LastNameTextBox" TextChanged="LastNameTextBox_TextChanged"/>
+            <TextBlock x:Name="FirstNameTextBlock" Text="Имя"/>
+            <TextBox x:Name="FirstNameTextBox" TextChanged="FirstNameTextBox_TextChanged"/>
+            <TextBlock x:Name="MiddleNameTextBlock" Text="Отчество"/>
+            <TextBox x:Name="MiddleNameTextBox" TextChanged="MiddleNameTextBox_TextChanged"/>
+            <TextBlock x:Name="MobileNumberTextBlock" Text="Мобильный номер"/>
+            <xctk:MaskedTextBox x:Name="MobileNumberMaskedTextBox" Mask="8-999-999-99-99"/>
             <TextBlock x:Name="StatusTextBlock" Text="Статус"/>
             <ComboBox x:Name="StatusComboBox"/>
         </StackPanel>
