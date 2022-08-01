@@ -58,7 +58,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 MiddleNameTextBox.Text = string.Empty;
                 PSRNIETextBox.Text = string.Empty;
                 TINTextBox.Text = string.Empty;
-
+                Close();
             }
             catch (Exception ex)
             {
@@ -73,6 +73,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             MiddleNameTextBox.Text = string.Empty;
             PSRNIETextBox.Text = string.Empty;
             TINTextBox.Text = string.Empty;
+            Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

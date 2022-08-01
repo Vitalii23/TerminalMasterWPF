@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TerminalMasterWPF.DML;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.ViewModel;
@@ -23,7 +24,7 @@ namespace TerminalMasterWPF.ElementContentDialog
     {
         private AddElement add = new AddElement();
         private UpdateElement update = new UpdateElement();
-        private GetElement get = new GetElement();
+        private OrderByElement orderBy = new OrderByElement();
         private LogFile logFile = new LogFile();
         private ObservableCollection<Holder> holders;
         private ObservableCollection<User> users;
@@ -31,8 +32,8 @@ namespace TerminalMasterWPF.ElementContentDialog
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            holders = get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-            users = get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+            holders = orderBy.GetOrderByHolder((App.Current as App).ConnectionString, "Ascending", "last_name");
+            users = orderBy.GetOrderByUser((App.Current as App).ConnectionString, "Ascending", "last_name");
 
 
             for (int i = 0; i < holders.Count; i++)

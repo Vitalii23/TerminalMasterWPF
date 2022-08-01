@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStyle="None"
-        Title="Принтеры" Height="700" Width="250">
+        Title="Принтеры" Height="670" Width="250">
     <Grid x:Name="PrinterGrid" Height="Auto" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="525*"/>
@@ -20,7 +20,7 @@
             <StackPanel.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="0,0,0,5"/>
-                    <Setter Property="Padding" Value="5,5,0,0"/>
+                    <Setter Property="Padding" Value="5,2,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -37,7 +37,7 @@
                 </Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Margin" Value="0,0,0,0"/>
-                    <Setter Property="Padding" Value="0,0,0,0"/>
+                    <Setter Property="Padding" Value="0,6,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TerminalMasterWPF.DML;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.Model.People;
@@ -25,6 +26,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         private AddElement add = new AddElement();
         private UpdateElement update = new UpdateElement();
         private GetElement get = new GetElement();
+        private OrderByElement orderBy = new OrderByElement();
         private LogFile logFile = new LogFile();
         private ObservableCollection<IndividualEntrepreneur> individuals;
         private ObservableCollection<CashRegister> cashRegisters;
@@ -36,13 +38,13 @@ namespace TerminalMasterWPF.ElementContentDialog
             string[] @operator = { "Билайн", "МТС", "Мегафон", "Теле2", "Неизвестно" };
             AddComboxItem(@operator, OperatorComboBox);
 
-            individuals = get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+            individuals = orderBy.GetOrderByIndividual((App.Current as App).ConnectionString, "Ascending", "last_name");
             for (int i = 0; i < individuals.Count; i++)
             {
                 IndividualEntrepreneurComboBox.Items.Add(individuals[i].LastName + " " + individuals[i].FirstName + " " + individuals[i].MiddleName);
             }
 
-            cashRegisters = get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+            cashRegisters = orderBy.GetOrderByCashRegister((App.Current as App).ConnectionString, "Ascending", "name");
             for (int i = 0; i < cashRegisters.Count; i++)
             {
                 NameCashRegisterComboBox.Items.Add(cashRegisters[i].NameDevice);
@@ -85,6 +87,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 IdentNumberTextBox.Text = string.Empty;
                 TmsMaskedTextBox.Text = string.Empty;
                 IccTextBox.Text = string.Empty;
+                Close();
 
             }
             catch (Exception ex)
@@ -98,6 +101,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             IdentNumberTextBox.Text = string.Empty;
             TmsMaskedTextBox.Text = string.Empty;
             IccTextBox.Text = string.Empty;
+            Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

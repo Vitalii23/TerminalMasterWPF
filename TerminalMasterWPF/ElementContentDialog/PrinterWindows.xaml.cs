@@ -72,6 +72,9 @@ namespace TerminalMasterWPF.ElementContentDialog
 
         private void SecondaryButtonClick_Click(object sender, RoutedEventArgs e)
         {
+            ModelTextBox.Text = string.Empty;
+            NamePortTextBox.Text = string.Empty;
+            LocationTextBox.Text = string.Empty;
             Close();
         }
 

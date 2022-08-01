@@ -30,7 +30,7 @@
                 <MenuItem Header="Настройка">
                     <MenuItem x:Name="SettingsDataBase" Header="Настройка подключение базы данных" Click="SettingsDataBase_Click"/>
                     <Separator/>
-                    <MenuItem x:Name="ConnectItem" Header="Подкдючено" Checked="ConnectItem_Checked"/>
+                    <MenuItem x:Name="ConnectItem" Header="Отключено" Click="ConnectItem_Click" Checked="ConnectItem_Checked" Unchecked="ConnectItem_Unchecked"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -52,6 +52,14 @@
                     <Setter Property="Height" Value="auto"/>
                     <Setter Property="Width" Value="200"/>
                     <Setter Property="MaxDropDownHeight" Value="200"/>
+                    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="10,10,0,10"/>
+                    <Setter Property="Padding" Value="5,2,0,0"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="Width" Value="150"/>
                     <Setter Property="BorderThickness" Value="2,2,2,2"/>
                 </Style>
             </StackPanel.Resources>
@@ -89,7 +97,8 @@
                                   CellEditEnding="PrinterDataGrid_CellEditEnding"
                                   ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="PrinterDataGrid_RowEditEnding"
-                                  MouseUp="PrinterDataGrid_MouseUp"/>
+                                  MouseUp="PrinterDataGrid_MouseUp"
+                                  Sorting="PrinterDataGrid_Sorting"/>
 
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
@@ -99,7 +108,8 @@
                                   CellEditEnding="CartridgeDataGrid_CellEditEnding"
                                   ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="CartridgeDataGrid_RowEditEnding"
-                                  MouseUp="CartridgeDataGrid_MouseUp"/>
+                                  MouseUp="CartridgeDataGrid_MouseUp"
+                                  Sorting="CartridgeDataGrid_Sorting"/>
 
                 </TabItem>
                 <TabItem x:Name="CashRegisterTabItem" Header="Контрольная-кассовая машина (ККМ)" Background="#FFE5E5E5">
@@ -109,7 +119,8 @@
                                   CellEditEnding="CashRegisterDataGrid_CellEditEnding"
                                   ItemsSource="{Binding CashRegisterList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="CashRegisterDataGrid_RowEditEnding"
-                                  MouseUp="CashRegisterDataGrid_MouseUp"/>
+                                  MouseUp="CashRegisterDataGrid_MouseUp"
+                                  Sorting="CashRegisterDataGrid_Sorting"/>
 
                 </TabItem>
                 <TabItem x:Name="SimCardTabItem" Header="Sim-карты" Background="#FFE5E5E5">
@@ -119,7 +130,8 @@
                                   CellEditEnding="SimCardDataGrid_CellEditEnding"
                                   ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="SimCardDataGrid_RowEditEnding"
-                                  MouseUp="SimCardDataGrid_MouseUp"/>
+                                  MouseUp="SimCardDataGrid_MouseUp"
+                                  Sorting="SimCardDataGrid_Sorting"/>
                 </TabItem>
                 <TabItem x:Name="PhoneBookTabItem" Header="Телефоны сотрудников" Background="#FFE5E5E5">
                     <DataGrid x:Name="PhoneBookDataGrid" 
@@ -128,7 +140,8 @@
                                   CellEditEnding="PhoneBookDataGrid_CellEditEnding"
                                   ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="PhoneBookDataGrid_RowEditEnding"
-                                  MouseUp="PhoneBookDataGrid_MouseUp"/>
+                                  MouseUp="PhoneBookDataGrid_MouseUp"
+                                  Sorting="PhoneBookDataGrid_Sorting"/>
                 </TabItem>
                 <TabItem x:Name="HolderTabItem" Header="Владельцы" Background="#FFE5E5E5">
                     <DataGrid x:Name="HolderDataGrid" 
@@ -137,7 +150,8 @@
                                   CellEditEnding="HolderDataGrid_CellEditEnding"
                                   ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="HolderDataGrid_RowEditEnding"
-                                  MouseUp="HolderDataGrid_MouseUp"/>
+                                  MouseUp="HolderDataGrid_MouseUp"
+                                  Sorting="HolderDataGrid_Sorting"/>
                 </TabItem>
                 <TabItem x:Name="UserTabItem" Header="Пользователи" Background="#FFE5E5E5">
                     <DataGrid x:Name="UserDataGrid" 
@@ -146,7 +160,8 @@
                                   CellEditEnding="UserDataGrid_CellEditEnding"
                                   ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="UserDataGrid_RowEditEnding"
-                                  MouseUp="UserDataGrid_MouseUp"/>
+                                  MouseUp="UserDataGrid_MouseUp"
+                                  Sorting="UserDataGrid_Sorting"/>
                 </TabItem>
                 <TabItem x:Name="IndividualEntrepreneurTabItem" Header="Индивидуальные предприниматели" Background="#FFE5E5E5">
                     <DataGrid x:Name="IndividualEntrepreneurDataGrid" 
@@ -155,16 +170,18 @@
                                   CellEditEnding="IndividualEntrepreneurDataGrid_CellEditEnding"
                                   ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="IndividualEntrepreneurDataGrid_RowEditEnding"
-                                  MouseUp="IndividualEntrepreneurDataGrid_MouseUp"/>
+                                  MouseUp="IndividualEntrepreneurDataGrid_MouseUp"
+                                  Sorting="IndividualEntrepreneurDataGrid_Sorting"/>
                 </TabItem>
-                <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
+                <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5" IsEnabled="False">
                     <DataGrid x:Name="WaybillDataGrid" 
                                   AutoGeneratingColumn="WaybillDataGrid_AutoGeneratingColumn"
                                   BeginningEdit="WaybillDataGrid_BeginningEdit"
                                   CellEditEnding="WaybillDataGrid_CellEditEnding"
                                   ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="WaybillDataGrid_RowEditEnding"
-                                  MouseUp="WaybillDataGrid_MouseUp"/>
+                                  MouseUp="WaybillDataGrid_MouseUp"
+                                  Sorting="WaybillDataGrid_Sorting"/>
                 </TabItem>
             </TabControl>
         </Grid>

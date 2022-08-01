@@ -53,6 +53,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 PostTextBox.Text = string.Empty;
                 LocationNumberTextBox.Text = string.Empty;
                 MobileNumberMaskedTextBox.Text = string.Empty;
+                Close();
 
             }
             catch (Exception ex)
@@ -68,6 +69,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             PostTextBox.Text = string.Empty;
             LocationNumberTextBox.Text = string.Empty;
             MobileNumberMaskedTextBox.Text = string.Empty;
+            Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

@@ -159,12 +159,61 @@ namespace TerminalMasterWPF
         }
         private void PrinterDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
         {
+            string tag = null;
+            switch (e.Column.SortMemberPath.ToString())
+            {
+                case "Id":
+                    tag = "id";
+                    break;
+                case "BrandPrinter":
+                    tag = "brand";
+                    break;
+                case "ModelPrinter":
+                    tag = "model";
+                    break;
+                case "Cartridge":
+                    tag = "cartridge";
+                    break;
+                case "NamePort":
+                    tag = "name_port";
+                    break;
+                case "LocationPrinter":
+                    tag = "location_port";
+                    break;
+                case "Status":
+                    tag = "status";
+                    break;
+                case "VendorCodePrinter":
+                    tag = "vendor_code";
+                    break;
+                case "Сounters":
+                    tag = "counters";
+                    break;
+                case "DatePrinterString":
+                    tag = "date_printer";
+                    break;
+                default:
+                    break;
+            }
 
+            dataGets.PrinterList.Clear();
+
+            if (e.Column.SortDirection == System.ComponentModel.ListSortDirection.Descending)
+            {
+                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, e.Column.SortDirection.ToString(), tag);
+            } 
+            else if (e.Column.SortDirection == null)
+            {
+                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, System.ComponentModel.ListSortDirection.Ascending.ToString(), tag);
+            }
+            else
+            {
+                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, e.Column.SortDirection.ToString(), tag);
+            }
         }
         private void PrinterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
         {
             dataGets.SelectedXIndex = PrinterDataGrid.Items.IndexOf(PrinterDataGrid.CurrentItem);
-            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
         }
         /// <summary>
         /// Event to Cartidge
@@ -829,157 +878,161 @@ namespace TerminalMasterWPF
             string tabItem = ((sender as TabControl).SelectedItem as TabItem).Header as string;
             try
             {
-                switch (tabItem)
+                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
                 {
-                    case "Принтеры":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                    switch (tabItem)
+                    {
+                        case "Принтеры":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        CartridgeDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
-                        NameNavigationItem = "printer";
-                        triggerSort = true;
+                            CartridgeDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
+                            NameNavigationItem = "printer";
+                            triggerSort = true;
 
-                        dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Картриджи":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Картриджи":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        CartridgeDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
-                        NameNavigationItem = "cartrides";
-                        triggerSort = true;
+                            CartridgeDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
+                            NameNavigationItem = "cartrides";
+                            triggerSort = true;
 
-                        dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Контрольная-кассовая машина (ККМ)":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Контрольная-кассовая машина (ККМ)":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        CashRegisterDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
-                        NameNavigationItem = "cashRegister";
-                        triggerSort = true;
+                            CashRegisterDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
+                            NameNavigationItem = "cashRegister";
+                            triggerSort = true;
 
-                        dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Sim-карты":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Sim-карты":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        SimCardDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
+                            SimCardDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
 
-                        dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
 
-                        NameNavigationItem = "simCard";
-                        triggerSort = true;
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Телефоны сотрудников":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            NameNavigationItem = "simCard";
+                            triggerSort = true;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Телефоны сотрудников":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        PhoneBookDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
-                        NameNavigationItem = "phoneBook";
-                        triggerSort = true;
+                            PhoneBookDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
+                            NameNavigationItem = "phoneBook";
+                            triggerSort = true;
 
-                        dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0); ;
+                            dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0); ;
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Владельцы":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Владельцы":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        HolderDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
-                        NameNavigationItem = "holder";
-                        triggerSort = true;
+                            HolderDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
+                            NameNavigationItem = "holder";
+                            triggerSort = true;
 
-                        dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Пользователи":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Пользователи":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        UserDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
-                        NameNavigationItem = "user";
-                        triggerSort = true;
+                            UserDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
+                            NameNavigationItem = "user";
+                            triggerSort = true;
 
-                        dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Индивидуальные предприниматели":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = false;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Индивидуальные предприниматели":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = false;
+                            CheckTag = null;
 
-                        IndividualEntrepreneurDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
+                            IndividualEntrepreneurDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
 
-                        NameNavigationItem = "ie";
-                        triggerSort = true;
+                            NameNavigationItem = "ie";
+                            triggerSort = true;
 
-                        dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "Накладные":
-                        PropertyNameDictionary = new Dictionary<string, string>();
-                        triggerPropertyNameList = true;
-                        triggerHeader = true;
-                        DowloandButton.IsEnabled = true;
-                        CheckTag = null;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "Накладные":
+                            PropertyNameDictionary = new Dictionary<string, string>();
+                            triggerPropertyNameList = true;
+                            triggerHeader = true;
+                            DowloandButton.IsEnabled = true;
+                            CheckTag = null;
 
-                        WaybillDataGrid.Columns.Clear();
-                        PropertyNameDictionary.Clear();
+                            WaybillDataGrid.Columns.Clear();
+                            PropertyNameDictionary.Clear();
 
-                        NameNavigationItem = "waybill";
-                        triggerSort = true;
+                            NameNavigationItem = "waybill";
+                            triggerSort = true;
 
-                        dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                            dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
 
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    default:
-                        break;
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
             }
             catch (Exception ex)
             {
@@ -996,102 +1049,105 @@ namespace TerminalMasterWPF
         {
             try
             {
-                triggerPropertyNameList = false;
-                triggerHeader = false;
-                CheckASCorDesc = null;
-                switch (NameNavigationItem)
+                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
                 {
-                    case "printer":
-                        PrinterWindows printer = new PrinterWindows()
-                        {
-                            SelectData = "ADD"
-                        };
-                        printer.ShowDialog();
-                        dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "cartrides":
-                        CartridgeWindow cartridge = new CartridgeWindow
-                        {
-                            SelectData = "ADD"
-                        };
-                        cartridge.ShowDialog();
-                        dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "cashRegister":
-                        CashRegisterWindows cashRegister = new CashRegisterWindows
-                        {
-                            SelectData = "ADD"
-                        };
-                        cashRegister.ShowDialog();
-                        dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "simCard":
-                        SimCardWindows simCard = new SimCardWindows
-                        {
-                            SelectData = "ADD"
-                        };
-                        simCard.ShowDialog();
-                        dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "phoneBook":
-                        PhoneBookWindows phoneBook = new PhoneBookWindows
-                        {
-                            SelectData = "ADD"
-                        };
-                        phoneBook.ShowDialog();
-                        dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "holder":
-                        PeopleWindow holder = new PeopleWindow
-                        {
-                            SelectData = "ADD",
-                            People = NameNavigationItem
-                        };
-                        holder.ShowDialog();
-                        dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "user":
-                        PeopleWindow user = new PeopleWindow
-                        {
-                            SelectData = "ADD",
-                            People = NameNavigationItem
-                        };
-                        user.ShowDialog();
-                        dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "ie":
-                        IndWindow individual = new IndWindow
-                        {
-                            SelectData = "ADD",
-                            People = NameNavigationItem
-                        };
-                        individual.ShowDialog();
-                        dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "waybill":
-                        WaybillWindow waybill = new WaybillWindow
-                        {
-                            SelectData = "ADD"
-                        };
-                        waybill.ShowDialog();
-                        dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    default:
-                        break;
+                    triggerPropertyNameList = false;
+                    triggerHeader = false;
+                    CheckASCorDesc = null;
+                    switch (NameNavigationItem)
+                    {
+                        case "printer":
+                            PrinterWindows printer = new PrinterWindows()
+                            {
+                                SelectData = "ADD"
+                            };
+                            printer.ShowDialog();
+                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "cartrides":
+                            CartridgeWindow cartridge = new CartridgeWindow
+                            {
+                                SelectData = "ADD"
+                            };
+                            cartridge.ShowDialog();
+                            dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "cashRegister":
+                            CashRegisterWindows cashRegister = new CashRegisterWindows
+                            {
+                                SelectData = "ADD"
+                            };
+                            cashRegister.ShowDialog();
+                            dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "simCard":
+                            SimCardWindows simCard = new SimCardWindows
+                            {
+                                SelectData = "ADD"
+                            };
+                            simCard.ShowDialog();
+                            dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "phoneBook":
+                            PhoneBookWindows phoneBook = new PhoneBookWindows
+                            {
+                                SelectData = "ADD"
+                            };
+                            phoneBook.ShowDialog();
+                            dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "holder":
+                            PeopleWindow holder = new PeopleWindow
+                            {
+                                SelectData = "ADD",
+                                People = NameNavigationItem
+                            };
+                            holder.ShowDialog();
+                            dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "user":
+                            PeopleWindow user = new PeopleWindow
+                            {
+                                SelectData = "ADD",
+                                People = NameNavigationItem
+                            };
+                            user.ShowDialog();
+                            dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "ie":
+                            IndWindow individual = new IndWindow
+                            {
+                                SelectData = "ADD",
+                                People = NameNavigationItem
+                            };
+                            individual.ShowDialog();
+                            dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "waybill":
+                            WaybillWindow waybill = new WaybillWindow
+                            {
+                                SelectData = "ADD"
+                            };
+                            waybill.ShowDialog();
+                            dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
             {
-               logFile.WriteLogAsync(ex.Message, "AppBarButtonAdd_Tapped");
+                logFile.WriteLogAsync(ex.Message, "AppBarButtonAdd_Tapped");
             }
         }
 
@@ -1103,7 +1159,43 @@ namespace TerminalMasterWPF
 
         private void ConnectItem_Checked(object sender, RoutedEventArgs e)
         {
+            ConnectItem.Header = "Подключено";
+            MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Information);
+            AddButton.IsEnabled = true;
+            EditButton.IsEnabled = true;
+            DeleteButton.IsEnabled = true;
+            UpdateButton.IsEnabled = true;
+        }
 
+        private void ConnectItem_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ConnectItem.Header = "Отключено";
+            MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CartridgeDataGrid.Columns.Clear();
+            CashRegisterDataGrid.Columns.Clear();
+            IndividualEntrepreneurDataGrid.Columns.Clear();
+            HolderDataGrid.Columns.Clear();
+            UserDataGrid.Columns.Clear();
+            PhoneBookDataGrid.Columns.Clear();
+            PrinterDataGrid.Columns.Clear();
+            SimCardDataGrid.Columns.Clear();
+            AddButton.IsEnabled = false;
+            EditButton.IsEnabled = false;
+            DeleteButton.IsEnabled = false;
+            UpdateButton.IsEnabled = false;
+            // WaybillDataGrid.Columns.Clear();
+        }
+
+        private void ConnectItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (ConnectItem.IsChecked == true)
+            {
+                ConnectItem.IsChecked = false;
+            }
+            else
+            {
+                ConnectItem.IsChecked = true;
+            }
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -1283,70 +1375,73 @@ namespace TerminalMasterWPF
         {
             try
             {
-
-                triggerPropertyNameList = false;
-                triggerHeader = false;
-
-                if(dataGets.SelectedXIndex >= 0)
+                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
                 {
-                    if (MessageBox.Show("Вы точно хотите удалить этот элемент.", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    triggerPropertyNameList = false;
+                    triggerHeader = false;
+
+                    if (dataGets.SelectedXIndex >= 0)
                     {
-                        switch (NameNavigationItem)
+                        if (MessageBox.Show("Вы точно хотите удалить этот элемент.", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            case "printer":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PrinterList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "cartrides":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CartridgesList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "cashRegister":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CashRegisterList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "simCard":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SimCardList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "phoneBook":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PhoneBookList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "holder":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.HolderList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "user":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.UserList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "ie":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.IndividualEntrepreneurList[dataGets.SelectedXIndex].Id, NameNavigationItem);
-                                dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            case "waybill":
-                                Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].Id, NameNavigationItem);
-                                dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                                UpdateTable(NameNavigationItem);
-                                break;
-                            default:
-                                break;
+                            switch (NameNavigationItem)
+                            {
+                                case "printer":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PrinterList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "cartrides":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CartridgesList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "cashRegister":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.CashRegisterList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "simCard":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SimCardList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "phoneBook":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.PhoneBookList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "holder":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.HolderList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "user":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.UserList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "ie":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.IndividualEntrepreneurList[dataGets.SelectedXIndex].Id, NameNavigationItem);
+                                    dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                case "waybill":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].Id, NameNavigationItem);
+                                    dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show("Выберите строку для удаления", "Удаление", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Выберите строку для удаления", "Удаление", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
+
             }
             catch (Exception ex)
             {
@@ -1357,53 +1452,57 @@ namespace TerminalMasterWPF
         {
             try
             {
-                triggerPropertyNameList = false;
-                triggerHeader = false;
-                switch (NameNavigationItem)
+                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
                 {
-                    case "printer":
-                        dataGets.PrinterList= Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "cartrides":
-                        dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "cashRegister":
-                        dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "simCard":
-                        dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "phoneBook":
-                        dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "holder":
-                        dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "user":
-                        dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "ie":
-                        dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    case "waybill":
-                        dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                        UpdateTable(NameNavigationItem);
-                        break;
-                    default:
-                        break;
+                    triggerPropertyNameList = false;
+                    triggerHeader = false;
+                    switch (NameNavigationItem)
+                    {
+                        case "printer":
+                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "cartrides":
+                            dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "cashRegister":
+                            dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "simCard":
+                            dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "phoneBook":
+                            dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "holder":
+                            dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "user":
+                            dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "ie":
+                            dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "waybill":
+                            dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
             }
             catch (Exception ex)
             {
-               logFile.WriteLogAsync(ex.Message, "AppBarButtonUpdate_Tapped");
+                logFile.WriteLogAsync(ex.Message, "AppBarButtonUpdate_Tapped");
             }
         }
         private void DowloandButton_Click(object sender, RoutedEventArgs e)
@@ -1419,12 +1518,12 @@ namespace TerminalMasterWPF
                     MemoryStream memorystream = new MemoryStream();
                     binaryformatter.Serialize(memorystream, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].FilePDF);
                     byte[] data = memorystream.ToArray();
-                //    AsStorageFile(data, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].FileName);
+                    //    AsStorageFile(data, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].FileName);
 
                 }
                 else
                 {
-                   MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
 
             }

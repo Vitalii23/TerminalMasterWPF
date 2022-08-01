@@ -61,6 +61,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 FirstNameTextBox.Text = string.Empty;
                 LastNameTextBox.Text = string.Empty;
                 MiddleNameTextBox.Text = string.Empty;
+                Close();
 
             }
             catch (Exception ex)
@@ -74,6 +75,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             FirstNameTextBox.Text = string.Empty;
             LastNameTextBox.Text = string.Empty;
             MiddleNameTextBox.Text = string.Empty;
+            Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

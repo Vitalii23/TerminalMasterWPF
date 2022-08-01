@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TerminalMasterWPF.DML;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.ViewModel;
@@ -24,7 +26,7 @@ namespace TerminalMasterWPF.ElementContentDialog
     {
         AddElement add = new AddElement();
         UpdateElement update = new UpdateElement();
-        GetElement get = new GetElement();
+        OrderByElement orderBy = new OrderByElement();
         private LogFile logFile = new LogFile();
         private ObservableCollection<Holder> holders;
         private string file;
@@ -33,7 +35,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            holders = get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
+            holders = orderBy.GetOrderByHolder((App.Current as App).ConnectionString, "Ascending", "last_name");
 
             FilePDFButton.IsEnabled = true;
 
@@ -71,6 +73,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 NameDocumentTextBox.Text = string.Empty;
                 NumberDocumentTextBox.Text = string.Empty;
                 NumberSuppliersTextBox.Text = string.Empty;
+                Close();
             }
             catch (Exception ex)
             {
@@ -83,6 +86,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             NameDocumentTextBox.Text = string.Empty;
             NumberDocumentTextBox.Text = string.Empty;
             NumberSuppliersTextBox.Text = string.Empty;
+            Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -102,7 +106,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             }
             catch (Exception ex)
             {
-               logFile.WriteLogAsync(ex.Message, "WaybillContentDialog_ContentDialog_Opened");
+                logFile.WriteLogAsync(ex.Message, "WaybillContentDialog_ContentDialog_Opened");
             }
         }
 
@@ -113,17 +117,19 @@ namespace TerminalMasterWPF.ElementContentDialog
                 OpenFileDialog openFile = new OpenFileDialog
                 {
                     InitialDirectory = "C:\\",
-                    FilterIndex = 4,
-                    Filter = "jpg image (*.jpg)|*.jpg|jpeg image (*.jpeg)|*.jpeg|png image (*.png)|*.png|pdf file (*.pdf)|*.pdf|",
+                    FilterIndex = 2,
+                    Filter = "File image (*.jpeg, *.jpg, .png)|*.jpeg;*.jpg;*.png|" +
+                    "Documents file (*.pdf)|*.pdf",
                     RestoreDirectory = true
                 };
 
                 bool? result = openFile.ShowDialog();
 
+
                 if (result == true)
                 {
                     file = openFile.FileName;
-                    pdfFile = "(SELECT * FROM  OPENROWSET(BULK '" + file + "', SINGLE_BLOB) AS file_pdf)";
+                    pdfFile = @"(SELECT * FROM  OPENROWSET(BULK '" + file + "', SINGLE_BLOB) AS file_pdf)";
                     FileNameTextblock.Text = file;
                 }
             }

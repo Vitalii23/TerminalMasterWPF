@@ -77,6 +77,7 @@ namespace TerminalMasterWPF.ElementContentDialog
 
         private void SecondaryButtonClick_Click(object sender, RoutedEventArgs e)
         {
+            VendorCodeTextBox.Text = string.Empty;
             Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)

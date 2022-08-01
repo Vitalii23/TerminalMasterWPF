@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStyle="None"
-        Title="Владелец" Height="320" Width="250">
+        Title="Картриджи" Height="330" Width="250">
     <Grid x:Name="CartridgeGrid" Height="Auto" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="525*"/>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="110*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

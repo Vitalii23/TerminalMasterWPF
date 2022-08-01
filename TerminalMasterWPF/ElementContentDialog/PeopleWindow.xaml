@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStyle="None"
-        Title="" Height="370" Width="250">
+        Title="" Height="400" Width="250">
     <Grid x:Name="PeopleGrid" Height="Auto" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="525*"/>
@@ -22,7 +22,7 @@
             <StackPanel.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="0,0,0,5"/>
-                    <Setter Property="Padding" Value="5,5,0,0"/>
+                    <Setter Property="Padding" Value="5,2,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -39,7 +39,7 @@
                 </Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Margin" Value="0,0,0,0"/>
-                    <Setter Property="Padding" Value="0,0,0,0"/>
+                    <Setter Property="Padding" Value="0,6,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -54,11 +54,11 @@
                 </Style>
             </StackPanel.Resources>
             <TextBlock x:Name="LastNameTextBlock" Text="Фамилия"/>
-            <TextBox x:Name="LastNameTextBox" TextChanged="LastNameTextBox_TextChanged"/>
+            <TextBox x:Name="LastNameTextBox"/>
             <TextBlock x:Name="FirstNameTextBlock" Text="Имя"/>
-            <TextBox x:Name="FirstNameTextBox" TextChanged="FirstNameTextBox_TextChanged"/>
+            <TextBox x:Name="FirstNameTextBox"/>
             <TextBlock x:Name="MiddleNameTextBlock" Text="Отчество"/>
-            <TextBox x:Name="MiddleNameTextBox" TextChanged="MiddleNameTextBox_TextChanged"/>
+            <TextBox x:Name="MiddleNameTextBox"/>
             <TextBlock x:Name="MobileNumberTextBlock" Text="Мобильный номер"/>
             <xctk:MaskedTextBox x:Name="MobileNumberMaskedTextBox" Mask="8-999-999-99-99"/>
             <TextBlock x:Name="StatusTextBlock" Text="Статус"/>

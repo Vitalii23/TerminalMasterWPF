@@ -20,7 +20,7 @@
             <StackPanel.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="0,0,0,5"/>
-                    <Setter Property="Padding" Value="0,3,0,0"/>
+                    <Setter Property="Padding" Value="5,2,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -28,7 +28,7 @@
                 </Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Margin" Value="0,0,0,0"/>
-                    <Setter Property="Padding" Value="0,0,0,0"/>
+                    <Setter Property="Padding" Value="0,6,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>

@@ -21,7 +21,7 @@
             <StackPanel.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="0,0,0,5"/>
-                    <Setter Property="Padding" Value="5,5,0,0"/>
+                    <Setter Property="Padding" Value="5,2,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -38,7 +38,7 @@
                 </Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Margin" Value="0,0,0,0"/>
-                    <Setter Property="Padding" Value="0,0,0,0"/>
+                    <Setter Property="Padding" Value="0,6,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -61,7 +61,7 @@
             <TextBlock x:Name="TypeDeviceTextBlock" Text="Тип устройства"/>
             <ComboBox x:Name="TypeDeviceComboBox"/>
             <TextBlock x:Name="TmsTextBlock" Text="Номер телефона (TMS)"/>
-            <xctk:MaskedTextBox x:Name="TmsMaskedTextBox" Mask="8-999-999-99-99"/>
+            <xctk:MaskedTextBox x:Name="TmsMaskedTextBox" Mask="+7-999-999-99-99"/>
             <TextBlock x:Name="IccTextBlock" Text="Уникальный серийный номер (ICC)"/>
             <TextBox x:Name="IccTextBox" MaxLength="18" />
             <TextBlock x:Name="IndividualEntrepreneurTextBlock" Text="Индивидульный предприниматель (ИП)"/>

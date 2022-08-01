@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using TerminalMasterWPF.Logging;
 
 namespace TerminalMasterWPF.ViewModel
@@ -7,7 +8,7 @@ namespace TerminalMasterWPF.ViewModel
     class AddElement
     {
         private LogFile logFile = new LogFile();
-        public async void AddDataElement(string connection, string[] element, string items)
+        public void AddDataElement(string connection, string[] element, string items)
         {
             try
             {
@@ -66,11 +67,11 @@ namespace TerminalMasterWPF.ViewModel
             }
             catch (Exception eSql)
             {
-                await logFile.WriteLogAsync(eSql.Message, items + "_AddDataElement");
+                logFile.WriteLogAsync(eSql.Message, items + "_AddDataElement");
             }
 
         }
-        public async void AddDataElement(string connection, string[] element, int[] id,  string items)
+        public void AddDataElement(string connection, string[] element, int[] id,  string items)
         {
             try
             {
@@ -115,11 +116,11 @@ namespace TerminalMasterWPF.ViewModel
             }
             catch (Exception eSql)
             {
-                await logFile.WriteLogAsync(eSql.Message, items + "_AddDataElement");
+                logFile.WriteLogAsync(eSql.Message, items + "_AddDataElement");
             }
 
         }
-        public async void AddDataElement(string connection, string[] element, int[] id, string path, string items)
+        public void AddDataElement(string connection, string[] element, int[] id, string path, string items)
         {
             try
             {
@@ -159,7 +160,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             catch (Exception eSql)
             {
-                await logFile.WriteLogAsync(eSql.Message, items + "_AddDataElement");
+                logFile.WriteLogAsync(eSql.Message, items + "_AddDataElement");
             }
 
         }
