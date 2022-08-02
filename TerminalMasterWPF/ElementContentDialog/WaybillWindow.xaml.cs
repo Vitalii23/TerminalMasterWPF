@@ -29,7 +29,6 @@ namespace TerminalMasterWPF.ElementContentDialog
         OrderByElement orderBy = new OrderByElement();
         private LogFile logFile = new LogFile();
         private ObservableCollection<Holder> holders;
-        private string file;
         private string pdfFile;
         public WaybillWindow()
         {
@@ -116,7 +115,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             {
                 OpenFileDialog openFile = new OpenFileDialog
                 {
-                    InitialDirectory = "C:\\",
+                    InitialDirectory = @"\\KV-SQL-N\TerminalDataFiles",
                     FilterIndex = 2,
                     Filter = "File image (*.jpeg, *.jpg, .png)|*.jpeg;*.jpg;*.png|" +
                     "Documents file (*.pdf)|*.pdf",
@@ -124,13 +123,10 @@ namespace TerminalMasterWPF.ElementContentDialog
                 };
 
                 bool? result = openFile.ShowDialog();
-
-
                 if (result == true)
                 {
-                    file = openFile.FileName;
-                    pdfFile = @"(SELECT * FROM  OPENROWSET(BULK '" + file + "', SINGLE_BLOB) AS file_pdf)";
-                    FileNameTextblock.Text = file;
+                    pdfFile = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_pdf)";
+                    FileNameTextblock.Text = NameDocumentTextBox.Text + "(" + NumberDocumentTextBox.Text + ")";
                 }
             }
             catch (Exception ex)

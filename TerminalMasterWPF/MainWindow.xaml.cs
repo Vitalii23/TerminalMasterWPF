@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +12,8 @@ using TerminalMasterWPF.ElementContentDialog;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Settings;
 using TerminalMasterWPF.ViewModel;
+using TerminalMasterWPF.Model;
+using Microsoft.Win32;
 
 namespace TerminalMasterWPF
 {
@@ -25,7 +28,6 @@ namespace TerminalMasterWPF
         private DeleteElement Delete = new DeleteElement();
         private OrderByElement Order = new OrderByElement();
         private ConnectSQL connect = new ConnectSQL();
-        //private DataGridSortDirection? CheckSort;
         private bool triggerSort = true, triggerHeader, triggerPropertyNameList;
         private Dictionary<string, string> PropertyNameDictionary;
         private LogFile logFile = new LogFile();
@@ -196,24 +198,64 @@ namespace TerminalMasterWPF
                     break;
             }
 
-            dataGets.PrinterList.Clear();
+            Debug.WriteLine(e.Column.SortDirection);
+            Debug.WriteLine(dataGets.PrinterList.Count);
+            Debug.WriteLine(e.Column.SortMemberPath);
 
-            if (e.Column.SortDirection == System.ComponentModel.ListSortDirection.Descending)
+            //dataGets.PrinterList.Clear();
+
+            if (e.Column.SortDirection == null || e.Column.SortDirection == System.ComponentModel.ListSortDirection.Descending)
             {
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, e.Column.SortDirection.ToString(), tag);
-            } 
-            else if (e.Column.SortDirection == null)
-            {
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, System.ComponentModel.ListSortDirection.Ascending.ToString(), tag);
+                //  dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, "Descending", tag);
             }
             else
             {
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, e.Column.SortDirection.ToString(), tag);
+                //  dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, "Ascending", tag);
+            }
+
+            //  PrinterDataGrid.ItemsSource = dataGets.PrinterList;
+        }
+
+        private void PrinterDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+
+            foreach (DataRowView row in PrinterDataGrid.SelectedItems)
+            {
+                string text = row.Row.ItemArray[dataGets.SelectedXIndex].ToString();
+                Debug.WriteLine("Row => " + text);
             }
         }
+
         private void PrinterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
         {
             dataGets.SelectedXIndex = PrinterDataGrid.Items.IndexOf(PrinterDataGrid.CurrentItem);
+            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
+            DataGrid dg = sender as DataGrid;
+            Printer row = (Printer)dg.SelectedItems[dataGets.SelectedXIndex];
+            Debug.WriteLine(row.Id);
+
+            //PrinterDataGrid.row
+            //foreach (PrinterDataGrid row in dataGrid.Rows)
+            //{
+            //    foreach (DataGridViewCell cell in row.Cells)
+            //    {
+            //        string value = cell.Value.ToString();
+
+            //    }
+            //}
+        }
+
+        private void PrinterDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //dataGets.SelectedXIndex = PrinterDataGrid.Items.IndexOf(PrinterDataGrid.CurrentItem);
+            //DataGrid dataGrid = (DataGrid)sender;
+            //foreach (Data row in dataGrid.ROws)
+            //{
+            //    foreach (DataGridCell cell in row.Cells)
+            //    {
+            //        string value = cell.Value.ToString();
+            //    }
+            //}
         }
         /// <summary>
         /// Event to Cartidge
@@ -245,15 +287,15 @@ namespace TerminalMasterWPF
                         break;
                 }
 
-                //    if (triggerPropertyNameList)
-                //    {
-                //        PropertyNameDictionary.Add(e.Column.Header.ToString(), e.PropertyName);
-                //    }
+                //if (triggerPropertyNameList)
+                //{
+                //    PropertyNameDictionary.Add(e.Column.Header.ToString(), e.PropertyName);
+                //}
 
-                //    if (triggerHeader)
-                //    {
-                //        SelectionItemComboBox.Items.Add(e.Column.Header);
-                //    }
+                //if (triggerHeader)
+                //{
+                //    SelectionItemComboBox.Items.Add(e.Column.Header);
+                //}
             }
             catch (Exception ex)
             {
@@ -279,7 +321,6 @@ namespace TerminalMasterWPF
         private void CartridgeDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
         {
             dataGets.SelectedXIndex = CartridgeDataGrid.Items.IndexOf(CartridgeDataGrid.CurrentItem);
-            Debug.WriteLine("SelectedXIndex => " + dataGets.SelectedXIndex);
         }
         /// <summary>
         /// Event to CashRegister
@@ -1045,6 +1086,7 @@ namespace TerminalMasterWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1179,11 +1221,11 @@ namespace TerminalMasterWPF
             PhoneBookDataGrid.Columns.Clear();
             PrinterDataGrid.Columns.Clear();
             SimCardDataGrid.Columns.Clear();
+            WaybillDataGrid.Columns.Clear();
             AddButton.IsEnabled = false;
             EditButton.IsEnabled = false;
             DeleteButton.IsEnabled = false;
             UpdateButton.IsEnabled = false;
-            // WaybillDataGrid.Columns.Clear();
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -1427,7 +1469,7 @@ namespace TerminalMasterWPF
                                     UpdateTable(NameNavigationItem);
                                     break;
                                 case "waybill":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].Id, NameNavigationItem);
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.WaybillList[dataGets.SelectedXIndex].Id, NameNavigationItem);
                                     dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
                                     UpdateTable(NameNavigationItem);
                                     break;
@@ -1512,13 +1554,32 @@ namespace TerminalMasterWPF
                 triggerPropertyNameList = false;
                 triggerHeader = false;
 
-                if (WaybillDataGrid.SelectedIndex >= 0)
+
+                Stream saveStream;
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    FilterIndex = 2,
+                    Filter = "File image (*.jpeg, *.jpg, .png)|*.jpeg;*.jpg;*.png|" +
+                    "Documents file (*.pdf)|*.pdf",
+                    RestoreDirectory = true
+                };
+
+                bool? result = saveFileDialog.ShowDialog();
+                if (result == true && (saveStream = saveFileDialog.OpenFile()) != null && dataGets.SelectedXIndex >= 0)
                 {
                     BinaryFormatter binaryformatter = new BinaryFormatter();
                     MemoryStream memorystream = new MemoryStream();
-                    binaryformatter.Serialize(memorystream, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].FilePDF);
+                    binaryformatter.Serialize(memorystream, dataGets.WaybillList[dataGets.SelectedXIndex].FilePDF);
                     byte[] data = memorystream.ToArray();
-                    //    AsStorageFile(data, dataGets.WaybillList[WaybillDataGrid.SelectedIndex].FileName);
+
+                    using (FileStream fileStream = new FileStream(saveFileDialog.FileName, FileMode.CreateNew))
+                    {
+                        File.WriteAllBytes(saveFileDialog.FileName, data);
+                    }
+                    MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                    saveStream.Close();
 
                 }
                 else

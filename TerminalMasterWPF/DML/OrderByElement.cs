@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.Model.People;
@@ -480,6 +481,7 @@ namespace TerminalMasterWPF.DML
             }
             catch (Exception eSql)
             {
+                Debug.WriteLine(eSql.Message);
                 logFile.WriteLogAsync(eSql.Message, "GetOrderByPrinter");
             }
             return null;

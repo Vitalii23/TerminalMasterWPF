@@ -85,6 +85,8 @@
                     <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
                     <Setter Property="SelectionUnit" Value="Cell"/>
                     <Setter Property="SelectionMode" Value="Extended"/>
+                    <Setter Property="RowBackground" Value="White"/>
+                    <Setter Property="AlternatingRowBackground" Value="LightGray"/>
                     <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
                     <Setter Property="SelectedIndex" Value="{Binding SelectedXIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Style>
@@ -98,11 +100,12 @@
                                   ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"
                                   RowEditEnding="PrinterDataGrid_RowEditEnding"
                                   MouseUp="PrinterDataGrid_MouseUp"
+                                  SelectedCellsChanged="PrinterDataGrid_SelectedCellsChanged"
                                   Sorting="PrinterDataGrid_Sorting"/>
 
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
-                    <DataGrid x:Name="CartridgeDataGrid" 
+                    <DataGrid x:Name="CartridgeDataGrid"
                                   AutoGeneratingColumn="CartridgeDataGrid_AutoGeneratingColumn"
                                   BeginningEdit="CartridgeDataGrid_BeginningEdit"
                                   CellEditEnding="CartridgeDataGrid_CellEditEnding"
@@ -110,7 +113,6 @@
                                   RowEditEnding="CartridgeDataGrid_RowEditEnding"
                                   MouseUp="CartridgeDataGrid_MouseUp"
                                   Sorting="CartridgeDataGrid_Sorting"/>
-
                 </TabItem>
                 <TabItem x:Name="CashRegisterTabItem" Header="Контрольная-кассовая машина (ККМ)" Background="#FFE5E5E5">
                     <DataGrid x:Name="CashRegisterDataGrid" 
@@ -173,7 +175,7 @@
                                   MouseUp="IndividualEntrepreneurDataGrid_MouseUp"
                                   Sorting="IndividualEntrepreneurDataGrid_Sorting"/>
                 </TabItem>
-                <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5" IsEnabled="False">
+                <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
                     <DataGrid x:Name="WaybillDataGrid" 
                                   AutoGeneratingColumn="WaybillDataGrid_AutoGeneratingColumn"
                                   BeginningEdit="WaybillDataGrid_BeginningEdit"
