@@ -27,6 +27,7 @@ namespace TerminalMasterWPF.ViewModel
         private ObservableCollection<IndividualEntrepreneur> _individual = new ObservableCollection<IndividualEntrepreneur>();
         private ObservableCollection<Waybill> _waybill = new ObservableCollection<Waybill>();
         private int _selectedXIndex;
+        private int _selectedId;
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -126,6 +127,16 @@ namespace TerminalMasterWPF.ViewModel
             {
                 _selectedXIndex = value;
                 OnPropertyChanged("SelectedXIndex");
+            }
+        }
+
+        public int SelectedId
+        {
+            get => _selectedId;
+            set
+            {
+                _selectedId = value;
+                OnPropertyChanged("SelectedId");
             }
         }
     }

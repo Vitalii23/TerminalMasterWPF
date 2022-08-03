@@ -166,7 +166,6 @@ namespace TerminalMasterWPF.DML
         }
         public ObservableCollection<CashRegister> GetOrderByCashRegister(string connection, string sort, string element)
         {
-
             string GetCashRegister = null;
             if (sort.Equals("Ascending"))
             {
