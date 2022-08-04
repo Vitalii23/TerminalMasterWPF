@@ -1870,6 +1870,14 @@ namespace TerminalMasterWPF
             }
         }
 
+        private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Вы точно хотите выйти", "Выход из программы", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
+        }
+
         private void DowloandButton_Click(object sender, RoutedEventArgs e)
         {
             try

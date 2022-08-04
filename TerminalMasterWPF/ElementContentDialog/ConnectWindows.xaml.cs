@@ -34,6 +34,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             user.UserID = UserIDTextBox.Text;
             user.Password = PasswordBox.Password;
             user.IntegratedSecurity = IntegratedSecurityCheckBox.IsChecked.Value;
+            user.ConnectTimeout = Convert.ToInt16(ConnectTimeoutTextBox.Text);
             user.Encrypt = EncryptCheckBox.IsChecked.Value;
             user.TrustServerCertificate = TrustServerCertificateCheckBox.IsChecked.Value;
             user.MultiSubnetFailover = MultiSubnetFailoverCheckBox.IsChecked.Value;

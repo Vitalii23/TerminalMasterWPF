@@ -497,8 +497,10 @@ namespace TerminalMasterWPF.DML
                    "dbo.CashRegister.brand, " +
                    "dbo.SimCard.type_device, " +
                    "dbo.SimCard.tms, " +
-                   "dbo.SimCard.icc, dbo.SimCard.status, " +
+                   "dbo.SimCard.icc, " +
+                   "dbo.SimCard.status, " +
                    "dbo.SimCard.id_individual_entrepreneur, " +
+                   "dbo.SimCard.id_cashRegister, " +
                    "dbo.IndividualEntrepreneur.last_name, " +
                    "dbo.IndividualEntrepreneur.first_name, " +
                    "dbo.IndividualEntrepreneur.middle_name " +
@@ -517,8 +519,10 @@ namespace TerminalMasterWPF.DML
                    "dbo.CashRegister.brand, " +
                    "dbo.SimCard.type_device, " +
                    "dbo.SimCard.tms, " +
-                   "dbo.SimCard.icc, dbo.SimCard.status, " +
+                   "dbo.SimCard.icc, " +
+                   "dbo.SimCard.status, " +
                    "dbo.SimCard.id_individual_entrepreneur, " +
+                   "dbo.SimCard.id_cashRegister, " +
                    "dbo.IndividualEntrepreneur.last_name, " +
                    "dbo.IndividualEntrepreneur.first_name, " +
                    "dbo.IndividualEntrepreneur.middle_name " +
@@ -543,21 +547,21 @@ namespace TerminalMasterWPF.DML
                             {
                                 while (reader.Read())
                                 {
-                                    var simcard = new SimCard
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        NameTerminal = reader.GetString(1),
-                                        Operator = reader.GetString(2),
-                                        IdentNumber = reader.GetString(3),
-                                        Brand = reader.GetString(4),
-                                        TypeDevice = reader.GetString(5),
-                                        TMS = reader.GetString(6),
-                                        ICC = reader.GetString(7),
-                                        Status = reader.GetString(8),
-                                        IdIndividual = reader.GetInt32(7),
-                                        IdCashRegister = reader.GetInt32(8),
-                                        IndividualEntrepreneur = reader.GetString(9) + " " + reader.GetString(10) + " " + reader.GetString(11)
-                                    };
+                                    var simcard = new SimCard();
+
+                                    simcard.Id = reader.GetInt32(0);
+                                    simcard.NameTerminal = reader.GetString(1);
+                                    simcard.Operator = reader.GetString(2);
+                                    simcard.IdentNumber = reader.GetString(3);
+                                    simcard.Brand = reader.GetString(4);
+                                    simcard.TypeDevice = reader.GetString(5);
+                                    simcard.TMS = reader.GetString(6);
+                                    simcard.ICC = reader.GetString(7);
+                                    simcard.Status = reader.GetString(8);
+                                    simcard.IdIndividual = reader.GetInt32(7);
+                                    simcard.IdCashRegister = reader.GetInt32(8);
+                                    simcard.IndividualEntrepreneur = reader.GetString(9) + " " + reader.GetString(10) + " " + reader.GetString(11);
+                                    
                                     simCards.Add(simcard);
                                 }
                             }

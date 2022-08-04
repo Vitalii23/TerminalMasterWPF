@@ -22,10 +22,9 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top" MinHeight="25">
                 <MenuItem Header="Файл">
-                    <MenuItem Header="Сохранить"/>
-                    <MenuItem Header="Сохранить Как"/>
+                    <MenuItem x:Name="SaveAllMenuItem" Header="Сохранить Как" IsEnabled="False"/>
                     <Separator/>
-                    <MenuItem Header="Выход"></MenuItem>
+                    <MenuItem x:Name="ExitMenuItem" Header="Выход" Click="ExitMenuItem_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Настройка">
                     <MenuItem x:Name="SettingsDataBase" Header="Настройка подключение базы данных" Click="SettingsDataBase_Click"/>

@@ -49,6 +49,14 @@
                     <Setter Property="Width" Value="200"/>
                     <Setter Property="BorderThickness" Value="2,2,2,2"/>
                 </Style>
+                <Style TargetType="ListBox">
+                    <Setter Property="Margin" Value="0,0,0,0"/>
+                    <Setter Property="Padding" Value="0,0,0,0"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="Width" Value="200"/>
+                    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+                </Style>
             </StackPanel.Resources>
             <TextBlock x:Name="DataSourceTextBlock" Text="Имя сервера"/>
             <TextBox x:Name="DataSourceTextBox"/>
