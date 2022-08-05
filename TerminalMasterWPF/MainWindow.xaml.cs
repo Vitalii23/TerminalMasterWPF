@@ -654,7 +654,7 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag); // bug getorder
+                dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
@@ -1212,6 +1212,12 @@ namespace TerminalMasterWPF
                     break;
                 case "FilePDF":
                     CheckTag = "file_pdf";
+                    break;
+                case "IdHolder":
+                    CheckTag = "id_holder";
+                    break;
+                case "Holder":
+                    CheckTag = "holder";
                     break;
                 default:
                     break;

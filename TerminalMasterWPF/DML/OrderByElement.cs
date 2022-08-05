@@ -16,12 +16,26 @@ namespace TerminalMasterWPF.DML
             string GetHolder = null;
             if (sort.Equals("Ascending"))
             {
-                GetHolder = "SELECT * FROM Holder ORDER BY " + element + ";";
+                GetHolder = "SELECT dbo.Holder.id," +
+                    "dbo.Holder.last_name, " +
+                    "dbo.Holder.first_name, " +
+                    "dbo.Holder.middle_name, " +
+                    "dbo.Holder.number, " +
+                    "dbo.Holder.status " +
+                    "FROM Holder " +
+                    "ORDER BY " + element + ";";
             }
 
             if (sort.Equals("Descending"))
             {
-                GetHolder = "SELECT * FROM Holder ORDER BY " + element + " DESC;";
+                GetHolder = "SELECT dbo.Holder.id," +
+                    "dbo.Holder.last_name, " +
+                    "dbo.Holder.first_name, " +
+                    "dbo.Holder.middle_name, " +
+                    "dbo.Holder.number, " +
+                    "dbo.Holder.status " +
+                    "FROM Holder " +
+                    "ORDER BY " + element + " DESC;";
             }
 
             var holders = new ObservableCollection<Holder>();
@@ -67,12 +81,26 @@ namespace TerminalMasterWPF.DML
             string GetUser = null;
             if (sort.Equals("Ascending"))
             {
-                GetUser = "SELECT * FROM UserDevice ORDER BY " + element + ";";
+                GetUser = "SELECT dbo.UserDevice.id, " +
+                    "dbo.UserDevice.last_name, " +
+                    "dbo.UserDevice.first_name, " +
+                    "dbo.UserDevice.middle_name, " +
+                    "dbo.UserDevice.number, " +
+                    "dbo.UserDevice.status " +
+                    "FROM UserDevice " +
+                    "ORDER BY " + element + ";";
             }
 
             if (sort.Equals("Descending"))
             {
-                GetUser = "SELECT * FROM UserDevice ORDER BY " + element + " DESC;";
+                GetUser = "SELECT dbo.UserDevice.id, " +
+                    "dbo.UserDevice.last_name, " +
+                    "dbo.UserDevice.first_name, " +
+                    "dbo.UserDevice.middle_name, " +
+                    "dbo.UserDevice.number, " +
+                    "dbo.UserDevice.status " +
+                    "FROM UserDevice " +
+                    "ORDER BY " + element + " DESC;";
             }
 
             var users = new ObservableCollection<User>();
@@ -118,12 +146,24 @@ namespace TerminalMasterWPF.DML
             string GetCartridgeQuery = null;
             if (sort.Equals("Ascending"))
             {
-                GetCartridgeQuery = "SELECT * FROM Cartrides ORDER BY " + element + ";";
+                GetCartridgeQuery = "SELECT dbo.Cartrides.id, " +
+                    "dbo.Cartrides.brand, " +
+                    "dbo.Cartrides.model, " +
+                    "dbo.Cartrides.vendor_code, " +
+                    "dbo.Cartrides.status " +
+                    "FROM dbo.Cartrides " +
+                    "ORDER BY " + element + ";";
             }
 
             if (sort.Equals("Descending"))
             {
-                GetCartridgeQuery = "SELECT * FROM Cartrides ORDER BY " + element + " DESC;";
+                GetCartridgeQuery = "SELECT dbo.Cartrides.id, " +
+                    "dbo.Cartrides.brand, " +
+                    "dbo.Cartrides.model, " +
+                    "dbo.Cartrides.vendor_code, " +
+                    "dbo.Cartrides.status " +
+                    "FROM dbo.Cartrides " +
+                    "ORDER BY " + element + " DESC;";
             }
 
 
@@ -381,12 +421,28 @@ namespace TerminalMasterWPF.DML
             string GetPhoneBook = null; ;
             if (sort.Equals("Ascending"))
             {
-                GetPhoneBook = "SELECT * FROM PhoneBook ORDER BY " + element + ";";
+                GetPhoneBook = "SELECT dbo.PhoneBook.id, " +
+                    "dbo.PhoneBook.first_name, " +
+                    "dbo.PhoneBook.last_name, " +
+                    "dbo.PhoneBook.middle_name, " +
+                    "dbo.PhoneBook.post, " +
+                    "dbo.PhoneBook.internal_number, " +
+                    "dbo.PhoneBook.mobile_number " +
+                    "FROM PhoneBook " +
+                    "ORDER BY " + element + ";";
             }
 
             if (sort.Equals("Descending"))
             {
-                GetPhoneBook = "SELECT * FROM PhoneBook ORDER BY " + element + " DESC;";
+                GetPhoneBook = "SELECT dbo.PhoneBook.id, " +
+                    "dbo.PhoneBook.first_name, " +
+                    "dbo.PhoneBook.last_name, " +
+                    "dbo.PhoneBook.middle_name, " +
+                    "dbo.PhoneBook.post, " +
+                    "dbo.PhoneBook.internal_number, " +
+                    "dbo.PhoneBook.mobile_number " +
+                    "FROM PhoneBook " +
+                    "ORDER BY " + element + " DESC;";
             }
 
             var phoneBooks = new ObservableCollection<PhoneBook>();
@@ -433,12 +489,34 @@ namespace TerminalMasterWPF.DML
             string GetPrinter = null;
             if (sort.Equals("Ascending"))
             {
-                GetPrinter = "SELECT * FROM Printer ORDER BY " + element + ";";
+                GetPrinter = "SELECT dbo.Printer.id, " +
+                    "dbo.Printer.brand, " +
+                    "dbo.Printer.model, " +
+                    "dbo.Printer.cartridge, " +
+                    "dbo.Printer.name_port, " +
+                    "dbo.Printer.location, " +
+                    "dbo.Printer.status, " +
+                    "dbo.Printer.vendor_code, " +
+                    "dbo.Printer.counters, " +
+                    "dbo.Printer.date" +
+                    "FROM Printer " +
+                    "ORDER BY " + element + ";";
             }
 
             if (sort.Equals("Descending"))
             {
-                GetPrinter = "SELECT * FROM Printer ORDER BY " + element + " DESC;";
+                GetPrinter = "SELECT dbo.Printer.id, " +
+                    "dbo.Printer.brand, " +
+                    "dbo.Printer.model, " +
+                    "dbo.Printer.cartridge, " +
+                    "dbo.Printer.name_port, " +
+                    "dbo.Printer.location, " +
+                    "dbo.Printer.status, " +
+                    "dbo.Printer.vendor_code, " +
+                    "dbo.Printer.counters, " +
+                    "dbo.Printer.date" +
+                    "FROM Printer " +
+                    "ORDER BY " + element + " DESC;";
             }
 
             var printers = new ObservableCollection<Printer>();
@@ -491,19 +569,19 @@ namespace TerminalMasterWPF.DML
             if (sort.Equals("Ascending"))
             {
                 GetSimCard = "SELECT dbo.SimCard.id, " +
-                   "dbo.CashRegister.name, " +
-                   "dbo.SimCard.operator, " +
-                   "dbo.SimCard.identifaction_number, " +
-                   "dbo.CashRegister.brand, " +
-                   "dbo.SimCard.type_device, " +
-                   "dbo.SimCard.tms, " +
-                   "dbo.SimCard.icc, " +
-                   "dbo.SimCard.status, " +
-                   "dbo.SimCard.id_individual_entrepreneur, " +
-                   "dbo.SimCard.id_cashRegister, " +
-                   "dbo.IndividualEntrepreneur.last_name, " +
-                   "dbo.IndividualEntrepreneur.first_name, " +
-                   "dbo.IndividualEntrepreneur.middle_name " +
+                    "dbo.CashRegister.name, " +
+                    "dbo.SimCard.operator, " +
+                    "dbo.SimCard.identifaction_number, " +
+                    "dbo.CashRegister.brand, " +
+                    "dbo.SimCard.type_device, " +
+                    "dbo.SimCard.tms, " +
+                    "dbo.SimCard.icc, " +
+                    "dbo.SimCard.status, " +
+                    "dbo.SimCard.id_individual_entrepreneur, " +
+                    "dbo.SimCard.id_cashRegister, " +
+                    "dbo.IndividualEntrepreneur.last_name, " +
+                    "dbo.IndividualEntrepreneur.first_name, " +
+                    "dbo.IndividualEntrepreneur.middle_name " +
                    "FROM dbo.SimCard " +
                    "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
                    "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister " +
@@ -513,19 +591,19 @@ namespace TerminalMasterWPF.DML
             if (sort.Equals("Descending"))
             {
                 GetSimCard = "SELECT dbo.SimCard.id, " +
-                   "dbo.CashRegister.name, " +
-                   "dbo.SimCard.operator, " +
-                   "dbo.SimCard.identifaction_number, " +
-                   "dbo.CashRegister.brand, " +
-                   "dbo.SimCard.type_device, " +
-                   "dbo.SimCard.tms, " +
-                   "dbo.SimCard.icc, " +
-                   "dbo.SimCard.status, " +
-                   "dbo.SimCard.id_individual_entrepreneur, " +
-                   "dbo.SimCard.id_cashRegister, " +
-                   "dbo.IndividualEntrepreneur.last_name, " +
-                   "dbo.IndividualEntrepreneur.first_name, " +
-                   "dbo.IndividualEntrepreneur.middle_name " +
+                    "dbo.CashRegister.name, " +
+                    "dbo.SimCard.operator, " +
+                    "dbo.SimCard.identifaction_number, " +
+                    "dbo.CashRegister.brand, " +
+                    "dbo.SimCard.type_device, " +
+                    "dbo.SimCard.tms, " +
+                    "dbo.SimCard.icc, " +
+                    "dbo.SimCard.status, " +
+                    "dbo.SimCard.id_individual_entrepreneur, " +
+                    "dbo.SimCard.id_cashRegister, " +
+                    "dbo.IndividualEntrepreneur.last_name, " +
+                    "dbo.IndividualEntrepreneur.first_name, " +
+                    "dbo.IndividualEntrepreneur.middle_name " +
                    "FROM dbo.SimCard " +
                    "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
                    "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister " +
@@ -547,21 +625,22 @@ namespace TerminalMasterWPF.DML
                             {
                                 while (reader.Read())
                                 {
-                                    var simcard = new SimCard();
+                                    var simcard = new SimCard
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        NameTerminal = reader.GetString(1),
+                                        Operator = reader.GetString(2),
+                                        IdentNumber = reader.GetString(3),
+                                        Brand = reader.GetString(4),
+                                        TypeDevice = reader.GetString(5),
+                                        TMS = reader.GetString(6),
+                                        ICC = reader.GetString(7),
+                                        Status = reader.GetString(8),
+                                        IdIndividual = reader.GetInt32(9),
+                                        IdCashRegister = reader.GetInt32(10),
+                                        IndividualEntrepreneur = reader.GetString(11) + " " + reader.GetString(12) + " " + reader.GetString(13)
+                                    };
 
-                                    simcard.Id = reader.GetInt32(0);
-                                    simcard.NameTerminal = reader.GetString(1);
-                                    simcard.Operator = reader.GetString(2);
-                                    simcard.IdentNumber = reader.GetString(3);
-                                    simcard.Brand = reader.GetString(4);
-                                    simcard.TypeDevice = reader.GetString(5);
-                                    simcard.TMS = reader.GetString(6);
-                                    simcard.ICC = reader.GetString(7);
-                                    simcard.Status = reader.GetString(8);
-                                    simcard.IdIndividual = reader.GetInt32(7);
-                                    simcard.IdCashRegister = reader.GetInt32(8);
-                                    simcard.IndividualEntrepreneur = reader.GetString(9) + " " + reader.GetString(10) + " " + reader.GetString(11);
-                                    
                                     simCards.Add(simcard);
                                 }
                             }
@@ -581,18 +660,32 @@ namespace TerminalMasterWPF.DML
             string GetIndividual = null;
             if (sort.Equals("Ascending"))
             {
-                GetIndividual = "SELECT * FROM IndividualEntrepreneur ORDER BY " + element + ";";
+                GetIndividual = "SELECT dbo.IndividualEntrepreneur.id," +
+                    "dbo.IndividualEntrepreneur.last_name, " +
+                    "dbo.IndividualEntrepreneur.first_name, " +
+                    "dbo.IndividualEntrepreneur.middle_name, " +
+                    "dbo.IndividualEntrepreneur.psrnie, " +
+                    "dbo.IndividualEntrepreneur.tin" +
+                    "FROM IndividualEntrepreneur " +
+                    "ORDER BY " + element + ";";
             }
 
             if (sort.Equals("Descending"))
             {
-                GetIndividual = "SELECT * FROM IndividualEntrepreneur ORDER BY " + element + " DESC;";
+                GetIndividual = "SELECT dbo.IndividualEntrepreneur.id," +
+                    "dbo.IndividualEntrepreneur.last_name, " +
+                    "dbo.IndividualEntrepreneur.first_name, " +
+                    "dbo.IndividualEntrepreneur.middle_name, " +
+                    "dbo.IndividualEntrepreneur.psrnie, " +
+                    "dbo.IndividualEntrepreneur.tin" +
+                    "FROM IndividualEntrepreneur " +
+                    "ORDER BY " + element + " DESC;";
             }
 
             var individuals = new ObservableCollection<IndividualEntrepreneur>();
             try
             {
-                using (var connect = new SqlConnection(connection))
+                using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
                     if (connect.State == System.Data.ConnectionState.Open)
@@ -631,18 +724,37 @@ namespace TerminalMasterWPF.DML
         {
             string GetWaybill = null;
 
-
             if (sort.Equals("Ascending"))
             {
                 if (element.Equals("holder"))
                 {
-                    GetWaybill = "SELECT id, name_document, number_document, number_suppliers, date_document, file_pdf, id_holder, id_userDevice FROM Waybill " +
+                    GetWaybill = "SELECT dbo.Waybill.id, " +
+                    "dbo.Waybill.name_document, " +
+                    "dbo.Waybill.number_document, " +
+                    "dbo.Waybill.number_suppliers, " +
+                    "dbo.Waybill.date_document, " +
+                    "dbo.Waybill.file_name, " +
+                    "dbo.Waybill.id_holder, " +
+                    "dbo.Holder.last_name, " +
+                    "dbo.Holder.first_name, " +
+                    "dbo.Holder.middle_name " +
+                        "FROM dbo.Waybill " +
                      "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
                      "ORDER BY dbo.Holder.last_name;";
                 }
                 else
                 {
-                    GetWaybill = "SELECT id, name_document, number_document, number_suppliers, date_document, file_pdf, id_holder, id_userDevice FROM Waybill " +
+                    GetWaybill = "SELECT dbo.Waybill.id, " +
+                    "dbo.Waybill.name_document, " +
+                    "dbo.Waybill.number_document, " +
+                    "dbo.Waybill.number_suppliers, " +
+                    "dbo.Waybill.date_document, " +
+                    "dbo.Waybill.file_name, " +
+                    "dbo.Waybill.id_holder, " +
+                    "dbo.Holder.last_name, " +
+                    "dbo.Holder.first_name, " +
+                    "dbo.Holder.middle_name " +
+                        "FROM dbo.Waybill " +
                      "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
                      "ORDER BY " + element + ";";
                 }
@@ -653,14 +765,34 @@ namespace TerminalMasterWPF.DML
             {
                 if (element.Equals("holder"))
                 {
-                    GetWaybill = "SELECT id, name_document, number_document, number_suppliers, date_document, file_pdf, id_holder, id_userDevice " +
+                    GetWaybill = "SELECT dbo.Waybill.id, " +
+                    "dbo.Waybill.name_document, " +
+                    "dbo.Waybill.number_document, " +
+                    "dbo.Waybill.number_suppliers, " +
+                    "dbo.Waybill.date_document, " +
+                    "dbo.Waybill.file_name, " +
+                    "dbo.Waybill.id_holder, " +
+                    "dbo.Holder.last_name, " +
+                    "dbo.Holder.first_name, " +
+                    "dbo.Holder.middle_name " +
+                        "FROM dbo.Waybill " +
                      "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
                      "ORDER BY dbo.Holder.last_name DESC;";
 
                 }
                 else
                 {
-                    GetWaybill = "SELECT id, name_document, number_document, number_suppliers, date_document, file_pdf, id_holder, id_userDevice " +
+                    GetWaybill = "SELECT dbo.Waybill.id, " +
+                    "dbo.Waybill.name_document, " +
+                    "dbo.Waybill.number_document, " +
+                    "dbo.Waybill.number_suppliers, " +
+                    "dbo.Waybill.date_document, " +
+                    "dbo.Waybill.file_name, " +
+                    "dbo.Waybill.id_holder, " +
+                    "dbo.Holder.last_name, " +
+                    "dbo.Holder.first_name, " +
+                    "dbo.Holder.middle_name " +
+                        "FROM dbo.Waybill " +
                      "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
                      "ORDER BY " + element + " DESC;";
                 }
@@ -669,7 +801,7 @@ namespace TerminalMasterWPF.DML
             var waybills = new ObservableCollection<Waybill>();
             try
             {
-                using (var connect = new SqlConnection(connection))
+                using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
                     if (connect.State == System.Data.ConnectionState.Open)

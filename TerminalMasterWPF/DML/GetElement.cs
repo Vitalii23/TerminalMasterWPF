@@ -19,12 +19,14 @@ namespace TerminalMasterWPF.ViewModel
             string GetCartridgeQuery = null;
             if (selection.Equals("ALL"))
             {
-                GetCartridgeQuery = "SELECT id, brand, model, vendor_code, status FROM Cartrides;";
+                GetCartridgeQuery = "SELECT dbo.Cartrides.id, dbo.Cartrides.brand, dbo.Cartrides.model, dbo.Cartrides.vendor_code, dbo.Cartrides.status " +
+                    "FROM dbo.Cartrides;";
             }
 
             if (selection.Equals("ONE"))
             {
-                GetCartridgeQuery = "SELECT id, brand, model, vendor_code, status FROM Cartrides WHERE id = " + id;
+                GetCartridgeQuery = "SELECT dbo.Cartrides.id, dbo.Cartrides.brand, dbo.Cartrides.model, dbo.Cartrides.vendor_code, dbo.Cartrides.status " +
+                    "FROM dbo.Cartrides WHERE dbo.Cartridges.id = " + id;
             }
 
 
@@ -127,7 +129,7 @@ namespace TerminalMasterWPF.ViewModel
                 using (var connect = new SqlConnection(connection))
                 {
                     connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
+                    if (connect.State == ConnectionState.Open)
                     {
                         using (SqlCommand cmd = connect.CreateCommand())
                         {
@@ -174,12 +176,14 @@ namespace TerminalMasterWPF.ViewModel
             string GetPhoneBook = null;
             if (selection.Equals("ALL"))
             {
-                GetPhoneBook = "SELECT id, first_name, last_name, middle_name, post, internal_number, mobile_number FROM PhoneBook;";
+                GetPhoneBook = "SELECT dbo.PhoneBook.id, dbo.PhoneBook.first_name, dbo.PhoneBook.last_name, dbo.PhoneBook.middle_name, dbo.PhoneBook.post, dbo.PhoneBook.internal_number, dbo.PhoneBook.mobile_number " +
+                    "FROM dbo.PhoneBook;";
             }
 
             if (selection.Equals("ONE"))
             {
-                GetPhoneBook = "SELECT id, first_name, last_name, middle_name, post, internal_number, mobile_number FROM PhoneBook WHERE id = " + id;
+                GetPhoneBook = "SELECT dbo.PhoneBook.id, dbo.PhoneBook.first_name, dbo.PhoneBook.last_name, dbo.PhoneBook.middle_name, dbo.PhoneBook.post, dbo.PhoneBook.internal_number, dbo.PhoneBook.mobile_number " +
+                    "FROM dbo.PhoneBook WHERE dbo.PhoneBook.id = " + id;
             }
 
             var phoneBooks = new ObservableCollection<PhoneBook>();
@@ -226,12 +230,14 @@ namespace TerminalMasterWPF.ViewModel
             string GetPrinter = null;
             if (selection.Equals("ALL"))
             {
-                GetPrinter = "SELECT id, brand, model, cartridge, name_port, location, status, vendor_code, counters, date FROM Printer;";
+                GetPrinter = "SELECT dbo.Printer.id, dbo.Printer.brand, dbo.Printer.model, dbo.Printer.cartridge, dbo.Printer.name_port, dbo.Printer.location, dbo.Printer.status, dbo.Printer.vendor_code, dbo.Printer.counters, dbo.Printer.date " +
+                    "FROM Printer;";
             }
 
             if (selection.Equals("ONE"))
             {
-                GetPrinter = "SELECT id, brand, model, cartridge, name_port, location, status, vendor_code, counters, date FROM Printer WHERE id = " + id;
+                GetPrinter = "SELECT dbo.Printer.id, dbo.Printer.brand, dbo.Printer.model, dbo.Printer.cartridge, dbo.Printer.name_port, dbo.Printer.location, dbo.Printer.status, dbo.Printer.vendor_code, dbo.Printer.counters, dbo.Printer.date " +
+                    "FROM Printer WHERE dbo.Printer.id = " + id;
             }
 
             var printers = new ObservableCollection<Printer>();
@@ -372,36 +378,20 @@ namespace TerminalMasterWPF.ViewModel
             string GetIndividual = null;
             if (selection.Equals("ALL"))
             {
-                GetIndividual = "SELECT id, last_name, first_name, middle_name, psrnie, tin FROM IndividualEntrepreneur;";
+                GetIndividual = "SELECT dbo.IndividualEntrepreneur.id, dbo.IndividualEntrepreneur.last_name, dbo.IndividualEntrepreneur.first_name, dbo.IndividualEntrepreneur.middle_name, dbo.IndividualEntrepreneur.psrnie, dbo.IndividualEntrepreneur.tin " +
+                    "FROM dbo.IndividualEntrepreneur;";
             }
 
             if (selection.Equals("ONE"))
             {
-                GetIndividual = "SELECT id, last_name, first_name, middle_name, psrnie, tin FROM IndividualEntrepreneur WHERE id = " + id;
+                GetIndividual = "SELECT dbo.IndividualEntrepreneur.id, dbo.IndividualEntrepreneur.last_name, dbo.IndividualEntrepreneur.first_name, dbo.IndividualEntrepreneur.middle_name, dbo.IndividualEntrepreneur.psrnie, dbo.IndividualEntrepreneur.tin " +
+                    "FROM dbo.IndividualEntrepreneur WHERE dbo.IndividualEntrepreneur.id = " + id;
             }
-
-            SqlConnectionStringBuilder bulder = new SqlConnectionStringBuilder
-            {
-                DataSource = @"tcp:192.168.0.223\SQL223",
-                InitialCatalog = @"TerminalMasterDB",
-                UserID = @"DVA",
-                Password = @"Kolizey$",
-                IntegratedSecurity = false,
-                ConnectTimeout = 30,
-                Encrypt = false,
-                TrustServerCertificate = false,
-                ApplicationIntent = ApplicationIntent.ReadWrite,
-                MultiSubnetFailover = false
-            };
-            //DataSource = @"KV-SQL-N\SQL223",
-            //DataSource = @"tcp:192.168.0.223\SQL223",
-
-            connection = @"Server=192.168.0.223;Trusted_Connection=No;Database=TerminalMasterDB;User Id=DVA;Password=Kolizey$;";
 
             ObservableCollection<IndividualEntrepreneur> individuals = new ObservableCollection<IndividualEntrepreneur>();
             try
             {
-                using (SqlConnection connect = new SqlConnection(bulder.ConnectionString))
+                using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
                     if (connect.State == ConnectionState.Open)
@@ -427,53 +417,28 @@ namespace TerminalMasterWPF.ViewModel
                             }
                         }
                     }
-                    else
-                    {
-                        connect.InfoMessage += Connect_InfoMessage;
-                        connect.StateChange += Connect_StateChange;
-                    }
                 }
                 return individuals;
             }
             catch (Exception eSql)
             {
-                Debug.WriteLine(eSql.InnerException);
-                Debug.WriteLine(eSql.Message);
-                Debug.WriteLine(eSql.StackTrace);
-                Debug.WriteLine(eSql.Source);
-                //logFile.WriteLogAsync(eSql.Message, "GetIndividual");
+                logFile.WriteLogAsync(eSql.Message, "GetIndividual");
             }
             return null;
         }
-
-        private void Connect_StateChange(object sender, StateChangeEventArgs e)
-        {
-            Console.WriteLine("The current Connection state has changed from {0} to {1}.", e.OriginalState, e.CurrentState);
-        }
-
-        private void Connect_InfoMessage(object sender, SqlInfoMessageEventArgs e)
-        {
-            foreach (SqlError err in e.Errors)
-            {
-                Debug.WriteLine(
-              "The {0} has received a severity {1}, state {2} error number {3}\n" +
-              "on line {4} of procedure {5} on server {6}:\n{7}",
-               err.Source, err.Class, err.State, err.Number, err.LineNumber,
-               err.Procedure, err.Server, err.Message);
-            }
-        }
-
         public ObservableCollection<Holder> GetHolder(string connection, string selection, int id)
         {
             string GetHolder = null;
             if (selection.Equals("ALL"))
             {
-                GetHolder = "SELECT id, last_name, first_name, middle_name, number, status FROM Holder ;";
+                GetHolder = "SELECT dbo.Holder.id, dbo.Holder.last_name, dbo.Holder.first_name, dbo.Holder.middle_name, dbo.Holder.number, dbo.Holder.status " +
+                    "FROM Holder ;";
             }
 
             if (selection.Equals("ONE"))
             {
-                GetHolder = "SELECT id, last_name, first_name, middle_name, number, status FROM Holder WHERE id = " + id;
+                GetHolder = "SELECT dbo.Holder.id, dbo.Holder.last_name, dbo.Holder.first_name, dbo.Holder.middle_name, dbo.Holder.number, dbo.Holder.status " +
+                    "FROM dbo.Holder WHERE dbo.Holder.id = " + id;
             }
 
             var holders = new ObservableCollection<Holder>();
@@ -519,12 +484,14 @@ namespace TerminalMasterWPF.ViewModel
             string GetUser = null;
             if (selection.Equals("ALL"))
             {
-                GetUser = "SELECT id, last_name, first_name, middle_name, number, status FROM UserDevice;";
+                GetUser = "SELECT dbo.UserDevice.id, dbo.UserDevice.last_name, dbo.UserDevice.first_name, dbo.UserDevice.middle_name, dbo.UserDevice.number, dbo.UserDevice.status " +
+                    "FROM dbo.UserDevice;";
             }
 
             if (selection.Equals("ONE"))
             {
-                GetUser = "SELECT id, last_name, first_name, middle_name, number, status FROM UserDevice WHERE id = " + id;
+                GetUser = "SELECT dbo.UserDevice.id, dbo.UserDevice.last_name, dbo.UserDevice.first_name, dbo.UserDevice.middle_name, dbo.UserDevice.number, dbo.UserDevice.status " +
+                    "FROM dbo.UserDevice WHERE dbo.UserDevice.id = " + id;
             }
 
             var users = new ObservableCollection<User>();
@@ -598,7 +565,7 @@ namespace TerminalMasterWPF.ViewModel
                     "dbo.Holder.middle_name " +
                     "FROM dbo.Waybill " +
                     "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                    "FROM dbo.Waybill WHERE id = " + id;
+                    "FROM dbo.Waybill WHERE dbo.Waybill.id = " + id;
             }
 
             var waybills = new ObservableCollection<Waybill>();
@@ -607,7 +574,7 @@ namespace TerminalMasterWPF.ViewModel
                 using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
+                    if (connect.State == ConnectionState.Open)
                     {
                         using (SqlCommand cmd = connect.CreateCommand())
                         {
