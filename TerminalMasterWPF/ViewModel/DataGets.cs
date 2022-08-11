@@ -26,6 +26,7 @@ namespace TerminalMasterWPF.ViewModel
         private ObservableCollection<User> _user = new ObservableCollection<User>();
         private ObservableCollection<IndividualEntrepreneur> _individual = new ObservableCollection<IndividualEntrepreneur>();
         private ObservableCollection<Waybill> _waybill = new ObservableCollection<Waybill>();
+        private ObservableCollection<CountersPage> _countersPages = new ObservableCollection<CountersPage>();
         private int _selectedXIndex;
         private int _selectedId;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -38,6 +39,7 @@ namespace TerminalMasterWPF.ViewModel
                 PropertyChanged(this, e);
             }
         }
+
         public ObservableCollection<Cartridge> CartridgesList
         {
             get =>_cartridges;
@@ -47,6 +49,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("CartridgesList");
             }
         }
+
         public ObservableCollection<CashRegister> CashRegisterList
         {
             get => _cashRegister;
@@ -56,6 +59,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("CashRegisterList");
             }
         }
+
         public ObservableCollection<PhoneBook> PhoneBookList
         {
             get => _phoneBook;
@@ -65,6 +69,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("PhoneBookList");
             }
         }
+
         public ObservableCollection<Printer> PrinterList
         {
             get => _printer;
@@ -74,6 +79,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("PrinterList");
             }
         }
+
         public ObservableCollection<SimCard> SimCardList
         {
             get => _simCard;
@@ -83,6 +89,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("SimCardList");
             }
         }
+
         public ObservableCollection<Holder> HolderList
         {
             get => _holder;
@@ -92,6 +99,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("HolderList");
             }
         }
+
         public ObservableCollection<User> UserList
         {
             get => _user;
@@ -101,6 +109,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("UserList");
             }
         }
+
         public ObservableCollection<IndividualEntrepreneur> IndividualEntrepreneurList
         {
             get => _individual;
@@ -110,6 +119,7 @@ namespace TerminalMasterWPF.ViewModel
                 OnPropertyChanged("IndividualEntrepreneurList");
             }
         }
+
         public ObservableCollection<Waybill> WaybillList
         {
             get => _waybill;
@@ -117,6 +127,16 @@ namespace TerminalMasterWPF.ViewModel
             {
                 _waybill = value;
                 OnPropertyChanged("WaybillList");
+            }
+        }
+
+        public ObservableCollection<CountersPage> CountersPageList
+        {
+            get => _countersPages;
+            set
+            {
+                _countersPages = value;
+                OnPropertyChanged("CountersPageList");
             }
         }
 

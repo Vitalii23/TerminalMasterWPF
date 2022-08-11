@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TerminalMasterWPF"
         xmlns:vm="clr-namespace:TerminalMasterWPF.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="auto" Width="auto">
+        Title="Терминал Мастер" Height="auto" Width="auto">
 
     <Window.DataContext>
         <vm:DataGets/>
@@ -100,6 +100,17 @@
                                   RowEditEnding="PrinterDataGrid_RowEditEnding"
                                   MouseUp="PrinterDataGrid_MouseUp"
                                   Sorting="PrinterDataGrid_Sorting"/>
+
+                </TabItem>
+                <TabItem x:Name="CountersPageTabItem" Header="Счетчик распечатанных страниц" Background="#FFE5E5E5">
+                    <DataGrid x:Name="CountersPageDataGrid" 
+                                  AutoGeneratingColumn="CountersPageDataGrid_AutoGeneratingColumn"
+                                  BeginningEdit="CountersPageDataGrid_BeginningEdit"
+                                  CellEditEnding="CountersPageDataGrid_CellEditEnding"
+                                  ItemsSource="{Binding CountersPageList, UpdateSourceTrigger=PropertyChanged}"
+                                  RowEditEnding="CountersPageDataGrid_RowEditEnding"
+                                  MouseUp="CountersPageDataGrid_MouseUp"
+                                  Sorting="CountersPageDataGrid_Sorting"/>
 
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">

@@ -79,6 +79,9 @@ namespace TerminalMasterWPF
                     case "waybill":
                         WaybillDataGrid.ItemsSource = dataGets.WaybillList;
                         break;
+                    case "countersPage":
+                        WaybillDataGrid.ItemsSource = dataGets.WaybillList;
+                        break;
                     default:
                         break;
                 }
@@ -266,6 +269,98 @@ namespace TerminalMasterWPF
         {
             dataGets.SelectedXIndex = PrinterDataGrid.Items.IndexOf(PrinterDataGrid.CurrentItem);
             DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, PrinterDataGrid);
+            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
+            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
+        }
+
+        /// <summary>
+        /// Event Cointers Page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CountersPageDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            try
+            {
+                switch (e.PropertyName)
+                {
+                    case "Id":
+                        e.Column.Header = "ID";
+                        break;
+                    case "PrintedPageCounter":
+                        e.Column.Header = "Счет распечатанных страниц";
+                        break;
+                    case "Date":
+                        e.Column.CanUserSort = false;
+                        e.Column.Header = "Дата";
+                        break;
+                    case "Printers":
+                        e.Column.Header = "Имя принтера";
+                        break;
+                    case "IdPrinter":
+                        e.Column.CanUserSort = false;
+                        e.Column.Header = "Id_printer";
+                        e.Column.Visibility = Visibility.Collapsed;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
+            }
+        }
+
+        private void CountersPageDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
+
+        private void CountersPageDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+
+        }
+
+        private void CountersPageDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+
+        }
+
+        private void CountersPageDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+
+            switch (e.Column.SortMemberPath.ToString())
+            {
+                case "Id":
+                    CheckTag = "id";
+                    break;
+                case "PrintedPageCounter":
+                    CheckTag = "printed_page_counter";
+                    break;
+                case "Date":
+                    CheckTag = "date";
+                    break;
+                default:
+                    break;
+            }
+
+            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
+            {
+                CheckASCorDesc = ListSortDirection.Ascending.ToString();
+                dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+            }
+            else
+            {
+                CheckASCorDesc = ListSortDirection.Descending.ToString();
+                dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+            }
+        }
+
+        private void CountersPageDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dataGets.SelectedXIndex = CountersPageDataGrid.Items.IndexOf(CountersPageDataGrid.CurrentItem);
+            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, CountersPageDataGrid);
             TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
             dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
         }
@@ -706,16 +801,6 @@ namespace TerminalMasterWPF
                     default:
                         break;
                 }
-
-                //    if (triggerPropertyNameList)
-                //    {
-                //        PropertyNameDictionary.Add(e.Column.Header.ToString(), e.PropertyName);
-                //    }
-
-                //    if (triggerHeader)
-                //    {
-                //        SelectionItemComboBox.Items.Add(e.Column.Header);
-                //    }
             }
             catch (Exception ex)
             {
@@ -928,16 +1013,6 @@ namespace TerminalMasterWPF
                     default:
                         break;
                 }
-
-                //    if (triggerPropertyNameList)
-                //    {
-                //        PropertyNameDictionary.Add(e.Column.Header.ToString(), e.PropertyName);
-                //    }
-
-                //    if (triggerHeader)
-                //    {
-                //        SelectionItemComboBox.Items.Add(e.Column.Header);
-                //    }
             }
             catch (Exception ex)
             {
@@ -1040,16 +1115,6 @@ namespace TerminalMasterWPF
                     default:
                         break;
                 }
-
-                //    if (triggerPropertyNameList)
-                //    {
-                //        PropertyNameDictionary.Add(e.Column.Header.ToString(), e.PropertyName);
-                //    }
-
-                //    if (triggerHeader)
-                //    {
-                //        SelectionItemComboBox.Items.Add(e.Column.Header);
-                //    }
             }
             catch (Exception ex)
             {
@@ -1205,6 +1270,9 @@ namespace TerminalMasterWPF
                     CheckTag = "number_suppliers";
                     break;
                 case "DateDocument":
+                    CheckTag = "date_document";
+                    break;
+                case "DateDocumentString":
                     CheckTag = "date_document";
                     break;
                 case "FileName":
@@ -1367,6 +1435,18 @@ namespace TerminalMasterWPF
 
                             UpdateTable(NameNavigationItem);
                             break;
+                        case "Счетчик распечатанных страниц":
+                            //PropertyNameDictionary = new Dictionary<string, string>();
+                            DowloandButton.IsEnabled = false;
+
+                            CountersPageDataGrid.Columns.Clear();
+                            //PropertyNameDictionary.Clear();
+                            NameNavigationItem = "countersPage";
+
+                            dataGets.CountersPageList = Get.GetCountersPage((App.Current as App).ConnectionString, "ALL", 0);
+
+                            UpdateTable(NameNavigationItem);
+                            break;
                         default:
                             break;
                     }
@@ -1419,7 +1499,7 @@ namespace TerminalMasterWPF
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
         {
-            if (ConnectItem.IsChecked == true)
+            if (ConnectItem.IsChecked)
             {
                 ConnectItem.IsChecked = false;
             }
@@ -1520,6 +1600,15 @@ namespace TerminalMasterWPF
                             };
                             waybill.ShowDialog();
                             dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
+                        case "countersPage":
+                            CointersPageWindow cointersPage = new CointersPageWindow
+                            {
+                                SelectData = "ADD"
+                            };
+                            cointersPage.ShowDialog();
+                            dataGets.CountersPageList = Get.GetCountersPage((App.Current as App).ConnectionString, "ALL", 0);
                             UpdateTable(NameNavigationItem);
                             break;
                         default:
@@ -1733,6 +1822,28 @@ namespace TerminalMasterWPF
                             MessageBox.Show("Выберите строку для изменения");
                         }
                         break;
+                    case "countersPage":
+                        if (dataGets.SelectedXIndex >= 0)
+                        {
+                            CointersPageWindow cointersPage = new CointersPageWindow
+                            {
+                                SelectData = "GET",
+                                SelectIndex = dataGets.SelectedXIndex,
+                                SelectId = dataGets.SelectedId
+                            };
+                            cointersPage.SelectCountersPage = CheckASCorDesc == null
+                                ? dataGets.CountersPageList
+                                : CheckASCorDesc.Equals("Descending")
+                                    ? Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                                    : Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+
+                            cointersPage.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите строку для изменения");
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -1800,6 +1911,11 @@ namespace TerminalMasterWPF
                                     dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
                                     UpdateTable(NameNavigationItem);
                                     break;
+                                case "countersPage":
+                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
+                                    dataGets.CountersPageList = Get.GetCountersPage((App.Current as App).ConnectionString, "ALL", 0);
+                                    UpdateTable(NameNavigationItem);
+                                    break;
                                 default:
                                     break;
                             }
@@ -1864,6 +1980,10 @@ namespace TerminalMasterWPF
                             dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
                             UpdateTable(NameNavigationItem);
                             break;
+                        case "countersPage":
+                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+                            UpdateTable(NameNavigationItem);
+                            break;
                         default:
                             break;
                     }
@@ -1921,8 +2041,6 @@ namespace TerminalMasterWPF
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.StackTrace);
-                Debug.WriteLine(ex.InnerException);
                 logFile.WriteLogAsync(ex.Message, "DowloandButton_Click");
             }
         }

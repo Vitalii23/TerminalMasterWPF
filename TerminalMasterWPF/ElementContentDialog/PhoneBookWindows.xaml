@@ -37,15 +37,12 @@
                     <Setter Property="BorderThickness" Value="2,2,2,2"/>
                 </Style>
                 <Style TargetType="TextBlock">
-                    <Setter Property="Margin" Value="0,0,0,0"/>
+                    <Setter Property="Margin" Value="20,0,0,0"/>
                     <Setter Property="Padding" Value="0,6,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
-                    <Setter Property="Width" Value="200"/>
                 </Style>
                 <Style TargetType="xctk:MaskedTextBox">
-                    <Setter Property="Margin" Value="0,0,0,0"/>
-                    <Setter Property="Padding" Value="0,0,0,0"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Width" Value="200"/>
@@ -53,7 +50,7 @@
                 </Style>
             </StackPanel.Resources>
             <TextBlock x:Name="LastNameTextBlock" Text="Фамилия"/>
-            <TextBox x:Name="LastNameTextBox" TextChanged="LastNameTextBox_TextChanged"/>
+            <TextBox x:Name="LastNameTextBox"/>
             <TextBlock x:Name="FirstNameTextBlock" Text="Имя"/>
             <TextBox x:Name="FirstNameTextBox" TextChanged="FirstNameTextBox_TextChanged"/>
             <TextBlock x:Name="MiddleNameTextBlock" Text="Отчество"/>

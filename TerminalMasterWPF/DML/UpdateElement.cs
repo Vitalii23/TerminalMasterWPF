@@ -139,6 +139,14 @@ namespace TerminalMasterWPF.ViewModel
                         "' WHERE Id = " + id;
                 }
 
+                if (items.Equals("countersPage"))
+                {
+                    AddQuery = "UPDATE dbo.CountersPage SET printed_page_counter = '" + element[0] +
+                        "', date =  '" + element[1] +
+                        "', id_printer =  '" + ids[0] +
+                        "' WHERE Id = " + id;
+                }
+
 
                 var connect = new SqlConnection(connection);
                 connect.Open();

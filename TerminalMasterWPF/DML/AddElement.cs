@@ -8,6 +8,7 @@ namespace TerminalMasterWPF.ViewModel
     class AddElement
     {
         private LogFile logFile = new LogFile();
+
         public void AddDataElement(string connection, string[] element, string items)
         {
             try
@@ -71,6 +72,7 @@ namespace TerminalMasterWPF.ViewModel
             }
 
         }
+
         public void AddDataElement(string connection, string[] element, int[] id,  string items)
         {
             try
@@ -104,6 +106,11 @@ namespace TerminalMasterWPF.ViewModel
                     AddQuery = "INSERT INTO dbo.SimCard (operator, identifaction_number, type_device, tms, icc, status, id_individual_entrepreneur, id_cashRegister) VALUES " + values + id[0] + "," + id[1] + ")";
                 }
 
+                if (items.Equals("simCard"))
+                {
+                    AddQuery = "INSERT INTO dbo.CountersPage (printed_page_counter, date, id_printer) VALUES " + values + id[0] + ")";
+                }
+
                 var connect = new SqlConnection(connection);
                 connect.Open();
                 if (connect.State == System.Data.ConnectionState.Open)
@@ -120,6 +127,7 @@ namespace TerminalMasterWPF.ViewModel
             }
 
         }
+
         public void AddDataElement(string connection, string[] element, int[] id, string path, string items)
         {
             try

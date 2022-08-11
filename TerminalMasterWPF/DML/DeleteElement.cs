@@ -8,6 +8,7 @@ namespace TerminalMasterWPF.ViewModel
     class DeleteElement
     {
         LogFile logFile = new LogFile();
+
         public async void DeleteDataElement(string connection, int id, string items)
         {
             try
@@ -42,6 +43,9 @@ namespace TerminalMasterWPF.ViewModel
                         break;
                     case "waybill":
                         AddQuery = "DELETE FROM dbo.Waybill WHERE id = " + id;
+                        break;
+                    case "countersPage":
+                        AddQuery = "DELETE FROM dbo.CountersPage WHERE id = " + id;
                         break;
                     default:
                         break;

@@ -738,9 +738,9 @@ namespace TerminalMasterWPF.DML
                     "dbo.Holder.last_name, " +
                     "dbo.Holder.first_name, " +
                     "dbo.Holder.middle_name " +
-                        "FROM dbo.Waybill " +
-                     "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                     "ORDER BY dbo.Holder.last_name;";
+                    "FROM dbo.Waybill " +
+                    "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
+                    "ORDER BY dbo.Holder.last_name;";
                 }
                 else
                 {
@@ -754,9 +754,9 @@ namespace TerminalMasterWPF.DML
                     "dbo.Holder.last_name, " +
                     "dbo.Holder.first_name, " +
                     "dbo.Holder.middle_name " +
-                        "FROM dbo.Waybill " +
-                     "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                     "ORDER BY " + element + ";";
+                    "FROM dbo.Waybill " +
+                    "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
+                    "ORDER BY " + element + ";";
                 }
 
             }
@@ -835,6 +835,66 @@ namespace TerminalMasterWPF.DML
             catch (Exception eSql)
             {
                 logFile.WriteLogAsync(eSql.Message, "GetOrderByWaybill");
+            }
+            return null;
+        }
+        public ObservableCollection<CountersPage> GetOrderByCountersPage(string connection, string sort, string element)
+        {
+            string GetCountersPageQuery = null;
+            if (sort.Equals("Ascending"))
+            {
+                GetCountersPageQuery = "SELECT dbo.CountersPage.id, " +
+                    "dbo.CountersPage.printed_page_counter, " +
+                    "dbo.CountersPage.date, " +
+                    "FROM dbo.CountersPage " +
+                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer " +
+                    "ORDER BY " + element + ";";
+            }
+
+            if (sort.Equals("Descending"))
+            {
+                GetCountersPageQuery = "SELECT dbo.CountersPage.id, " +
+                    "dbo.CountersPage.printed_page_counter, " +
+                    "dbo.CountersPage.date, " +
+                    "FROM dbo.CountersPage " +
+                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer " +
+                    "ORDER BY " + element + " DESC;";
+            }
+
+
+            ObservableCollection<CountersPage> countersPages = new ObservableCollection<CountersPage>();
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(connection))
+                {
+                    connect.Open();
+                    if (connect.State == System.Data.ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = connect.CreateCommand())
+                        {
+                            cmd.CommandText = GetCountersPageQuery;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    var countersPage = new CountersPage
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        PrintedPageCounter = reader.GetString(1),
+                                        Date = reader.GetDateTime(2),
+                                        Printers = reader.GetString(3)
+                                    };
+                                    countersPages.Add(countersPage);
+                                }
+                            }
+                        }
+                    }
+                }
+                return countersPages;
+            }
+            catch (Exception eSql)
+            {
+                logFile.WriteLogAsync(eSql.Message, "GetOrderByCartridges");
             }
             return null;
         }

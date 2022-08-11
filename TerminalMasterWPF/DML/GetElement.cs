@@ -14,6 +14,7 @@ namespace TerminalMasterWPF.ViewModel
     {
         LogFile logFile = new LogFile();
         public Dictionary<string, string> values;
+
         public ObservableCollection<Cartridge> GetCartridges(string connection, string selection, int id)
         {
             string GetCartridgeQuery = null;
@@ -68,6 +69,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<CashRegister> GetCashRegister(string connection, string selection, int id)
         {
 
@@ -171,6 +173,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<PhoneBook> GetPhoneBook(string connection, string selection, int id)
         {
             string GetPhoneBook = null;
@@ -225,6 +228,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<Printer> GetPrinter(string connection, string selection, int id)
         {
             string GetPrinter = null;
@@ -283,6 +287,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<SimCard> GetSimCard(string connection, string selection, int id)
         {
             string GetSimCard = null;
@@ -373,6 +378,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<IndividualEntrepreneur> GetIndividual(string connection, string selection, int id)
         {
             string GetIndividual = null;
@@ -426,6 +432,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<Holder> GetHolder(string connection, string selection, int id)
         {
             string GetHolder = null;
@@ -479,6 +486,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<User> GetUser(string connection, string selection, int id)
         {
             string GetUser = null;
@@ -532,6 +540,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
         public ObservableCollection<Waybill> GetWaybill(string connection, string selection, int id)
         {
             string GetWaybill = null;
@@ -608,6 +617,68 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
+
+        public ObservableCollection<CountersPage> GetCountersPage(string connection, string selection, int id)
+        {
+
+            string GetCountersPageQuery = null;
+            if (selection.Equals("ALL"))
+            {
+                GetCountersPageQuery = "SELECT dbo.CountersPage.id, " +
+                    "dbo.CountersPage.printed_page_counter, " +
+                    "dbo.CountersPage.date " +
+                    "FROM dbo.CountersPage " +
+                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer;";
+            }
+
+            if (selection.Equals("ONE"))
+            {
+                GetCountersPageQuery = "SELECT dbo.CountersPage.id, " +
+                    "dbo.CountersPage.printed_page_counter, " +
+                    "dbo.CountersPage.date " +
+                    "FROM dbo.CountersPage " +
+                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer" + 
+                    "WHERE dbo.CountersPage.id =  " + id + " ;";
+            }
+
+            ObservableCollection<CountersPage> countersPages = new ObservableCollection<CountersPage>();
+            try
+            {
+                using (var connect = new SqlConnection(connection))
+                {
+                    connect.Open();
+                    if (connect.State == ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = connect.CreateCommand())
+                        {
+                            cmd.CommandText = GetCountersPageQuery;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+
+                                while (reader.Read())
+                                {
+                                    var countersPage = new CountersPage
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        PrintedPageCounter = reader.GetString(1),
+                                        Date = reader.GetDateTime(2),
+                                        Printers = reader.GetString(3)
+                                    };
+                                    countersPages.Add(countersPage);
+                                }
+                            }
+                        }
+                    }
+                }
+                return countersPages;
+            }
+            catch (Exception eSql)
+            {
+                logFile.WriteLogAsync(eSql.Message, "GetCountersPage");
+            }
+            return null;
+        }
+
         private static byte[] GetDocument(int documentId, string connection)
         {
             using (SqlConnection connect = new SqlConnection(connection))
