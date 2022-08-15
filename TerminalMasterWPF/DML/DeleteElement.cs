@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Data.Linq;
 using System.Data.SqlClient;
-using System.Diagnostics;
+
 using TerminalMasterWPF.Logging;
 
 namespace TerminalMasterWPF.ViewModel
 {
     class DeleteElement
     {
-        LogFile logFile = new LogFile();
+        private LogFile logFile = new LogFile();
 
-        public async void DeleteDataElement(string connection, int id, string items)
+        public async void DeleteDataElement(int id, string items)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace TerminalMasterWPF.ViewModel
                         break;
                 }
 
-                var connect = new SqlConnection(connection);
+                var connect = new SqlConnection((App.Current as App).ConnectionString);
                 connect.Open();
                 if (connect.State == System.Data.ConnectionState.Open)
                 {

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:TerminalMasterWPF"
         xmlns:vm="clr-namespace:TerminalMasterWPF.ViewModel"
         mc:Ignorable="d"
-        Title="Терминал Мастер" Height="auto" Width="auto">
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="Терминал Мастер" Height="auto" Width="auto" MaxHeight="2160" MaxWidth="3840">
 
     <Window.DataContext>
         <vm:DataGets/>
@@ -24,7 +25,7 @@
                 <MenuItem Header="Файл">
                     <MenuItem x:Name="SaveAllMenuItem" Header="Сохранить Как" IsEnabled="False"/>
                     <Separator/>
-                    <MenuItem x:Name="ExitMenuItem" Header="Выход" Click="ExitMenuItem_Click"></MenuItem>
+                    <MenuItem x:Name="ExitMenuItem" Header="Выход" Click="ExitMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Header="Настройка">
                     <MenuItem x:Name="SettingsDataBase" Header="Настройка подключение базы данных" Click="SettingsDataBase_Click"/>
@@ -71,128 +72,67 @@
 
         <Grid Grid.Row="2">
             <Grid.Resources>
-                <Style TargetType="DataGrid">
-                    <Setter Property="CanUserSortColumns" Value="True"/>
-                    <Setter Property="CanUserReorderColumns" Value="True"/>
-                    <Setter Property="CanUserResizeColumns" Value="True"/>
+                <Style TargetType="telerik:RadGridView">
+                    <Setter Property="AutoGenerateColumns" Value="True"/>
                     <Setter Property="ColumnWidth" Value="*"/>
-                    <Setter Property="IsSynchronizedWithCurrentItem" Value="True"/>
-                    <Setter Property="IsReadOnly" Value="True"/>
-                    <Setter Property="Height" Value="Auto"/>
-                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-                    <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-                    <Setter Property="SelectionUnit" Value="Cell"/>
-                    <Setter Property="SelectionMode" Value="Extended"/>
-                    <Setter Property="RowBackground" Value="White"/>
-                    <Setter Property="AlternatingRowBackground" Value="LightGray"/>
-                    <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
-                    <Setter Property="SelectedIndex" Value="{Binding SelectedXIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Setter Property="IsReadOnly" Value="False"/>
+                    <Setter Property="ShowSearchPanel" Value="True"/>
                 </Style>
             </Grid.Resources>
+            
             <TabControl x:Name="MainTabControl"  SelectionChanged="MainTabControl_SelectionChanged">
                 <TabItem x:Name="PrinterTabItem" Header="Принтеры" Background="#FFE5E5E5">
-                    <DataGrid x:Name="PrinterDataGrid" 
+                    <telerik:RadGridView x:Name="PrinterDataGrid"
                                   AutoGeneratingColumn="PrinterDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="PrinterDataGrid_BeginningEdit"
-                                  CellEditEnding="PrinterDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="PrinterDataGrid_RowEditEnding"
-                                  MouseUp="PrinterDataGrid_MouseUp"
-                                  Sorting="PrinterDataGrid_Sorting"/>
-
+                                  ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="CountersPageTabItem" Header="Счетчик распечатанных страниц" Background="#FFE5E5E5">
-                    <DataGrid x:Name="CountersPageDataGrid" 
-                                  AutoGeneratingColumn="CountersPageDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="CountersPageDataGrid_BeginningEdit"
-                                  CellEditEnding="CountersPageDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding CountersPageList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="CountersPageDataGrid_RowEditEnding"
-                                  MouseUp="CountersPageDataGrid_MouseUp"
-                                  Sorting="CountersPageDataGrid_Sorting"/>
-
+                    <telerik:RadGridView x:Name="CountersPageDataGrid"
+                                  AutoGeneratingColumn="CountersPageDataGrid_AutoGeneratingColumn"       
+                                  ItemsSource="{Binding CountersPageList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
-                    <DataGrid x:Name="CartridgeDataGrid"
+                    <telerik:RadGridView x:Name="CartridgeDataGrid"
                                   AutoGeneratingColumn="CartridgeDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="CartridgeDataGrid_BeginningEdit"
-                                  CellEditEnding="CartridgeDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="CartridgeDataGrid_RowEditEnding"
-                                  MouseUp="CartridgeDataGrid_MouseUp"
-                                  Sorting="CartridgeDataGrid_Sorting"/>
+                                  ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}">
+                    </telerik:RadGridView>
+
                 </TabItem>
                 <TabItem x:Name="CashRegisterTabItem" Header="Контрольная-кассовая машина (ККМ)" Background="#FFE5E5E5">
-                    <DataGrid x:Name="CashRegisterDataGrid" 
-                                  AutoGeneratingColumn="CashRegisterDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="CashRegisterDataGrid_BeginningEdit"
-                                  CellEditEnding="CashRegisterDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding CashRegisterList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="CashRegisterDataGrid_RowEditEnding"
-                                  MouseUp="CashRegisterDataGrid_MouseUp"
-                                  Sorting="CashRegisterDataGrid_Sorting"/>
+                    <telerik:RadGridView x:Name="CashRegisterDataGrid"
+                                  AutoGeneratingColumn="CashRegisterDataGrid_AutoGeneratingColumn"       
+                                  ItemsSource="{Binding CashRegisterList, UpdateSourceTrigger=PropertyChanged}"/>
 
                 </TabItem>
                 <TabItem x:Name="SimCardTabItem" Header="Sim-карты" Background="#FFE5E5E5">
-                    <DataGrid x:Name="SimCardDataGrid" 
-                                  AutoGeneratingColumn="SimCardDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="SimCardDataGrid_BeginningEdit"
-                                  CellEditEnding="SimCardDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="SimCardDataGrid_RowEditEnding"
-                                  MouseUp="SimCardDataGrid_MouseUp"
-                                  Sorting="SimCardDataGrid_Sorting"/>
+                    <telerik:RadGridView x:Name="SimCardDataGrid"
+                                  AutoGeneratingColumn="SimCardDataGrid_AutoGeneratingColumn"       
+                                  ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="PhoneBookTabItem" Header="Телефоны сотрудников" Background="#FFE5E5E5">
-                    <DataGrid x:Name="PhoneBookDataGrid" 
-                                  AutoGeneratingColumn="PhoneBookDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="PhoneBookDataGrid_BeginningEdit"
-                                  CellEditEnding="PhoneBookDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="PhoneBookDataGrid_RowEditEnding"
-                                  MouseUp="PhoneBookDataGrid_MouseUp"
-                                  Sorting="PhoneBookDataGrid_Sorting"/>
+                    <telerik:RadGridView x:Name="PhoneBookDataGrid" 
+                                  AutoGeneratingColumn="PhoneBookDataGrid_AutoGeneratingColumn"       
+                                  ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="HolderTabItem" Header="Владельцы" Background="#FFE5E5E5">
-                    <DataGrid x:Name="HolderDataGrid" 
-                                  AutoGeneratingColumn="HolderDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="HolderDataGrid_BeginningEdit"
-                                  CellEditEnding="HolderDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="HolderDataGrid_RowEditEnding"
-                                  MouseUp="HolderDataGrid_MouseUp"
-                                  Sorting="HolderDataGrid_Sorting"/>
+                    <telerik:RadGridView x:Name="HolderDataGrid"
+                                  AutoGeneratingColumn="HolderDataGrid_AutoGeneratingColumn"   
+                                  ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="UserTabItem" Header="Пользователи" Background="#FFE5E5E5">
-                    <DataGrid x:Name="UserDataGrid" 
+                    <telerik:RadGridView x:Name="UserDataGrid"
                                   AutoGeneratingColumn="UserDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="UserDataGrid_BeginningEdit"
-                                  CellEditEnding="UserDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="UserDataGrid_RowEditEnding"
-                                  MouseUp="UserDataGrid_MouseUp"
-                                  Sorting="UserDataGrid_Sorting"/>
+                                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="IndividualEntrepreneurTabItem" Header="Индивидуальные предприниматели" Background="#FFE5E5E5">
-                    <DataGrid x:Name="IndividualEntrepreneurDataGrid" 
+                    <telerik:RadGridView x:Name="IndividualEntrepreneurDataGrid"
                                   AutoGeneratingColumn="IndividualEntrepreneurDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="IndividualEntrepreneurDataGrid_BeginningEdit"
-                                  CellEditEnding="IndividualEntrepreneurDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="IndividualEntrepreneurDataGrid_RowEditEnding"
-                                  MouseUp="IndividualEntrepreneurDataGrid_MouseUp"
-                                  Sorting="IndividualEntrepreneurDataGrid_Sorting"/>
+                                  ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
                 <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
-                    <DataGrid x:Name="WaybillDataGrid" 
-                                  AutoGeneratingColumn="WaybillDataGrid_AutoGeneratingColumn"
-                                  BeginningEdit="WaybillDataGrid_BeginningEdit"
-                                  CellEditEnding="WaybillDataGrid_CellEditEnding"
-                                  ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}"
-                                  RowEditEnding="WaybillDataGrid_RowEditEnding"
-                                  MouseUp="WaybillDataGrid_MouseUp"
-                                  Sorting="WaybillDataGrid_Sorting"/>
+                    <telerik:RadGridView x:Name="WaybillDataGrid"
+                                  AutoGeneratingColumn="WaybillDataGrid_AutoGeneratingColumn"       
+                                  ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
             </TabControl>
         </Grid>

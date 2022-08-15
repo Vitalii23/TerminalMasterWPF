@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using TerminalMasterWPF.Logging;
@@ -10,10 +11,15 @@ namespace TerminalMasterWPF.DML
 {
     class OrderByElement
     {
-        LogFile logFile = new LogFile();
+        private LogFile logFile = new LogFile();
+        private DataContext dataContext;
+
         public ObservableCollection<Holder> GetOrderByHolder(string connection, string sort, string element)
         {
-            string GetHolder = null;
+            try
+            {
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                string GetHolder = null;
             if (sort.Equals("Ascending"))
             {
                 GetHolder = "SELECT dbo.Holder.id," +
@@ -39,8 +45,7 @@ namespace TerminalMasterWPF.DML
             }
 
             var holders = new ObservableCollection<Holder>();
-            try
-            {
+
                 using (var connect = new SqlConnection(connection))
                 {
                     connect.Open();
@@ -76,6 +81,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<User> GetOrderByUser(string connection, string sort, string element)
         {
             string GetUser = null;
@@ -141,6 +147,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<Cartridge> GetOrderByCartridges(string connection, string sort, string element)
         {
             string GetCartridgeQuery = null;
@@ -204,6 +211,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<CashRegister> GetOrderByCashRegister(string connection, string sort, string element)
         {
             string GetCashRegister = null;
@@ -416,6 +424,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<PhoneBook> GetOrderByPhoneBook(string connection, string sort, string element)
         {
             string GetPhoneBook = null; ;
@@ -484,6 +493,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<Printer> GetOrderByPrinter(string connection, string sort, string element)
         {
             string GetPrinter = null;
@@ -563,6 +573,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<SimCard> GetOrderBySimCard(string connection, string sort, string element)
         {
             string GetSimCard = null;
@@ -655,6 +666,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<IndividualEntrepreneur> GetOrderByIndividual(string connection, string sort, string element)
         {
             string GetIndividual = null;
@@ -720,6 +732,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<Waybill> GetOrderByWaybill(string connection, string sort, string element)
         {
             string GetWaybill = null;
@@ -838,7 +851,9 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<CountersPage> GetOrderByCountersPage(string connection, string sort, string element)
+
         {
             string GetCountersPageQuery = null;
             if (sort.Equals("Ascending"))
@@ -898,6 +913,7 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         private static byte[] GetDocument(int documentId, string connection)
         {
             using (SqlConnection connect = new SqlConnection(connection))

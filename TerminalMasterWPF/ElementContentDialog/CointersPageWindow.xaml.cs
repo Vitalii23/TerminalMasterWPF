@@ -32,7 +32,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            printer = get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
+            printer = get.GetPrinter("ALL", 0);
 
 
             for (int i = 0; i < printer.Count; i++)

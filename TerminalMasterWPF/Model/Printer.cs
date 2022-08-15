@@ -1,25 +1,43 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
 {
+    [Table(Name = "Printer")]
     class Printer
     {
+        [DisplayAttribute(AutoGenerateField = false)]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public int Id { get; set; }
-        public string BrandPrinter { get; set; } // Фирма
-        public string ModelPrinter { get; set; } // Модель принтера
-        public string Cartridge { get; set; } // Катридж
-        public string NamePort { get; set; } // Имена портов
-        public string LocationPrinter { get; set; } // Расположение принтера
-        public string Status { get; set; } // Статус
-        public string VendorCodePrinter { get; set; } // Артикули принтера
-        public int Сounters { get; set; } // Счетчик страниц
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
-        public DateTime DatePrinter { get; set; }
-        public string DatePrinterString { get; set; }
 
-        public Printer()
-        {
-        }
+        [DisplayAttribute(Name = "Фирма")]
+        [Column(Name = "brand")]
+        public string BrandPrinter { get; set; }
+
+        [DisplayAttribute(Name = "Модель принтера")]
+        [Column(Name = "model")]
+        public string ModelPrinter { get; set; }
+
+        [DisplayAttribute(Name = "Катридж")]
+        [Column(Name = "cartridge")]
+        public string Cartridge { get; set; }
+
+        [DisplayAttribute(Name = "Имена портов")]
+        [Column(Name = "name_port")]
+        public string NamePort { get; set; }
+
+        [DisplayAttribute(Name = "Расположение принтера")]
+        [Column(Name = "location")]
+        public string LocationPrinter { get; set; }
+
+        [DisplayAttribute(Name = "Статус")]
+        [Column(Name = "status")]
+        public string Status { get; set; }
+
+        [DisplayAttribute(Name = "Артикули принтера")]
+        [Column(Name = "vendor_code")]
+        public string VendorCodePrinter { get; set; }
+
+        public Printer() { }
     }
 }
