@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.Model.People;
@@ -14,195 +16,24 @@ namespace TerminalMasterWPF.DML
         private LogFile logFile = new LogFile();
         private DataContext dataContext;
 
-        public ObservableCollection<Holder> GetOrderByHolder(string connection, string sort, string element)
+        public ObservableCollection<Cartridge> GetOrderByCartridges(string sort, string element)
         {
             try
             {
                 dataContext = new DataContext((App.Current as App).ConnectionString);
-                string GetHolder = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetHolder = "SELECT dbo.Holder.id," +
-                    "dbo.Holder.last_name, " +
-                    "dbo.Holder.first_name, " +
-                    "dbo.Holder.middle_name, " +
-                    "dbo.Holder.number, " +
-                    "dbo.Holder.status " +
-                    "FROM Holder " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetHolder = "SELECT dbo.Holder.id," +
-                    "dbo.Holder.last_name, " +
-                    "dbo.Holder.first_name, " +
-                    "dbo.Holder.middle_name, " +
-                    "dbo.Holder.number, " +
-                    "dbo.Holder.status " +
-                    "FROM Holder " +
-                    "ORDER BY " + element + " DESC;";
-            }
-
-            var holders = new ObservableCollection<Holder>();
-
-                using (var connect = new SqlConnection(connection))
+                IEnumerable<Cartridge> query = null;
+                if (sort.Equals("Ascending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetHolder;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var holder = new Holder()
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        LastName = reader.GetString(1),
-                                        FirstName = reader.GetString(2),
-                                        MiddleName = reader.GetString(3),
-                                        Number = reader.GetString(4),
-                                        Status = reader.GetString(5)
-                                    };
-                                    holders.Add(holder);
-                                }
-                            }
-                        }
-                    }
+                    // query = dataContext.GetTable<Cartridge>().OrderBy(cartridge => cartridge.);
                 }
-                return holders;
-            }
-            catch (Exception eSql)
-            {
-                logFile.WriteLogAsync(eSql.Message, "GetOrderByHolder");
-            }
-            return null;
-        }
 
-        public ObservableCollection<User> GetOrderByUser(string connection, string sort, string element)
-        {
-            string GetUser = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetUser = "SELECT dbo.UserDevice.id, " +
-                    "dbo.UserDevice.last_name, " +
-                    "dbo.UserDevice.first_name, " +
-                    "dbo.UserDevice.middle_name, " +
-                    "dbo.UserDevice.number, " +
-                    "dbo.UserDevice.status " +
-                    "FROM UserDevice " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetUser = "SELECT dbo.UserDevice.id, " +
-                    "dbo.UserDevice.last_name, " +
-                    "dbo.UserDevice.first_name, " +
-                    "dbo.UserDevice.middle_name, " +
-                    "dbo.UserDevice.number, " +
-                    "dbo.UserDevice.status " +
-                    "FROM UserDevice " +
-                    "ORDER BY " + element + " DESC;";
-            }
-
-            var users = new ObservableCollection<User>();
-            try
-            {
-                using (var connect = new SqlConnection(connection))
+                if (sort.Equals("Descending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetUser;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var user = new User()
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        LastName = reader.GetString(1),
-                                        FirstName = reader.GetString(2),
-                                        MiddleName = reader.GetString(3),
-                                        Number = reader.GetString(4),
-                                        Status = reader.GetString(5)
-                                    };
-                                    users.Add(user);
-                                }
-                            }
-                        }
-                    }
+                    // query = dataContext.GetTable<Cartridge>().OrderByDescending(cartridge => cartridge.);
                 }
-                return users;
-            }
-            catch (Exception eSql)
-            {
-                logFile.WriteLogAsync(eSql.Message, "GetOrderByUser");
-            }
-            return null;
-        }
-
-        public ObservableCollection<Cartridge> GetOrderByCartridges(string connection, string sort, string element)
-        {
-            string GetCartridgeQuery = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetCartridgeQuery = "SELECT dbo.Cartrides.id, " +
-                    "dbo.Cartrides.brand, " +
-                    "dbo.Cartrides.model, " +
-                    "dbo.Cartrides.vendor_code, " +
-                    "dbo.Cartrides.status " +
-                    "FROM dbo.Cartrides " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetCartridgeQuery = "SELECT dbo.Cartrides.id, " +
-                    "dbo.Cartrides.brand, " +
-                    "dbo.Cartrides.model, " +
-                    "dbo.Cartrides.vendor_code, " +
-                    "dbo.Cartrides.status " +
-                    "FROM dbo.Cartrides " +
-                    "ORDER BY " + element + " DESC;";
-            }
 
 
-            ObservableCollection<Cartridge> cartridges = new ObservableCollection<Cartridge>();
-            try
-            {
-                using (SqlConnection connect = new SqlConnection(connection))
-                {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetCartridgeQuery;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var cartridge = new Cartridge
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        Brand = reader.GetString(1),
-                                        Model = reader.GetString(2),
-                                        VendorCode = reader.GetString(3),
-                                        Status = reader.GetString(4)
-                                    };
-                                    cartridges.Add(cartridge);
-                                }
-                            }
-                        }
-                    }
-                }
+                ObservableCollection<Cartridge> cartridges = new ObservableCollection<Cartridge>(query);
                 return cartridges;
             }
             catch (Exception eSql)
@@ -212,208 +43,102 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public ObservableCollection<CashRegister> GetOrderByCashRegister(string connection, string sort, string element)
+        public ObservableCollection<CashRegister> GetOrderByCashRegister(string sort, string element)
         {
-            string GetCashRegister = null;
-            if (sort.Equals("Ascending"))
-            {
-                if (element.Equals("holder"))
-                {
-                    GetCashRegister = "SELECT dbo.CashRegister.id, " +
-                                       "dbo.CashRegister.name, " +
-                                       "dbo.CashRegister.brand, " +
-                                       "dbo.CashRegister.factory_number, " +
-                                       "dbo.CashRegister.serial_number, " +
-                                       "dbo.CashRegister.payment_number, " +
-                                       "dbo.CashRegister.date_reception, " +
-                                       "dbo.CashRegister.date_end_fiscal_memory, " +
-                                       "dbo.CashRegister.date_key_activ_fisc_data, " +
-                                       "dbo.CashRegister.location, " +
-                                       "dbo.CashRegister.id_holder," +
-                                       "dbo.CashRegister.id_user," +
-                                       "dbo.Holder.last_name, " +
-                                       "dbo.Holder.first_name, " +
-                                       "dbo.Holder.middle_name, " +
-                                       "dbo.UserDevice.last_name, " +
-                                       "dbo.UserDevice.first_name, " +
-                                       "dbo.UserDevice.middle_name " +
-                                       "FROM dbo.CashRegister " +
-                                       "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.CashRegister.id_holder " +
-                                       "INNER JOIN dbo.UserDevice ON dbo.UserDevice.id = dbo.CashRegister.id_user " +
-                                       "ORDER BY dbo.Holder.last_name;";
-                }
-                else if (element.Equals("user"))
-                {
-                    GetCashRegister = "SELECT dbo.CashRegister.id, " +
-                                       "dbo.CashRegister.name, " +
-                                       "dbo.CashRegister.brand, " +
-                                       "dbo.CashRegister.factory_number, " +
-                                       "dbo.CashRegister.serial_number, " +
-                                       "dbo.CashRegister.payment_number, " +
-                                       "dbo.CashRegister.date_reception, " +
-                                       "dbo.CashRegister.date_end_fiscal_memory, " +
-                                       "dbo.CashRegister.date_key_activ_fisc_data, " +
-                                       "dbo.CashRegister.location, " +
-                                       "dbo.CashRegister.id_holder," +
-                                       "dbo.CashRegister.id_user," +
-                                       "dbo.Holder.last_name, " +
-                                       "dbo.Holder.first_name, " +
-                                       "dbo.Holder.middle_name, " +
-                                       "dbo.UserDevice.last_name, " +
-                                       "dbo.UserDevice.first_name, " +
-                                       "dbo.UserDevice.middle_name " +
-                                       "FROM dbo.CashRegister " +
-                                       "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.CashRegister.id_holder " +
-                                       "INNER JOIN dbo.UserDevice ON dbo.UserDevice.id = dbo.CashRegister.id_user " +
-                                       "ORDER BY dbo.UserDevice.last_name;";
-                }
-                else
-                {
-                    GetCashRegister = "SELECT dbo.CashRegister.id, " +
-                                       "dbo.CashRegister.name, " +
-                                       "dbo.CashRegister.brand, " +
-                                       "dbo.CashRegister.factory_number, " +
-                                       "dbo.CashRegister.serial_number, " +
-                                       "dbo.CashRegister.payment_number, " +
-                                       "dbo.CashRegister.date_reception, " +
-                                       "dbo.CashRegister.date_end_fiscal_memory, " +
-                                       "dbo.CashRegister.date_key_activ_fisc_data, " +
-                                       "dbo.CashRegister.location, " +
-                                       "dbo.CashRegister.id_holder," +
-                                       "dbo.CashRegister.id_user," +
-                                       "dbo.Holder.last_name, " +
-                                       "dbo.Holder.first_name, " +
-                                       "dbo.Holder.middle_name, " +
-                                       "dbo.UserDevice.last_name, " +
-                                       "dbo.UserDevice.first_name, " +
-                                       "dbo.UserDevice.middle_name " +
-                                       "FROM dbo.CashRegister " +
-                                       "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.CashRegister.id_holder " +
-                                       "INNER JOIN dbo.UserDevice ON dbo.UserDevice.id = dbo.CashRegister.id_user " +
-                                       "ORDER BY " + element + ";";
-                }
-
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                if (element.Equals("holder"))
-                {
-                    GetCashRegister = "SELECT dbo.CashRegister.id, " +
-                                       "dbo.CashRegister.name, " +
-                                       "dbo.CashRegister.brand, " +
-                                       "dbo.CashRegister.factory_number, " +
-                                       "dbo.CashRegister.serial_number, " +
-                                       "dbo.CashRegister.payment_number, " +
-                                       "dbo.CashRegister.date_reception, " +
-                                       "dbo.CashRegister.date_end_fiscal_memory, " +
-                                       "dbo.CashRegister.date_key_activ_fisc_data, " +
-                                       "dbo.CashRegister.location, " +
-                                       "dbo.CashRegister.id_holder," +
-                                       "dbo.CashRegister.id_user," +
-                                       "dbo.Holder.last_name, " +
-                                       "dbo.Holder.first_name, " +
-                                       "dbo.Holder.middle_name, " +
-                                       "dbo.UserDevice.last_name, " +
-                                       "dbo.UserDevice.first_name, " +
-                                       "dbo.UserDevice.middle_name " +
-                                       "FROM dbo.CashRegister " +
-                                       "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.CashRegister.id_holder " +
-                                       "INNER JOIN dbo.UserDevice ON dbo.UserDevice.id = dbo.CashRegister.id_user " +
-                                       "ORDER BY dbo.Holder.last_name DESC;";
-                }
-                else if (element.Equals("user"))
-                {
-                    GetCashRegister = "SELECT dbo.CashRegister.id, " +
-                                       "dbo.CashRegister.name, " +
-                                       "dbo.CashRegister.brand, " +
-                                       "dbo.CashRegister.factory_number, " +
-                                       "dbo.CashRegister.serial_number, " +
-                                       "dbo.CashRegister.payment_number, " +
-                                       "dbo.CashRegister.date_reception, " +
-                                       "dbo.CashRegister.date_end_fiscal_memory, " +
-                                       "dbo.CashRegister.date_key_activ_fisc_data, " +
-                                       "dbo.CashRegister.location, " +
-                                       "dbo.CashRegister.id_holder," +
-                                       "dbo.CashRegister.id_user," +
-                                       "dbo.Holder.last_name, " +
-                                       "dbo.Holder.first_name, " +
-                                       "dbo.Holder.middle_name, " +
-                                       "dbo.UserDevice.last_name, " +
-                                       "dbo.UserDevice.first_name, " +
-                                       "dbo.UserDevice.middle_name " +
-                                       "FROM dbo.CashRegister " +
-                                       "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.CashRegister.id_holder " +
-                                       "INNER JOIN dbo.UserDevice ON dbo.UserDevice.id = dbo.CashRegister.id_user " +
-                                       "ORDER BY dbo.UserDevice.last_name DESC;";
-                }
-                else
-                {
-                    GetCashRegister = "SELECT dbo.CashRegister.id, " +
-                                       "dbo.CashRegister.name, " +
-                                       "dbo.CashRegister.brand, " +
-                                       "dbo.CashRegister.factory_number, " +
-                                       "dbo.CashRegister.serial_number, " +
-                                       "dbo.CashRegister.payment_number, " +
-                                       "dbo.CashRegister.date_reception, " +
-                                       "dbo.CashRegister.date_end_fiscal_memory, " +
-                                       "dbo.CashRegister.date_key_activ_fisc_data, " +
-                                       "dbo.CashRegister.location, " +
-                                       "dbo.CashRegister.id_holder," +
-                                       "dbo.CashRegister.id_user," +
-                                       "dbo.Holder.last_name, " +
-                                       "dbo.Holder.first_name, " +
-                                       "dbo.Holder.middle_name, " +
-                                       "dbo.UserDevice.last_name, " +
-                                       "dbo.UserDevice.first_name, " +
-                                       "dbo.UserDevice.middle_name " +
-                                       "FROM dbo.CashRegister " +
-                                       "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.CashRegister.id_holder " +
-                                       "INNER JOIN dbo.UserDevice ON dbo.UserDevice.id = dbo.CashRegister.id_user " +
-                                       "ORDER BY " + element + " DESC   ;";
-                }
-            }
-
-            ObservableCollection<CashRegister> cashRegisters = new ObservableCollection<CashRegister>();
             try
             {
-                using (var connect = new SqlConnection(connection))
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                ObservableCollection<CashRegister> cashRegisters = null;
+                if (sort.Equals("Ascending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
+                    if (element.Equals("holder"))
                     {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetCashRegister;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-
-                                while (reader.Read())
-                                {
-                                    var cashRegister = new CashRegister
+                        var query = from cash in dataContext.GetTable<CashRegister>()
+                                    join holder in dataContext.GetTable<Holder>() on cash.IdHolder equals holder.Id
+                                    join user in dataContext.GetTable<User>() on cash.IdUser equals user.Id
+                                    orderby holder.LastName
+                                    select new
                                     {
-                                        Id = reader.GetInt32(0),
-                                        NameDevice = reader.GetString(1),
-                                        Brand = reader.GetString(2),
-                                        FactoryNumber = reader.GetString(3),
-                                        SerialNumber = reader.GetString(4),
-                                        PaymentNumber = reader.GetString(5),
-                                        DateReception = reader.GetDateTime(6)
+                                        cash,
+                                        holder,
+                                        user
                                     };
-                                    cashRegister.DateReceptionString = cashRegister.DateReception.ToShortDateString();
-                                    cashRegister.DateEndFiscalMemory = reader.GetDateTime(7);
-                                    cashRegister.DateEndFiscalMemoryString = cashRegister.DateEndFiscalMemory.ToShortDateString();
-                                    cashRegister.DateKeyActivationFiscalDataOperator = reader.GetDateTime(8);
-                                    cashRegister.DateKeyActivationFiscalDataOperatorString = cashRegister.DateKeyActivationFiscalDataOperator.ToShortDateString();
-                                    cashRegister.Location = reader.GetString(9);
-                                    cashRegister.IdHolder = reader.GetInt32(10);
-                                    cashRegister.IdUser = reader.GetInt32(11);
-                                    cashRegister.Holder = reader.GetString(12) + " " + reader.GetString(13) + " " + reader.GetString(14);
-                                    cashRegister.User = reader.GetString(15) + " " + reader.GetString(16) + " " + reader.GetString(17);
-                                    cashRegisters.Add(cashRegister);
-                                }
-                            }
-                        }
+                        cashRegisters = new ObservableCollection<CashRegister>((IEnumerable<CashRegister>)query);
+                    }
+                    else if (element.Equals("user"))
+                    {
+                        var query = from cash in dataContext.GetTable<CashRegister>()
+                                    join holder in dataContext.GetTable<Holder>() on cash.IdHolder equals holder.Id
+                                    join user in dataContext.GetTable<User>() on cash.IdUser equals user.Id
+                                    orderby user.LastName
+                                    select new
+                                    {
+                                        cash,
+                                        holder,
+                                        user
+                                    };
+                        cashRegisters = new ObservableCollection<CashRegister>((IEnumerable<CashRegister>)query);
+                    }
+                    else
+                    {
+                        //var query = from cash in dataContext.GetTable<CashRegister>()
+                        //            join holder in dataContext.GetTable<Holder>() on cash.IdHolder equals holder.Id
+                        //            join user in dataContext.GetTable<User>() on cash.IdUser equals user.Id
+                        //            orderby holder.
+                        //            select new
+                        //            {
+                        //                cash,
+                        //                holder,
+                        //                user
+                        //            };
+                        //cashRegisters = new ObservableCollection<CashRegister>((IEnumerable<CashRegister>)query);
+                    }
+
+                }
+
+                if (sort.Equals("Descending"))
+                {
+                    if (element.Equals("holder"))
+                    {
+                        var query = from cash in dataContext.GetTable<CashRegister>()
+                                    join holder in dataContext.GetTable<Holder>() on cash.IdHolder equals holder.Id
+                                    join user in dataContext.GetTable<User>() on cash.IdUser equals user.Id
+                                    orderby holder.LastName descending
+                                    select new
+                                    {
+                                        cash,
+                                        holder,
+                                        user
+                                    };
+                        cashRegisters = new ObservableCollection<CashRegister>((IEnumerable<CashRegister>)query);
+                    }
+                    else if (element.Equals("user"))
+                    {
+                        var query = from cash in dataContext.GetTable<CashRegister>()
+                                    join holder in dataContext.GetTable<Holder>() on cash.IdHolder equals holder.Id
+                                    join user in dataContext.GetTable<User>() on cash.IdUser equals user.Id
+                                    orderby user.LastName descending
+                                    select new
+                                    {
+                                        cash,
+                                        holder,
+                                        user
+                                    };
+                        cashRegisters = new ObservableCollection<CashRegister>((IEnumerable<CashRegister>)query);
+                    }
+                    else
+                    {
+                        //var query = from cash in dataContext.GetTable<CashRegister>()
+                        //            join holder in dataContext.GetTable<Holder>() on cash.IdHolder equals holder.Id
+                        //            join user in dataContext.GetTable<User>() on cash.IdUser equals user.Id
+                        //            orderby user. descending
+                        //            select new
+                        //            {
+                        //                cash,
+                        //                holder,
+                        //                user
+                        //            };
+                        //cashRegisters = new ObservableCollection<CashRegister>((IEnumerable<CashRegister>)query);
                     }
                 }
                 return cashRegisters;
@@ -425,66 +150,120 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public ObservableCollection<PhoneBook> GetOrderByPhoneBook(string connection, string sort, string element)
+        public ObservableCollection<CountersPage> GetOrderByCountersPage(string sort, string element)
+
         {
-            string GetPhoneBook = null; ;
-            if (sort.Equals("Ascending"))
-            {
-                GetPhoneBook = "SELECT dbo.PhoneBook.id, " +
-                    "dbo.PhoneBook.first_name, " +
-                    "dbo.PhoneBook.last_name, " +
-                    "dbo.PhoneBook.middle_name, " +
-                    "dbo.PhoneBook.post, " +
-                    "dbo.PhoneBook.internal_number, " +
-                    "dbo.PhoneBook.mobile_number " +
-                    "FROM PhoneBook " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetPhoneBook = "SELECT dbo.PhoneBook.id, " +
-                    "dbo.PhoneBook.first_name, " +
-                    "dbo.PhoneBook.last_name, " +
-                    "dbo.PhoneBook.middle_name, " +
-                    "dbo.PhoneBook.post, " +
-                    "dbo.PhoneBook.internal_number, " +
-                    "dbo.PhoneBook.mobile_number " +
-                    "FROM PhoneBook " +
-                    "ORDER BY " + element + " DESC;";
-            }
-
-            var phoneBooks = new ObservableCollection<PhoneBook>();
             try
             {
-                using (var connect = new SqlConnection(connection))
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                IEnumerable<CountersPage> query = null;
+                if (sort.Equals("Ascending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetPhoneBook;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var phoneBook = new PhoneBook()
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        FirstName = reader.GetString(1),
-                                        LastName = reader.GetString(2),
-                                        MiddleName = reader.GetString(3),
-                                        Post = reader.GetString(4),
-                                        InternalNumber = Convert.ToString(reader.GetInt32(5)),
-                                        MobileNumber = reader.GetString(6)
-                                    };
-                                    phoneBooks.Add(phoneBook);
-                                }
-                            }
-                        }
-                    }
+                    //var query = from counter in dataContext.GetTable<CountersPage>()
+                    //            join printer in dataContext.GetTable<Printer>() on counter.IdPrinter equals printer.Id
+                    //            orderby element
+                    //            select new
+                    //            {
+                    //                counter,
+                    //                printer
+                    //            };
                 }
+
+                if (sort.Equals("Descending"))
+                {
+                    //var query = from counter in dataContext.GetTable<CountersPage>()
+                    //            join printer in dataContext.GetTable<Printer>() on counter.IdPrinter equals printer.Id
+                    //            orderby element descending
+                    //            select new
+                    //            {
+                    //                counter,
+                    //                printer
+                    //            };
+                }
+
+
+                ObservableCollection<CountersPage> countersPages = new ObservableCollection<CountersPage>(query);
+
+                return countersPages;
+            }
+            catch (Exception eSql)
+            {
+                logFile.WriteLogAsync(eSql.Message, "GetOrderByCartridges");
+            }
+            return null;
+        }
+
+        public ObservableCollection<Holder> GetOrderByHolder(string sort, string element)
+        {
+            try
+            {
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                IEnumerable<Holder> query = null;
+                if (sort.Equals("Ascending"))
+                {
+                    //query = dataContext.GetTable<Holder>().OrderBy(holder => holder.);
+                }
+
+                if (sort.Equals("Descending"))
+                {
+                    //query = dataContext.GetTable<Holder>().OrderByDescending(holder => holder.);
+                }
+
+                ObservableCollection<Holder> holders = new ObservableCollection<Holder>();
+
+                return holders;
+            }
+            catch (Exception eSql)
+            {
+                logFile.WriteLogAsync(eSql.Message, "GetOrderByHolder");
+            }
+            return null;
+        }
+
+        public ObservableCollection<IndividualEntrepreneur> GetOrderByIndividual(string sort, string element)
+        {
+            try
+            {
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                IEnumerable<IndividualEntrepreneur> query = null;
+                if (sort.Equals("Ascending"))
+                {
+                    //query = dataContext.GetTable<IndividualEntrepreneur>().OrderBy(ind => ind.);
+                }
+
+                if (sort.Equals("Descending"))
+                {
+                    //query = dataContext.GetTable<IndividualEntrepreneur>().OrderByDescending(ind => ind.);
+                }
+
+                var individuals = new ObservableCollection<IndividualEntrepreneur>(query);
+
+                return individuals;
+            }
+            catch (Exception eSql)
+            {
+                logFile.WriteLogAsync(eSql.Message, "GetOrderByIndividual");
+            }
+            return null;
+        }
+
+        public ObservableCollection<PhoneBook> GetOrderByPhoneBook(string sort, string element)
+        {
+            try
+            {
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                IEnumerable<PhoneBook> query = null;
+                if (sort.Equals("Ascending"))
+                {
+                    //query = dataContext.GetTable<PhoneBook>().OrderBy(phone => phone.);
+                }
+
+                if (sort.Equals("Descending"))
+                {
+                    //query = dataContext.GetTable<PhoneBook>().OrderByDescending(phone => phone.);
+                }
+
+                ObservableCollection<PhoneBook> phoneBooks = new ObservableCollection<PhoneBook>(query);
                 return phoneBooks;
             }
             catch (Exception eSql)
@@ -494,76 +273,23 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public ObservableCollection<Printer> GetOrderByPrinter(string connection, string sort, string element)
+        public ObservableCollection<Printer> GetOrderByPrinter(string sort, string element)
         {
-            string GetPrinter = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetPrinter = "SELECT dbo.Printer.id, " +
-                    "dbo.Printer.brand, " +
-                    "dbo.Printer.model, " +
-                    "dbo.Printer.cartridge, " +
-                    "dbo.Printer.name_port, " +
-                    "dbo.Printer.location, " +
-                    "dbo.Printer.status, " +
-                    "dbo.Printer.vendor_code, " +
-                    "dbo.Printer.counters, " +
-                    "dbo.Printer.date" +
-                    "FROM Printer " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetPrinter = "SELECT dbo.Printer.id, " +
-                    "dbo.Printer.brand, " +
-                    "dbo.Printer.model, " +
-                    "dbo.Printer.cartridge, " +
-                    "dbo.Printer.name_port, " +
-                    "dbo.Printer.location, " +
-                    "dbo.Printer.status, " +
-                    "dbo.Printer.vendor_code, " +
-                    "dbo.Printer.counters, " +
-                    "dbo.Printer.date" +
-                    "FROM Printer " +
-                    "ORDER BY " + element + " DESC;";
-            }
-
-            var printers = new ObservableCollection<Printer>();
             try
             {
-                using (var connect = new SqlConnection(connection))
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                IEnumerable<Printer> query = null;
+                if (sort.Equals("Ascending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetPrinter;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var printer = new Printer
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        BrandPrinter = reader.GetString(1),
-                                        ModelPrinter = reader.GetString(2),
-                                        Cartridge = reader.GetString(3),
-                                        NamePort = reader.GetString(4),
-                                        LocationPrinter = reader.GetString(5),
-                                        Status = reader.GetString(6),
-                                        VendorCodePrinter = reader.GetString(7),
-                                        Сounters = reader.GetInt32(8),
-                                        DatePrinter = reader.GetDateTime(9)
-                                    };
-                                    printer.DatePrinterString = printer.DatePrinter.ToShortDateString();
-                                    printers.Add(printer);
-                                }
-                            }
-                        }
-                    }
+                    //query = dataContext.GetTable<Printer>().OrderBy(printer => printer.);
                 }
+
+                if (sort.Equals("Descending"))
+                {
+                    //query = dataContext.GetTable<Printer>().OrderByDescending(printer => printer.);
+                }
+
+                ObservableCollection<Printer> printers = new ObservableCollection<Printer>(query);
                 return printers;
             }
             catch (Exception eSql)
@@ -574,90 +300,42 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public ObservableCollection<SimCard> GetOrderBySimCard(string connection, string sort, string element)
+        public ObservableCollection<SimCard> GetOrderBySimCard(string sort, string element)
         {
-            string GetSimCard = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetSimCard = "SELECT dbo.SimCard.id, " +
-                    "dbo.CashRegister.name, " +
-                    "dbo.SimCard.operator, " +
-                    "dbo.SimCard.identifaction_number, " +
-                    "dbo.CashRegister.brand, " +
-                    "dbo.SimCard.type_device, " +
-                    "dbo.SimCard.tms, " +
-                    "dbo.SimCard.icc, " +
-                    "dbo.SimCard.status, " +
-                    "dbo.SimCard.id_individual_entrepreneur, " +
-                    "dbo.SimCard.id_cashRegister, " +
-                    "dbo.IndividualEntrepreneur.last_name, " +
-                    "dbo.IndividualEntrepreneur.first_name, " +
-                    "dbo.IndividualEntrepreneur.middle_name " +
-                   "FROM dbo.SimCard " +
-                   "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
-                   "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister " +
-                   "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetSimCard = "SELECT dbo.SimCard.id, " +
-                    "dbo.CashRegister.name, " +
-                    "dbo.SimCard.operator, " +
-                    "dbo.SimCard.identifaction_number, " +
-                    "dbo.CashRegister.brand, " +
-                    "dbo.SimCard.type_device, " +
-                    "dbo.SimCard.tms, " +
-                    "dbo.SimCard.icc, " +
-                    "dbo.SimCard.status, " +
-                    "dbo.SimCard.id_individual_entrepreneur, " +
-                    "dbo.SimCard.id_cashRegister, " +
-                    "dbo.IndividualEntrepreneur.last_name, " +
-                    "dbo.IndividualEntrepreneur.first_name, " +
-                    "dbo.IndividualEntrepreneur.middle_name " +
-                   "FROM dbo.SimCard " +
-                   "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
-                   "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister " +
-                   "ORDER BY " + element + " DESC;";
-            }
-
-            var simCards = new ObservableCollection<SimCard>();
             try
             {
-                using (var connect = new SqlConnection(connection))
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                ObservableCollection<SimCard> simCards = null;
+                if (sort.Equals("Ascending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetSimCard;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
+                    var query = from simcard in dataContext.GetTable<SimCard>()
+                                join ind in dataContext.GetTable<IndividualEntrepreneur>() on simcard.IdIndividual equals ind.Id
+                                join cash in dataContext.GetTable<CashRegister>() on simcard.IdCashRegister equals cash.Id
+                                orderby element
+                                select new
                                 {
-                                    var simcard = new SimCard
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        NameTerminal = reader.GetString(1),
-                                        Operator = reader.GetString(2),
-                                        IdentNumber = reader.GetString(3),
-                                        Brand = reader.GetString(4),
-                                        TypeDevice = reader.GetString(5),
-                                        TMS = reader.GetString(6),
-                                        ICC = reader.GetString(7),
-                                        Status = reader.GetString(8),
-                                        IdIndividual = reader.GetInt32(9),
-                                        IdCashRegister = reader.GetInt32(10),
-                                        IndividualEntrepreneur = reader.GetString(11) + " " + reader.GetString(12) + " " + reader.GetString(13)
-                                    };
-
-                                    simCards.Add(simcard);
-                                }
-                            }
-                        }
-                    }
+                                    simcard,
+                                    ind,
+                                    cash
+                                };
+                    simCards = new ObservableCollection<SimCard>((IEnumerable<SimCard>)query);
                 }
+
+                if (sort.Equals("Descending"))
+                {
+                    var query = from simcard in dataContext.GetTable<SimCard>()
+                                join ind in dataContext.GetTable<IndividualEntrepreneur>() on simcard.IdIndividual equals ind.Id
+                                join cash in dataContext.GetTable<CashRegister>() on simcard.IdCashRegister equals cash.Id
+                                orderby element descending
+                                select new
+                                {
+                                    simcard,
+                                    ind,
+                                    cash
+                                };
+                    simCards = new ObservableCollection<SimCard>((IEnumerable<SimCard>)query);
+                }
+
                 return simCards;
             }
             catch (Exception eSql)
@@ -667,249 +345,73 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public ObservableCollection<IndividualEntrepreneur> GetOrderByIndividual(string connection, string sort, string element)
+        public ObservableCollection<User> GetOrderByUser(string sort, string element)
         {
-            string GetIndividual = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetIndividual = "SELECT dbo.IndividualEntrepreneur.id," +
-                    "dbo.IndividualEntrepreneur.last_name, " +
-                    "dbo.IndividualEntrepreneur.first_name, " +
-                    "dbo.IndividualEntrepreneur.middle_name, " +
-                    "dbo.IndividualEntrepreneur.psrnie, " +
-                    "dbo.IndividualEntrepreneur.tin" +
-                    "FROM IndividualEntrepreneur " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetIndividual = "SELECT dbo.IndividualEntrepreneur.id," +
-                    "dbo.IndividualEntrepreneur.last_name, " +
-                    "dbo.IndividualEntrepreneur.first_name, " +
-                    "dbo.IndividualEntrepreneur.middle_name, " +
-                    "dbo.IndividualEntrepreneur.psrnie, " +
-                    "dbo.IndividualEntrepreneur.tin" +
-                    "FROM IndividualEntrepreneur " +
-                    "ORDER BY " + element + " DESC;";
-            }
-
-            var individuals = new ObservableCollection<IndividualEntrepreneur>();
             try
             {
-                using (SqlConnection connect = new SqlConnection(connection))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
+                    dataContext = new DataContext((App.Current as App).ConnectionString);
+                    IEnumerable<User> query = null;
+                    if (sort.Equals("Ascending"))
                     {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetIndividual;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    IndividualEntrepreneur individual = new IndividualEntrepreneur()
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        LastName = reader.GetString(1),
-                                        FirstName = reader.GetString(2),
-                                        MiddleName = reader.GetString(3),
-                                        PSRNIE = reader.GetString(4),
-                                        TIN = reader.GetString(5),
-                                    };
-                                    individuals.Add(individual);
-                                }
-                            }
-                        }
+                        //query = dataContext.GetTable<User>().OrderBy(user => user.);
                     }
+
+                    if (sort.Equals("Descending"))
+                    {
+                        //query = dataContext.GetTable<User>().OrderByDescending(user => user.);
+                    }
+
+                    ObservableCollection<User> users = new ObservableCollection<User>();
+                    return users;
                 }
-                return individuals;
             }
+
             catch (Exception eSql)
             {
-                logFile.WriteLogAsync(eSql.Message, "GetOrderByIndividual");
+                logFile.WriteLogAsync(eSql.Message, "GetOrderByUser");
             }
             return null;
         }
 
-        public ObservableCollection<Waybill> GetOrderByWaybill(string connection, string sort, string element)
+        public ObservableCollection<Waybill> GetOrderByWaybill(string sort, string element)
         {
-            string GetWaybill = null;
-
-            if (sort.Equals("Ascending"))
-            {
-                if (element.Equals("holder"))
-                {
-                    GetWaybill = "SELECT dbo.Waybill.id, " +
-                    "dbo.Waybill.name_document, " +
-                    "dbo.Waybill.number_document, " +
-                    "dbo.Waybill.number_suppliers, " +
-                    "dbo.Waybill.date_document, " +
-                    "dbo.Waybill.file_name, " +
-                    "dbo.Waybill.id_holder, " +
-                    "dbo.Holder.last_name, " +
-                    "dbo.Holder.first_name, " +
-                    "dbo.Holder.middle_name " +
-                    "FROM dbo.Waybill " +
-                    "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                    "ORDER BY dbo.Holder.last_name;";
-                }
-                else
-                {
-                    GetWaybill = "SELECT dbo.Waybill.id, " +
-                    "dbo.Waybill.name_document, " +
-                    "dbo.Waybill.number_document, " +
-                    "dbo.Waybill.number_suppliers, " +
-                    "dbo.Waybill.date_document, " +
-                    "dbo.Waybill.file_name, " +
-                    "dbo.Waybill.id_holder, " +
-                    "dbo.Holder.last_name, " +
-                    "dbo.Holder.first_name, " +
-                    "dbo.Holder.middle_name " +
-                    "FROM dbo.Waybill " +
-                    "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                    "ORDER BY " + element + ";";
-                }
-
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                if (element.Equals("holder"))
-                {
-                    GetWaybill = "SELECT dbo.Waybill.id, " +
-                    "dbo.Waybill.name_document, " +
-                    "dbo.Waybill.number_document, " +
-                    "dbo.Waybill.number_suppliers, " +
-                    "dbo.Waybill.date_document, " +
-                    "dbo.Waybill.file_name, " +
-                    "dbo.Waybill.id_holder, " +
-                    "dbo.Holder.last_name, " +
-                    "dbo.Holder.first_name, " +
-                    "dbo.Holder.middle_name " +
-                        "FROM dbo.Waybill " +
-                     "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                     "ORDER BY dbo.Holder.last_name DESC;";
-
-                }
-                else
-                {
-                    GetWaybill = "SELECT dbo.Waybill.id, " +
-                    "dbo.Waybill.name_document, " +
-                    "dbo.Waybill.number_document, " +
-                    "dbo.Waybill.number_suppliers, " +
-                    "dbo.Waybill.date_document, " +
-                    "dbo.Waybill.file_name, " +
-                    "dbo.Waybill.id_holder, " +
-                    "dbo.Holder.last_name, " +
-                    "dbo.Holder.first_name, " +
-                    "dbo.Holder.middle_name " +
-                        "FROM dbo.Waybill " +
-                     "INNER JOIN dbo.Holder ON dbo.Holder.id = dbo.Waybill.id_holder " +
-                     "ORDER BY " + element + " DESC;";
-                }
-            }
-
-            var waybills = new ObservableCollection<Waybill>();
             try
             {
-                using (SqlConnection connect = new SqlConnection(connection))
+                dataContext = new DataContext((App.Current as App).ConnectionString);
+                IEnumerable<Waybill> query = null;
+                if (sort.Equals("Ascending"))
                 {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
+                    if (element.Equals("holder"))
                     {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetWaybill;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    Waybill waybill = new Waybill();
-                                    waybill.Id = reader.GetInt32(0);
-                                    waybill.NameDocument = reader.GetString(1);
-                                    waybill.NumberDocument = reader.GetString(2);
-                                    waybill.NumberSuppliers = reader.GetString(3);
-                                    waybill.DateDocument = reader.GetDateTime(4);
-                                    waybill.DateDocumentString = waybill.DateDocument.ToShortDateString();
-                                    waybill.FileName = reader.GetString(5);
-                                    waybill.FilePDF = GetDocument(waybill.Id, connection);
-                                    waybill.IdHolder = reader.GetInt32(6);
-                                    waybill.Holder = reader.GetString(7) + " " + reader.GetString(8) + " " + reader.GetString(9);
-                                    waybills.Add(waybill);
-                                }
-                            }
-                        }
+                        //query = dataContext.GetTable<Waybill>().OrderBy(Waybill => Waybill.LastName);
+                    }
+                    else
+                    {
+                        //query = dataContext.GetTable<Waybill>().OrderBy(Waybill => Waybill.);
+                    }
+
+                }
+
+                if (sort.Equals("Descending"))
+                {
+                    if (element.Equals("holder"))
+                    {
+                        //query = dataContext.GetTable<Waybill>().OrderByDescending(Waybill => Waybill.LastName);
+
+                    }
+                    else
+                    {
+                        //query = dataContext.GetTable<Waybill>().OrderByDescending(Waybill => Waybill.);
                     }
                 }
+
+                ObservableCollection<Waybill> waybills = new ObservableCollection<Waybill>();
                 return waybills;
             }
             catch (Exception eSql)
             {
                 logFile.WriteLogAsync(eSql.Message, "GetOrderByWaybill");
-            }
-            return null;
-        }
-
-        public ObservableCollection<CountersPage> GetOrderByCountersPage(string connection, string sort, string element)
-
-        {
-            string GetCountersPageQuery = null;
-            if (sort.Equals("Ascending"))
-            {
-                GetCountersPageQuery = "SELECT dbo.CountersPage.id, " +
-                    "dbo.CountersPage.printed_page_counter, " +
-                    "dbo.CountersPage.date, " +
-                    "FROM dbo.CountersPage " +
-                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer " +
-                    "ORDER BY " + element + ";";
-            }
-
-            if (sort.Equals("Descending"))
-            {
-                GetCountersPageQuery = "SELECT dbo.CountersPage.id, " +
-                    "dbo.CountersPage.printed_page_counter, " +
-                    "dbo.CountersPage.date, " +
-                    "FROM dbo.CountersPage " +
-                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer " +
-                    "ORDER BY " + element + " DESC;";
-            }
-
-
-            ObservableCollection<CountersPage> countersPages = new ObservableCollection<CountersPage>();
-            try
-            {
-                using (SqlConnection connect = new SqlConnection(connection))
-                {
-                    connect.Open();
-                    if (connect.State == System.Data.ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetCountersPageQuery;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var countersPage = new CountersPage
-                                    {
-                                        Id = reader.GetInt32(0),
-                                        PrintedPageCounter = reader.GetString(1),
-                                        Date = reader.GetDateTime(2),
-                                        Printers = reader.GetString(3)
-                                    };
-                                    countersPages.Add(countersPage);
-                                }
-                            }
-                        }
-                    }
-                }
-                return countersPages;
-            }
-            catch (Exception eSql)
-            {
-                logFile.WriteLogAsync(eSql.Message, "GetOrderByCartridges");
             }
             return null;
         }

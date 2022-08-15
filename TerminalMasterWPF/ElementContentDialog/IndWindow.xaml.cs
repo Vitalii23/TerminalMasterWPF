@@ -49,7 +49,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             {
                 string[] ie = { FirstNameTextBox.Text, LastNameTextBox.Text, MiddleNameTextBox.Text, PSRNIETextBox.Text, TINTextBox.Text, };
 
-                if (SelectData.Equals("ADD")) { add.AddDataElement((App.Current as App).ConnectionString, ie, People); }
+                if (SelectData.Equals("ADD")) { add.AddDataElement(ie, People); }
 
                 if (SelectData.Equals("UPDATE")) { update.UpdateDataElement((App.Current as App).ConnectionString, ie, SelectId, People); }
 

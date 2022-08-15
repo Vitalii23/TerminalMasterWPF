@@ -43,7 +43,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 string[] phoneBooks = { FirstNameTextBox.Text, LastNameTextBox.Text, MiddleNameTextBox.Text,
                 PostTextBox.Text, LocationNumberTextBox.Text, MobileNumberMaskedTextBox.Text};
 
-                if (SelectData.Equals("ADD")) { add.AddDataElement((App.Current as App).ConnectionString, phoneBooks, "phoneBook"); }
+                if (SelectData.Equals("ADD")) { add.AddDataElement(phoneBooks, "phoneBook"); }
 
                 if (SelectData.Equals("UPDATE")) { update.UpdateDataElement((App.Current as App).ConnectionString, phoneBooks, SelectId, "phoneBook"); }
 

@@ -199,12 +199,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+               // dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
 
         }
@@ -255,12 +255,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -315,12 +315,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -401,12 +401,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -470,12 +470,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -536,12 +536,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -599,12 +599,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+               //dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -671,12 +671,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -733,12 +733,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -807,12 +807,12 @@ namespace TerminalMasterWPF
             if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
             {
                 CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
             else
             {
                 CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                //dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
             }
         }
 
@@ -839,10 +839,11 @@ namespace TerminalMasterWPF
                     switch (tabItem)
                     {
                         case "Принтеры":
+                            DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
                             DowloandButton.IsEnabled = false;
                             NameNavigationItem = "printer";
-                            dataGets.PrinterList = Get.GetPrinter("ALL", 0);
-                            UpdateTable(NameNavigationItem);
+                            PrinterDataGrid.ItemsSource = printer.List();
+                           // UpdateTable(NameNavigationItem);
                             break;
                         case "Картриджи":
                             DowloandButton.IsEnabled = false;
@@ -1086,11 +1087,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.SelectedId
                             };
-                            printer.SelectPrinter = CheckASCorDesc == null
-                                ? dataGets.PrinterList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //printer.SelectPrinter = CheckASCorDesc == null
+                            //    ? dataGets.PrinterList
+                            //    : CheckASCorDesc.Equals("Descending")
+                            //        ? Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //        : Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
 
                             printer.Show();
                         }
@@ -1108,11 +1109,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.SelectedId
                             };
-                            cartridge.SelectCartrides = CheckASCorDesc == null
-                                ? dataGets.CartridgesList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //cartridge.SelectCartrides = CheckASCorDesc == null
+                            //    ? dataGets.CartridgesList
+                            //    : CheckASCorDesc.Equals("Descending")
+                            //        ? Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //        : Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
 
                             cartridge.Show();
                         }
@@ -1130,11 +1131,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.CashRegisterList[dataGets.SelectedXIndex].Id
                             };
-                            cashRegister.SelectCashRegister = CheckASCorDesc == null
-                                ? dataGets.CashRegisterList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //cashRegister.SelectCashRegister = CheckASCorDesc == null
+                            //    ? dataGets.CashRegisterList
+                            //    : CheckASCorDesc.Equals("Descending")
+                            //        ? Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //        : Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             cashRegister.Show();
                         }
                         else
@@ -1151,11 +1152,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.SelectedId
                             };
-                            simCard.SelectSimCard = CheckASCorDesc == null
-                                ? dataGets.SimCardList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //simCard.SelectSimCard = CheckASCorDesc == null
+                            //    ? dataGets.SimCardList
+                            //    : CheckASCorDesc.Equals("Descending")
+                            //        ? Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //        : Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             simCard.Show();
                         }
                         else
@@ -1172,11 +1173,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.SelectedId
                             };
-                            phoneBook.SelectPhoneBook = CheckASCorDesc == null
-                            ? dataGets.PhoneBookList
-                            : CheckASCorDesc.Equals("Descending")
-                                ? Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                : Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //phoneBook.SelectPhoneBook = CheckASCorDesc == null
+                            //? dataGets.PhoneBookList
+                            //: CheckASCorDesc.Equals("Descending")
+                            //    ? Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //    : Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             phoneBook.Show();
                         }
                         else
@@ -1194,11 +1195,11 @@ namespace TerminalMasterWPF
                                 SelectId = dataGets.SelectedId,
                                 People = NameNavigationItem
                             };
-                            holder.SelectHolder = CheckASCorDesc == null
-                            ? dataGets.HolderList
-                            : CheckASCorDesc.Equals("Descending")
-                                ? Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                : Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //holder.SelectHolder = CheckASCorDesc == null
+                            //? dataGets.HolderList
+                            //: CheckASCorDesc.Equals("Descending")
+                            //    ? Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //    : Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             holder.Show();
                         }
                         else
@@ -1216,11 +1217,11 @@ namespace TerminalMasterWPF
                                 SelectId = dataGets.SelectedId,
                                 People = NameNavigationItem
                             };
-                            user.SelectUser = CheckASCorDesc == null
-                           ? dataGets.UserList
-                           : CheckASCorDesc.Equals("Descending")
-                               ? Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                               : Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                           // user.SelectUser = CheckASCorDesc == null
+                           //? dataGets.UserList
+                           //: CheckASCorDesc.Equals("Descending")
+                           //    ? Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                           //    : Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             user.Show();
                         }
                         else
@@ -1238,11 +1239,11 @@ namespace TerminalMasterWPF
                                 SelectId = dataGets.SelectedId,
                                 People = NameNavigationItem
                             };
-                            individual.SelectInd = CheckASCorDesc == null
-                           ? dataGets.IndividualEntrepreneurList
-                           : CheckASCorDesc.Equals("Descending")
-                               ? Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                               : Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                           // individual.SelectInd = CheckASCorDesc == null
+                           //? dataGets.IndividualEntrepreneurList
+                           //: CheckASCorDesc.Equals("Descending")
+                           //    ? Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                           //    : Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             individual.Show();
                         }
                         else
@@ -1259,11 +1260,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.SelectedId
                             };
-                            waybill.SelectWaybill = CheckASCorDesc == null
-                           ? dataGets.WaybillList
-                           : CheckASCorDesc.Equals("Descending")
-                               ? Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                               : Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                           // waybill.SelectWaybill = CheckASCorDesc == null
+                           //? dataGets.WaybillList
+                           //: CheckASCorDesc.Equals("Descending")
+                           //    ? Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                           //    : Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
                             waybill.Show();
                         }
                         else
@@ -1280,11 +1281,11 @@ namespace TerminalMasterWPF
                                 SelectIndex = dataGets.SelectedXIndex,
                                 SelectId = dataGets.SelectedId
                             };
-                            cointersPage.SelectCountersPage = CheckASCorDesc == null
-                                ? dataGets.CountersPageList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                            //cointersPage.SelectCountersPage = CheckASCorDesc == null
+                            //    ? dataGets.CountersPageList
+                            //    : CheckASCorDesc.Equals("Descending")
+                            //        ? Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
+                            //        : Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
 
                             cointersPage.Show();
                         }
@@ -1394,7 +1395,8 @@ namespace TerminalMasterWPF
                     switch (NameNavigationItem)
                     {
                         case "printer":
-                            dataGets.PrinterList = Get.GetPrinter("ALL", 0);
+                            DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
+                            dataGets.PrinterList = printer.Get(1);
                             UpdateTable(NameNavigationItem);
                             break;
                         case "cartrides":

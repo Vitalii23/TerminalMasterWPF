@@ -51,7 +51,7 @@ namespace TerminalMasterWPF.ElementContentDialog
 
                 if (SelectData.Equals("ADD"))
                 {
-                    add.AddDataElement((App.Current as App).ConnectionString, printers, "printer");
+                    add.AddDataElement(printers, "printer");
                 }
 
                 if (SelectData.Equals("UPDATE"))
@@ -91,8 +91,8 @@ namespace TerminalMasterWPF.ElementContentDialog
                     LocationTextBox.Text = SelectPrinter[SelectIndex].LocationPrinter;
                     StatusComboBox.SelectedValue = SelectPrinter[SelectIndex].Status;
                     VendorCodeTextBox.Text = SelectPrinter[SelectIndex].VendorCodePrinter;
-                    PaperTextBox.Text = Convert.ToString(SelectPrinter[SelectIndex].Сounters);
-                    DatePrinterDatePicker.Text = SelectPrinter[SelectIndex].DatePrinter.ToString();
+                    //PaperTextBox.Text = Convert.ToString(SelectPrinter[SelectIndex].Сounters);
+                    //DatePrinterDatePicker.Text = SelectPrinter[SelectIndex].DatePrinter.ToString();
                     SelectData = "UPDATE";
                 }
             }

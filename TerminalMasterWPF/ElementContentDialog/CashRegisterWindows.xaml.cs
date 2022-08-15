@@ -14,7 +14,7 @@ namespace TerminalMasterWPF.ElementContentDialog
     /// </summary>
     public partial class CashRegisterWindows : Window
     {
-        private AddElement add = new AddElement();
+        //private AddElement add = new AddElement();
         private UpdateElement update = new UpdateElement();
         private OrderByElement orderBy = new OrderByElement();
         private LogFile logFile = new LogFile();
@@ -24,8 +24,8 @@ namespace TerminalMasterWPF.ElementContentDialog
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            holders = orderBy.GetOrderByHolder((App.Current as App).ConnectionString, "Ascending", "last_name");
-            users = orderBy.GetOrderByUser((App.Current as App).ConnectionString, "Ascending", "last_name");
+            holders = orderBy.GetOrderByHolder("Ascending", "last_name");
+            users = orderBy.GetOrderByUser("Ascending", "last_name");
 
 
             for (int i = 0; i < holders.Count; i++)
@@ -66,7 +66,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 if (SelectData.Equals("ADD"))
                 {
 
-                    add.AddDataElement((App.Current as App).ConnectionString, cashRehisters, Ids, "cashRegister");
+                    //add.AddDataElement((App.Current as App).ConnectionString, cashRehisters, Ids, "cashRegister");
                 }
 
                 if (SelectData.Equals("UPDATE"))

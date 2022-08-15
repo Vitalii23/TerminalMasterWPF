@@ -1,69 +1,64 @@
 ﻿using System;
+using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using TerminalMasterWPF.Logging;
+using System.Collections.ObjectModel;
+using TerminalMasterWPF.Model;
+using TerminalMasterWPF.Model.People;
 
 namespace TerminalMasterWPF.ViewModel
 {
     class AddElement
     {
         private LogFile logFile = new LogFile();
+        private DataContext dataContext = new DataContext((App.Current as App).ConnectionString);
 
-        public void AddDataElement(string connection, string[] element, string items)
+        public void AddDataElement(string[] element, string items)
         {
+
             try
             {
-                string AddQuery = null;
-                string values = null;
-
-                for (int i = 0; i < element.Length; i++)
-                {
-                    if (i == 0)
-                    {
-                        values += "('" + element[i] + "','";
-                    }
-                    else if (i == element.Length - 1)
-                    {
-                        values += element[i] + "')";
-                    }
-                    else
-                    {
-                        values += element[i] + "','";
-                    }
-                }
-
                 switch (items)
                 {
                     case "cartrides":
-                        AddQuery = "INSERT INTO dbo.Cartrides (brand, model, vendor_code, status) VALUES " + values;
+                        //dataContext.GetTable<Cartridge>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
                         break;
                     case "phoneBook":
-                        AddQuery = "INSERT INTO dbo.PhoneBook (last_name, first_name, middle_name, post, internal_number, mobile_number) VALUES " + values;
+                        //dataContext.GetTable<PhoneBook>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
                         break;
                     case "printer":
-                        AddQuery = "INSERT INTO dbo.Printer (brand, model, cartridge, name_port, location, status, vendor_code, counters, date) VALUES " + values;
+                        //dataContext.GetTable<Printer>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
                         break;
                     case "holder":
-                        AddQuery = "INSERT INTO dbo.Holder (last_name, first_name, middle_name, number, status) VALUES " + values;
+                        //dataContext.GetTable<Holder>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
                         break;
                     case "user":
-                        AddQuery = "INSERT INTO dbo.UserDevice (last_name, first_name, middle_name, number, status) VALUES " + values;
+                        //dataContext.GetTable<User>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
                         break;
                     case "ie":
-                        AddQuery = "INSERT INTO dbo.IndividualEntrepreneur (last_name, first_name, middle_name, psrnie, tin) VALUES " + values;
+                        //dataContext.GetTable<IndividualEntrepreneur>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
+                        break;
+                    case "cashRegister":
+                        //dataContext.GetTable<CashRegister>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
+                        break;
+                    case "simCard":
+                        //dataContext.GetTable<SimCard>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
+                        break;
+                    case "waybill":
+                        //dataContext.GetTable<Waybill>().InsertOnSubmit(element);
+                        dataContext.SubmitChanges();
                         break;
                     default:
                         break;
-                }
-
-                var connect = new SqlConnection(connection);
-                connect.Open();
-                if (connect.State == System.Data.ConnectionState.Open)
-                {
-                    SqlCommand cmd = connect.CreateCommand();
-                    cmd.CommandText = AddQuery;
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    reader.Read();
                 }
             }
             catch (Exception eSql)

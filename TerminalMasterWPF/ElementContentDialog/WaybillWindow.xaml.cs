@@ -34,7 +34,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            holders = orderBy.GetOrderByHolder((App.Current as App).ConnectionString, "Ascending", "last_name");
+            holders = orderBy.GetOrderByHolder("Ascending", "last_name");
 
             FilePDFButton.IsEnabled = true;
 

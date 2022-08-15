@@ -39,7 +39,6 @@ namespace TerminalMasterWPF.ViewModel
             }
             catch (Exception eSql)
             {
-                Debug.WriteLine(eSql.Message);
                 logFile.WriteLogAsync(eSql.Message, "GetCartridges");
             }
             return null;
@@ -88,7 +87,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
-        
+
         public ObservableCollection<CountersPage> GetCountersPage(string selection, int id)
         {
             try
@@ -115,7 +114,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
-        
+
         public ObservableCollection<Holder> GetHolder(string selection, int id)
         {
             try
@@ -168,7 +167,7 @@ namespace TerminalMasterWPF.ViewModel
             }
             return null;
         }
-        
+
         public ObservableCollection<PhoneBook> GetPhoneBook(string selection, int id)
         {
             try

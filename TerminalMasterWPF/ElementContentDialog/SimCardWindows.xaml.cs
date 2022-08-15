@@ -38,13 +38,13 @@ namespace TerminalMasterWPF.ElementContentDialog
             string[] @operator = { "Билайн", "МТС", "Мегафон", "Теле2", "Неизвестно" };
             AddComboxItem(@operator, OperatorComboBox);
 
-            individuals = orderBy.GetOrderByIndividual((App.Current as App).ConnectionString, "Ascending", "last_name");
+            individuals = orderBy.GetOrderByIndividual("Ascending", "last_name");
             for (int i = 0; i < individuals.Count; i++)
             {
                 IndividualEntrepreneurComboBox.Items.Add(individuals[i].LastName + " " + individuals[i].FirstName + " " + individuals[i].MiddleName);
             }
 
-            cashRegisters = orderBy.GetOrderByCashRegister((App.Current as App).ConnectionString, "Ascending", "name");
+            cashRegisters = orderBy.GetOrderByCashRegister( "Ascending", "name");
             for (int i = 0; i < cashRegisters.Count; i++)
             {
                 NameCashRegisterComboBox.Items.Add(cashRegisters[i].NameDevice);

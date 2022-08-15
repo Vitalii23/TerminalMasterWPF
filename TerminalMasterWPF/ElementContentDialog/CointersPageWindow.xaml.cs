@@ -22,7 +22,7 @@ namespace TerminalMasterWPF.ElementContentDialog
     /// </summary>
     public partial class CointersPageWindow : Window
     {
-        private AddElement add = new AddElement();
+       // private AddElement add = new AddElement();
         private UpdateElement update = new UpdateElement();
         private GetElement get = new GetElement();
         private LogFile logFile = new LogFile();
@@ -66,7 +66,7 @@ namespace TerminalMasterWPF.ElementContentDialog
 
                 if (SelectData.Equals("ADD"))
                 {
-                    add.AddDataElement((App.Current as App).ConnectionString, countersPage, Ids, "countersPage");
+                 //   add.AddDataElement((App.Current as App).ConnectionString, countersPage, Ids, "countersPage");
                 }
 
                 if (SelectData.Equals("UPDATE"))

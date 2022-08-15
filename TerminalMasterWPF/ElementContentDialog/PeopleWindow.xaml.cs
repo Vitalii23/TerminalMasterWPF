@@ -54,7 +54,7 @@ namespace TerminalMasterWPF.ElementContentDialog
                 string statusValue = (string)StatusComboBox.SelectedValue;
                 string[] peoples = { LastNameTextBox.Text, FirstNameTextBox.Text, MiddleNameTextBox.Text, MobileNumberMaskedTextBox.Text, statusValue };
 
-                if (SelectData.Equals("ADD")) { add.AddDataElement((App.Current as App).ConnectionString, peoples, People); }
+                if (SelectData.Equals("ADD")) { add.AddDataElement(peoples, People); }
 
                 if (SelectData.Equals("UPDATE")) { update.UpdateDataElement((App.Current as App).ConnectionString, peoples, SelectId, People); }
 

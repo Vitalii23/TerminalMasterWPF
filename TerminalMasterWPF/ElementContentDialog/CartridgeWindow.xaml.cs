@@ -21,7 +21,7 @@ namespace TerminalMasterWPF.ElementContentDialog
     /// </summary>
     public partial class CartridgeWindow : Window
     {
-        private AddElement add = new AddElement();
+        //private AddElement add = new AddElement();
         private UpdateElement update = new UpdateElement();
         private LogFile logFile = new LogFile();
         public CartridgeWindow()
@@ -61,7 +61,7 @@ namespace TerminalMasterWPF.ElementContentDialog
 
                 string[] cartridges = { brandValue, modelValue, VendorCodeTextBox.Text, statusValue };
 
-                if (SelectData.Equals("ADD")) { add.AddDataElement((App.Current as App).ConnectionString, cartridges, "cartrides"); }
+                //if (SelectData.Equals("ADD")) { add.AddDataElement(SelectCartrides, "cartrides"); }
 
                 if (SelectData.Equals("UPDATE")) { update.UpdateDataElement((App.Current as App).ConnectionString, cartridges, SelectId, "cartrides"); }
 
