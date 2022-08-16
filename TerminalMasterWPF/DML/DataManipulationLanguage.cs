@@ -6,23 +6,41 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using TerminalMasterWPF.Logging;
 
 namespace TerminalMasterWPF.DML
 {
     class DataManipulationLanguage<T> : IDataManipulationLanguage<T> where T : class
     {
         private DataContext dataContext = new DataContext((App.Current as App).ConnectionString);
+        private LogFile log = new LogFile();
 
         public void Add(T element)
         {
-            dataContext.GetTable<T>().InsertOnSubmit(element);
-            dataContext.SubmitChanges();
+            try
+            {
+                dataContext.GetTable<T>().InsertOnSubmit(element);
+                dataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                log.WriteLogAsync(e.Message, "Add");
+            }
+
         }
 
         public bool Delete(T element)
         {
-            dataContext.GetTable<T>().DeleteOnSubmit(element);
-            dataContext.SubmitChanges();
+            try
+            {
+                dataContext.GetTable<T>().Attach(element);
+                dataContext.GetTable<T>().DeleteOnSubmit(element);
+                dataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                log.WriteLogAsync(e.Message, "Delete");
+            }
             return true;
         }
 
@@ -40,7 +58,7 @@ namespace TerminalMasterWPF.DML
         {
             T result = null;
             IQueryable<T> queryableData = dataContext.GetTable<T>().AsQueryable<T>();
-            if(queryableData != null)
+            if (queryableData != null)
             {
                 ParameterExpression parameterExpression = Expression.Parameter(typeof(T), "dataManipulationLanguage");
                 Expression left = Expression.Property(parameterExpression, GetPropertyInfo(v));
@@ -79,16 +97,26 @@ namespace TerminalMasterWPF.DML
 
         public void Update(T element)
         {
-            throw new NotImplementedException();
+            try
+            {
+                dataContext.GetTable<T>().Attach(element);
+                dataContext.Refresh(RefreshMode.KeepCurrentValues, element);
+                dataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                log.WriteLogAsync(e.Message, "Update");
+            }
+
         }
 
         private PropertyInfo GetPropertyInfo(string property)
         {
             PropertyInfo[] properties = typeof(T).GetProperties();
             PropertyInfo result = null;
-            foreach (PropertyInfo info in properties) 
+            foreach (PropertyInfo info in properties)
             {
-                if (info.Name.Equals(properties)) 
+                if (info.Name.Equals(properties))
                 {
                     result = info;
                     break;

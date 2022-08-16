@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TerminalMasterWPF"
         xmlns:vm="clr-namespace:TerminalMasterWPF.ViewModel"
+        xmlns:bd="clr-namespace:TerminalMasterWPF.DML"
         mc:Ignorable="d"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="Терминал Мастер" Height="auto" Width="auto" MaxHeight="2160" MaxWidth="3840">
@@ -15,7 +16,6 @@
 
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="1080*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -63,11 +63,6 @@
                     <Setter Property="BorderThickness" Value="2,2,2,2"/>
                 </Style>
             </StackPanel.Resources>
-            <Button x:Name="AddButton" Click="AddButton_Click">Добавить</Button>
-            <Button x:Name="EditButton" Click="EditButton_Click">Изменить</Button>
-            <Button x:Name="DeleteButton" Click="DeleteButton_Click">Удалить</Button>
-            <Button x:Name="UpdateButton" Click="UpdateButton_Click">Обновить</Button>
-            <Button x:Name="DowloandButton" Click="DowloandButton_Click">Скачать</Button>
         </StackPanel>
 
         <Grid Grid.Row="2">
@@ -77,62 +72,192 @@
                     <Setter Property="ColumnWidth" Value="*"/>
                     <Setter Property="IsReadOnly" Value="False"/>
                     <Setter Property="ShowSearchPanel" Value="True"/>
+                    <Setter Property="GroupRenderMode" Value="Flat"/>
+                    <Setter Property="NewRowPosition" Value="Bottom"/>
                 </Style>
             </Grid.Resources>
             
             <TabControl x:Name="MainTabControl"  SelectionChanged="MainTabControl_SelectionChanged">
                 <TabItem x:Name="PrinterTabItem" Header="Принтеры" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="PrinterDataGrid"
-                                  AutoGeneratingColumn="PrinterDataGrid_AutoGeneratingColumn"
-                                  ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"/>
+                                  RowEditEnded="PrinterDataGrid_RowEditEnded"
+                                  ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deletePrinterRadButton"
+                                                           Click="DeletePrinterRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="CountersPageTabItem" Header="Счетчик распечатанных страниц" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="CountersPageDataGrid"
-                                  AutoGeneratingColumn="CountersPageDataGrid_AutoGeneratingColumn"       
-                                  ItemsSource="{Binding CountersPageList, UpdateSourceTrigger=PropertyChanged}"/>
+                    <telerik:RadGridView x:Name="CountersPageDataGrid"     
+                                  ItemsSource="{Binding CountersPageList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteCaRadButton"
+                                                           Click="deleteCaRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="CartridgeDataGrid"
-                                  AutoGeneratingColumn="CartridgeDataGrid_AutoGeneratingColumn"
                                   ItemsSource="{Binding CartridgesList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteCartridgeRadButton"
+                                                           Click="deleteCartridgeRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
                     </telerik:RadGridView>
-
                 </TabItem>
                 <TabItem x:Name="CashRegisterTabItem" Header="Контрольная-кассовая машина (ККМ)" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="CashRegisterDataGrid"
-                                  AutoGeneratingColumn="CashRegisterDataGrid_AutoGeneratingColumn"       
-                                  ItemsSource="{Binding CashRegisterList, UpdateSourceTrigger=PropertyChanged}"/>
-
+                    <telerik:RadGridView x:Name="CashRegisterDataGrid" 
+                                  ItemsSource="{Binding CashRegisterList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteCashRegisterRadButton"
+                                                           Click="DeleteCashRegisterRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="SimCardTabItem" Header="Sim-карты" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="SimCardDataGrid"
-                                  AutoGeneratingColumn="SimCardDataGrid_AutoGeneratingColumn"       
-                                  ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}"/>
+                    <telerik:RadGridView x:Name="SimCardDataGrid"    
+                                  ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteSimCardRadButton"
+                                                           Click="DeleteSimCardRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="PhoneBookTabItem" Header="Телефоны сотрудников" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="PhoneBookDataGrid" 
-                                  AutoGeneratingColumn="PhoneBookDataGrid_AutoGeneratingColumn"       
-                                  ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}"/>
+                    <telerik:RadGridView x:Name="PhoneBookDataGrid"       
+                                  ItemsSource="{Binding PhoneBookList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deletePhoneBookRadButton"
+                                                           Click="DeletePhoneBookRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="HolderTabItem" Header="Владельцы" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="HolderDataGrid"
-                                  AutoGeneratingColumn="HolderDataGrid_AutoGeneratingColumn"   
-                                  ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}"/>
+                    <telerik:RadGridView x:Name="HolderDataGrid"   
+                                  ItemsSource="{Binding HolderList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteHolderRadButton"
+                                                           Click="DeleteHolderRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="UserTabItem" Header="Пользователи" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="UserDataGrid"
-                                  AutoGeneratingColumn="UserDataGrid_AutoGeneratingColumn"
-                                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}"/>
+                                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteUserRadButton"
+                                                           Click="DeleteUserRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="IndividualEntrepreneurTabItem" Header="Индивидуальные предприниматели" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="IndividualEntrepreneurDataGrid"
-                                  AutoGeneratingColumn="IndividualEntrepreneurDataGrid_AutoGeneratingColumn"
-                                  ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}"/>
+                                  ItemsSource="{Binding IndividualEntrepreneurList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteIndividualEntrepreneurRadButton"
+                                                           Click="DeleteIndividualEntrepreneurRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="WaybillDataGrid"
-                                  AutoGeneratingColumn="WaybillDataGrid_AutoGeneratingColumn"       
-                                  ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}"/>
+                    <telerik:RadGridView x:Name="WaybillDataGrid"  
+                                  ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewColumn Header="Delete" >
+                                <telerik:GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <telerik:RadButton x:Name="deleteWaybillRadButton"
+                                                           Click="DeleteWaybillRadButton_Click"
+                                                           Content="Delete" 
+                                                           Command="telerik:RadGridViewCommands.Delete" 
+                                                           CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </telerik:GridViewColumn.CellTemplate>
+                            </telerik:GridViewColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
                 </TabItem>
             </TabControl>
         </Grid>
