@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.Model.People;
 
@@ -17,18 +13,28 @@ namespace TerminalMasterWPF.ViewModel
           
         }
 
-        private ObservableCollection<Cartridge> _cartridges = new ObservableCollection<Cartridge>();
-        private ObservableCollection<CashRegister> _cashRegister = new ObservableCollection<CashRegister>();
-        private ObservableCollection<PhoneBook> _phoneBook = new ObservableCollection<PhoneBook>();
-        private ObservableCollection<Printer> _printer = new ObservableCollection<Printer>();
-        private ObservableCollection<SimCard> _simCard = new ObservableCollection<SimCard>();
-        private ObservableCollection<Holder> _holder = new ObservableCollection<Holder>();
-        private ObservableCollection<User> _user = new ObservableCollection<User>();
-        private ObservableCollection<IndividualEntrepreneur> _individual = new ObservableCollection<IndividualEntrepreneur>();
-        private ObservableCollection<Waybill> _waybill = new ObservableCollection<Waybill>();
-        private ObservableCollection<CountersPage> _countersPages = new ObservableCollection<CountersPage>();
-        private int _selectedXIndex;
-        private int _selectedId;
+        private Cartridge _cartridges;
+        private CashRegister _cashRegister;
+        private Employees _phoneBook;
+        private Printer _printer;
+        private SimCard _simCard;
+        private Holder _holder;
+        private User _user;
+        private IndividualEntrepreneur _individual;
+        private Waybill _waybill;
+        private CountersPage _countersPages;
+
+        public ObservableCollection<Cartridge> CartridgesList { get; set; }
+        public ObservableCollection<CashRegister> CashRegisterList { get; set; }
+        public ObservableCollection<Employees> EmployessList { get; set; }
+        public ObservableCollection<Printer> PrinterList { get; set; }
+        public ObservableCollection<SimCard> SimCardList { get; set; }
+        public ObservableCollection<Holder> HolderList { get; set; }
+        public ObservableCollection<User> UserList { get; set; }
+        public ObservableCollection<IndividualEntrepreneur> IndividualList { get; set; }
+        public ObservableCollection<Waybill> WaybillList { get; set; }
+        public ObservableCollection<CountersPage> CountersPagesList { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -40,67 +46,67 @@ namespace TerminalMasterWPF.ViewModel
             }
         }
 
-        public ObservableCollection<Cartridge> CartridgesList
+        public Cartridge Cartridges
         {
             get =>_cartridges;
             set
             {
                 _cartridges = value;
-                OnPropertyChanged("CartridgesList");
+                OnPropertyChanged("Cartridge");
             }
         }
 
-        public ObservableCollection<CashRegister> CashRegisterList
+        public CashRegister CashRegister
         {
             get => _cashRegister;
             set
             {
                 _cashRegister = value;
-                OnPropertyChanged("CashRegisterList");
+                OnPropertyChanged("CashRegister");
             }
         }
 
-        public ObservableCollection<PhoneBook> PhoneBookList
+        public Employees Employees
         {
             get => _phoneBook;
             set
             {
                 _phoneBook = value;
-                OnPropertyChanged("PhoneBookList");
+                OnPropertyChanged("PhoneBook");
             }
         }
 
-        public ObservableCollection<Printer> PrinterList
+        public Printer Printer
         {
             get => _printer;
             set
             {
                 _printer = value;
-                OnPropertyChanged("PrinterList");
+                OnPropertyChanged("Printer");
             }
         }
 
-        public ObservableCollection<SimCard> SimCardList
+        public SimCard SimCard
         {
             get => _simCard;
             set
             {
                 _simCard = value;
-                OnPropertyChanged("SimCardList");
+                OnPropertyChanged("SimCard");
             }
         }
 
-        public ObservableCollection<Holder> HolderList
+        public Holder Holder
         {
             get => _holder;
             set
             {
                 _holder = value;
-                OnPropertyChanged("HolderList");
+                OnPropertyChanged("Holder");
             }
         }
 
-        public ObservableCollection<User> UserList
+        public User User
         {
             get => _user;
             set
@@ -110,53 +116,33 @@ namespace TerminalMasterWPF.ViewModel
             }
         }
 
-        public ObservableCollection<IndividualEntrepreneur> IndividualEntrepreneurList
+        public IndividualEntrepreneur IndividualEntrepreneur
         {
             get => _individual;
             set
             {
                 _individual = value;
-                OnPropertyChanged("IndividualEntrepreneurList");
+                OnPropertyChanged("IndividualEntrepreneur");
             }
         }
 
-        public ObservableCollection<Waybill> WaybillList
+        public Waybill Waybill
         {
             get => _waybill;
             set
             {
                 _waybill = value;
-                OnPropertyChanged("WaybillList");
+                OnPropertyChanged("Waybill");
             }
         }
 
-        public ObservableCollection<CountersPage> CountersPageList
+        public CountersPage CountersPage
         {
             get => _countersPages;
             set
             {
                 _countersPages = value;
-                OnPropertyChanged("CountersPageList");
-            }
-        }
-
-        public int SelectedXIndex
-        {
-            get => _selectedXIndex;
-            set
-            {
-                _selectedXIndex = value;
-                OnPropertyChanged("SelectedXIndex");
-            }
-        }
-
-        public int SelectedId
-        {
-            get => _selectedId;
-            set
-            {
-                _selectedId = value;
-                OnPropertyChanged("SelectedId");
+                OnPropertyChanged("CountersPage");
             }
         }
     }

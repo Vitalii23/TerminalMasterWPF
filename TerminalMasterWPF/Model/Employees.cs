@@ -3,8 +3,8 @@ using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
 {
-    [Table(Name = "PhoneBook")]
-    class PhoneBook
+    [Table(Name = "Employees")]
+    class Employees
     {
         [DisplayAttribute(AutoGenerateField = false)]
         [Column(IsPrimaryKey = true, IsDbGenerated = true)]
@@ -12,7 +12,7 @@ namespace TerminalMasterWPF.Model
 
         [DisplayAttribute(Name = "Фамилия")]
         [Column(Name = "last_name")]
-        public string LastName { get; set; } 
+        public string LastName { get; set; }
 
         [DisplayAttribute(Name = "Имя")]
         [Column(Name = "first_name")]
@@ -34,6 +34,14 @@ namespace TerminalMasterWPF.Model
         [Column(Name = "mobile_number")]
         public string MobileNumber { get; set; }
 
-        public PhoneBook() { }
+        [DisplayAttribute(Name = "Статус")]
+        [Column(Name = "status")]
+        public string Status { get; set; }
+
+        [DisplayAttribute(Name = "Отдел")]
+        [Column(Name = "department")]
+        public string Department { get; set; }
+
+        public Employees() { }
     }
 }

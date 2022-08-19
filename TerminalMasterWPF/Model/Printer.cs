@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
@@ -38,17 +37,6 @@ namespace TerminalMasterWPF.Model
         [DisplayAttribute(Name = "Артикули принтера")]
         [Column(Name = "vendor_code")]
         public string VendorCodePrinter { get; set; }
-
-        public Printer(string brandPrinter, string modelPrinter, string cartridge, string namePort, string locationPrinter, string status, string vendorCodePrinter)
-        {
-            BrandPrinter = brandPrinter ?? throw new ArgumentNullException(nameof(brandPrinter));
-            ModelPrinter = modelPrinter ?? throw new ArgumentNullException(nameof(modelPrinter));
-            Cartridge = cartridge ?? throw new ArgumentNullException(nameof(cartridge));
-            NamePort = namePort ?? throw new ArgumentNullException(nameof(namePort));
-            LocationPrinter = locationPrinter ?? throw new ArgumentNullException(nameof(locationPrinter));
-            Status = status ?? throw new ArgumentNullException(nameof(status));
-            VendorCodePrinter = vendorCodePrinter ?? throw new ArgumentNullException(nameof(vendorCodePrinter));
-        }
 
         public Printer() { }
     }

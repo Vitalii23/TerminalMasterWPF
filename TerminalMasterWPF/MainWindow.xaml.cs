@@ -1,13 +1,10 @@
 ﻿using System;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.ComponentModel;
 using TerminalMasterWPF.DML;
 using TerminalMasterWPF.ElementContentDialog;
 using TerminalMasterWPF.Logging;
@@ -18,6 +15,7 @@ using Microsoft.Win32;
 using System.Collections.Generic;
 using TerminalMasterWPF.Model.People;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace TerminalMasterWPF
 {
@@ -26,10 +24,11 @@ namespace TerminalMasterWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string NameNavigationItem, CheckASCorDesc = null, CheckTag = null;
+        private string NameNavigationItem;
         private readonly DataGets dataGets = new DataGets();
-        private ConnectSQL connect = new ConnectSQL();
-        private LogFile logFile = new LogFile();
+        private readonly ConnectSQL connect = new ConnectSQL();
+        private readonly LogFile log = new LogFile();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,7 +36,7 @@ namespace TerminalMasterWPF
             connect.ConnectRead();
         }
 
-        private void UpdateTable<T>(string items, IList<T> list)
+        private async void UpdateTable<T>(string items, IList<T> list)
         {
             try
             {
@@ -51,18 +50,14 @@ namespace TerminalMasterWPF
                         break;
                     case "cashRegister":
                         CashRegisterDataGrid.ItemsSource = list;
+                        DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
+                        HolderGridViewDataColumn.ItemsSource = holder.GetHolders();
                         break;
                     case "simCard":
                         SimCardDataGrid.ItemsSource = list;
                         break;
-                    case "phoneBook":
-                        PhoneBookDataGrid.ItemsSource = list;
-                        break;
-                    case "holder":
-                        HolderDataGrid.ItemsSource = list;
-                        break;
-                    case "user":
-                        UserDataGrid.ItemsSource = list;
+                    case "employees":
+                        EmployeesDataGrid.ItemsSource = list;
                         break;
                     case "ie":
                         IndividualEntrepreneurDataGrid.ItemsSource = list;
@@ -79,7 +74,69 @@ namespace TerminalMasterWPF
             }
             catch (Exception ex)
             {
-                logFile.WriteLogAsync(ex.Message, "UpdateTable");
+                await log.WriteLogAsync(ex.Message, "UpdateTable");
+            }
+        }
+
+        private async void AddAndEditElement<T>(GridViewRowEditEndedEventArgs e, DataManipulationLanguage<T> element, string voidMessage) where T : class
+        {
+            try
+            {
+                if (e.EditAction == GridViewEditAction.Cancel)
+                {
+                    return;
+                }
+
+                if (e.EditOperationType == GridViewEditOperationType.Insert)
+                {
+                    if (e.NewData is T newElement)
+                    {
+                        element.Add(newElement);
+                    }
+                }
+
+                if (e.EditOperationType == GridViewEditOperationType.Edit)
+                {
+                    if (e.NewData is T newElement)
+                    {
+                        element.Update(newElement);
+                    }
+                }
+
+                UpdateTable(NameNavigationItem, element.List());
+            }
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, voidMessage);
+            }
+        }
+
+        private async void DeleteElement<T>(RadGridView gridView, DataManipulationLanguage<T> element, string voidMessage) where T : class
+        {
+            try
+            {
+                if (gridView.SelectedItems.Count == 0)
+                {
+                    return;
+                }
+
+                List<T> itemsPrinterRemove = new List<T>();
+
+                foreach (object item in gridView.SelectedItems)
+                {
+                    itemsPrinterRemove.Add(item as T);
+                }
+
+                foreach (T item in itemsPrinterRemove)
+                {
+                    ((List<T>)gridView.ItemsSource).Remove(item as T);
+                    element.Delete(item);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, voidMessage);
             }
         }
 
@@ -90,60 +147,12 @@ namespace TerminalMasterWPF
         /// <param name="e"></param>
         private void PrinterDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
-            if (e.EditAction == GridViewEditAction.Cancel)
-            {
-                return;
-            }
-
-            if (e.EditOperationType == GridViewEditOperationType.Insert)
-            {
-                if (e.NewData is Printer newPrinter)
-                {
-                    printer.Add(newPrinter);
-                }
-            }
-
-            if (e.EditOperationType == GridViewEditOperationType.Edit)
-            {
-                if (e.NewData is Printer newPrinter)
-                {
-                    printer.Update(newPrinter);
-                }
-            }
-
-            UpdateTable(NameNavigationItem, printer.List());
+            AddAndEditElement(e, new DataManipulationLanguage<Printer>(), "PrinterDataGrid_RowEditEnded");
         }
 
         private void DeletePrinterRadButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
-                if (PrinterDataGrid.SelectedItems.Count == 0)
-                {
-                    return;
-                }
-
-                List<Printer> itemsPrinterRemove = new List<Printer>();
-
-                foreach (var item in PrinterDataGrid.SelectedItems)
-                {
-                    itemsPrinterRemove.Add(item as Printer);
-                }
-
-                foreach (var item in itemsPrinterRemove)
-                {
-                    ((List<Printer>)PrinterDataGrid.ItemsSource).Remove(item as Printer);
-                    printer.Delete(item);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "DeletePrinterRadButton_Click");
-            }
-
+            DeleteElement(PrinterDataGrid, new DataManipulationLanguage<Printer>(), "DeletePrinterRadButton_Click");
         }
 
         /// <summary>
@@ -151,63 +160,105 @@ namespace TerminalMasterWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void CountersPageDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<CountersPage>(), "CountersPageDataGrid_RowEditEnded");
+        }
 
+        private void DeleteCounterPageRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(CountersPageDataGrid, new DataManipulationLanguage<CountersPage>(), "DeleteCounterPageRadButton_Click");
+        }
 
         /// <summary>
         /// Event to Cartidge
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void CartridgeDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<Cartridge>(), "CartridgeDataGrid_RowEditEnded");
+        }
 
+        private void DeleteCartridgeRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(CartridgeDataGrid, new DataManipulationLanguage<Cartridge>(), "DeleteCartridgeRadButton_Click");
+        }
 
         /// <summary>
         /// Event to CashRegister
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void CashRegisterDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<CashRegister>(), "CashRegisterDataGrid_RowEditEnded");
+        }
 
+        private void DeleteCashRegisterRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(CashRegisterDataGrid, new DataManipulationLanguage<CashRegister>(), "DeleteCashRegisterRadButton_Click");
+        }
 
         /// <summary>
         /// Event to SimCard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void SimCardDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<SimCard>(), "SimCardDataGrid_RowEditEnded");
+        }
 
+        private void DeleteSimCardRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(SimCardDataGrid, new DataManipulationLanguage<SimCard>(), "DeleteSimCardRadButton_Click");
+        }
 
         /// <summary>
-        /// Event to PhoneBook
+        /// Event to Employees
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void EmployeesDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        { 
+            AddAndEditElement(e, new DataManipulationLanguage<Employees>(), "EmployeesDataGrid_RowEditEnded");
+        }
 
-
-        /// <summary>
-        /// Event to Holder
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-
-
-        /// <summary>
-        /// Event to User
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-
+        private void DeleteEmployeesRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(EmployeesDataGrid, new DataManipulationLanguage<Employees>(), "DeleteEmployeesRadButton_Click");
+        }
 
         /// <summary>
         /// Event to Individual Entrepreneur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void IndividualEntrepreneurDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "IndividualEntrepreneurDataGrid_RowEditEnded");
+        }
 
+        private void DeleteIndividualEntrepreneurRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(IndividualEntrepreneurDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteIndividualEntrepreneurRadButton_Click");
+        }
 
         /// <summary>
         /// Event to Waybill
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void WaybillDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "WaybillDataGrid_RowEditEnded");
+        }
 
+        private void DeleteWaybillRadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteElement(WaybillDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteWaybillRadButton_Click");
+        }
 
         /// <summary>
         /// Event Tab
@@ -236,17 +287,17 @@ namespace TerminalMasterWPF
                         case "Контрольная-кассовая машина (ККМ)":
                             DataManipulationLanguage<CashRegister> cashRegister = new DataManipulationLanguage<CashRegister>();
                             NameNavigationItem = "cashRegister";
-                            UpdateTable(NameNavigationItem, cashRegister.List());
+                            UpdateTable(NameNavigationItem, cashRegister.GetCashRegistersList());
                             break;
                         case "Sim-карты":
                             DataManipulationLanguage<SimCard> simCard = new DataManipulationLanguage<SimCard>();
                             NameNavigationItem = "simCard";
                             UpdateTable(NameNavigationItem, simCard.List());
                             break;
-                        case "Телефоны сотрудников":
-                            DataManipulationLanguage<PhoneBook> phoneBook = new DataManipulationLanguage<PhoneBook>();
-                            NameNavigationItem = "phoneBook";
-                            UpdateTable(NameNavigationItem, phoneBook.List());
+                        case "Сотрудники":
+                            DataManipulationLanguage<Employees> employees = new DataManipulationLanguage<Employees>();
+                            NameNavigationItem = "employees";
+                            UpdateTable(NameNavigationItem, employees.List());
                             break;
                         case "Владельцы":
                             DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
@@ -281,12 +332,12 @@ namespace TerminalMasterWPF
             }
             catch (Exception ex)
             {
-                logFile.WriteLogAsync(ex.Message, "UpdateTable");
+                log.WriteLogAsync(ex.Message, "MainTabControl_SelectionChanged");
             }
         }
 
         /// <summary>
-        /// Click Button Add, Edit, Update, Delete, Dowloand
+        /// Click Button and Check
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -306,9 +357,7 @@ namespace TerminalMasterWPF
             CartridgeDataGrid.Columns.Clear();
             CashRegisterDataGrid.Columns.Clear();
             IndividualEntrepreneurDataGrid.Columns.Clear();
-            HolderDataGrid.Columns.Clear();
-            UserDataGrid.Columns.Clear();
-            PhoneBookDataGrid.Columns.Clear();
+            EmployeesDataGrid.Columns.Clear();
             PrinterDataGrid.Columns.Clear();
             SimCardDataGrid.Columns.Clear();
             WaybillDataGrid.Columns.Clear();
@@ -334,21 +383,6 @@ namespace TerminalMasterWPF
             }
         }
 
-        private void deleteCountersRadButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void deleteCaRadButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void deleteCartridgeRadButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void DowloandButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -364,11 +398,11 @@ namespace TerminalMasterWPF
                 };
 
                 bool? result = saveFileDialog.ShowDialog();
-                if (result == true && dataGets.SelectedXIndex >= 0)
-                {
+               // if (result == true && dataGets.SelectedXIndex >= 0)
+               // {
                     BinaryFormatter binaryformatter = new BinaryFormatter();
                     MemoryStream memorystream = new MemoryStream();
-                    binaryformatter.Serialize(memorystream, dataGets.WaybillList[dataGets.SelectedXIndex].FilePDF);
+                   // binaryformatter.Serialize(memorystream, dataGets.WaybillList[dataGets.SelectedXIndex].FilePDF);
                     byte[] data = memorystream.ToArray();
 
                     using (FileStream fileStream = File.Create(saveFileDialog.FileName))
@@ -377,16 +411,16 @@ namespace TerminalMasterWPF
                     }
 
                     MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
+              //  }
+            //    else
+             //   {
                     MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
+           //     }
 
             }
             catch (Exception ex)
             {
-                logFile.WriteLogAsync(ex.Message, "DowloandButton_Click");
+                log.WriteLogAsync(ex.Message, "DowloandButton_Click");
             }
         }
 

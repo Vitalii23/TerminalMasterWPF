@@ -19,21 +19,10 @@ namespace TerminalMasterWPF.Model
         [Column(Name = "number_document")]
         public string NumberDocument { get; set; }
 
-        [DisplayAttribute(Name = "Номер поставщика")]
-        [Column(Name = "number_suppliers")]
-        public string NumberSuppliers { get; set; }
-
         [DisplayAttribute(Name = "Дата документы")]
         [Column(Name = "date_document")]
         [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
         public DateTime DateDocument { get; set; }
-
-        [DisplayAttribute(AutoGenerateField = false)]
-        public string DateDocumentString { get; set; }
-
-        [DisplayAttribute(Name = "Имя документа")]
-        [Column(Name = "file_name")]
-        public string FileName { get; set; }
 
         [DisplayAttribute(Name = "Документ")]
         [Column(Name = "file_pdf")]
