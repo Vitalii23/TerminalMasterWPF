@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TerminalMasterWPF"
         xmlns:vm="clr-namespace:TerminalMasterWPF.ViewModel"
+        xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI"
         xmlns:bd="clr-namespace:TerminalMasterWPF.DML"
         mc:Ignorable="d"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
@@ -19,7 +20,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="1080*"></RowDefinition>
         </Grid.RowDefinitions>
-
+        
         <DockPanel>
             <Menu DockPanel.Dock="Top" MinHeight="25">
                 <MenuItem Header="Файл">
@@ -319,39 +320,37 @@
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-                            <telerik:GridViewComboBoxColumn x:Name="HolderGridViewDataColumn" Header="Владелец"
-                                                            DisplayMemberPath="FullName" 
-                                                            SelectedValueMemberPath="Id"
-                                                            DataContext="Holder"
-                                                            DataMemberBinding="{Binding IdEmployess}">
+                            <telerik:GridViewComboBoxColumn x:Name="HolderGridViewDataColumn" Header="Владелец">
                                 <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding IdEmployess}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding HolderCashRegister}"/>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewComboBoxColumn.CellTemplate>
                             </telerik:GridViewComboBoxColumn>
-                            <telerik:GridViewDataColumn x:Name="DateReceptionGridViewDataColumn" Header="Дата получения" DataMemberBinding="{Binding DateReception}">
+                            <telerik:GridViewDataColumn x:Name="DateReceptionGridViewDataColumn" Header="Дата получения" DataFormatString="dd/MM/yyyy" DataMemberBinding="{Binding DateReception}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
-                                        <telerik:RadDateTimePicker SelectedDate="{Binding DateReception}"/>
+                                        <telerik:RadDatePicker  SelectedDate="{Binding DateReception}" IsTooltipEnabled="False"/>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
                             <telerik:GridViewDataColumn x:Name="DateKeyActivationFiscalDataOperatorGridViewDataColumn" Header="Дата активации ключа ОФД" DataMemberBinding="{Binding DateKeyActivationFiscalDataOperator}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
-                                        <telerik:RadDateTimePicker SelectedDate="{Binding DateKeyActivationFiscalDataOperator}" IsTooltipEnabled="False"/>
+                                        <telerik:RadDatePicker SelectedDate="{Binding DateKeyActivationFiscalDataOperator}" IsTooltipEnabled="False"/>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
                             <telerik:GridViewDataColumn x:Name="DateEndFiscalMemoryGridViewDataColumn" Header="Дата окончания ФН" DataMemberBinding="{Binding DateEndFiscalMemory}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
-                                        <telerik:RadDateTimePicker  SelectedDate="{Binding DateEndFiscalMemory}" IsTooltipEnabled="False"/>
+                                        <telerik:RadDatePicker SelectedDate="{Binding DateEndFiscalMemory}" IsTooltipEnabled="False"/>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="LocationDeviceGridViewDataColumn" Header="" DataMemberBinding="{Binding Location}">
+                            <telerik:GridViewDataColumn x:Name="LocationDeviceGridViewDataColumn" Header="Месторасположение" DataMemberBinding="{Binding Location}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -380,24 +379,24 @@
                                          ItemsSource="{Binding SimCardList, UpdateSourceTrigger=PropertyChanged}"
                                          SelectedItem="{Binding SimCard}">
                         <telerik:RadGridView.Columns>
-                            <telerik:GridViewDataColumn x:Name="NameTerminalGridViewDataColumn" Header="Имя терминала" DataMemberBinding="{Binding NameTerminal}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                            <telerik:GridViewComboBoxColumn x:Name="NameTerminalGridViewComboBoxColumn" Header="Имя терминала" DataMemberBinding="{Binding NameTerminal}">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding NameTerminal}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="OperatorGridViewDataColumn" Header="Оператор связи" DataMemberBinding="{Binding Operator}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
+                            <telerik:GridViewComboBoxColumn x:Name="OperatorGridViewComboBoxColumn" Header="Оператор связи" DataMemberBinding="{Binding Operator}">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Operator}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
                             <telerik:GridViewDataColumn x:Name="IdentNumberGridViewDataColumn" Header="Идентификационный номер (ИН)" DataMemberBinding="{Binding IdentNumber}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
@@ -407,33 +406,33 @@
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="BrandSimCardGridViewDataColumn" Header="Фирма" DataMemberBinding="{Binding Brand}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                            <telerik:GridViewComboBoxColumn x:Name="BrandSimCardGridViewComboBoxColumn" Header="Фирма" DataMemberBinding="{Binding Brand}">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Brand}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="TypeDeviceGridViewDataColumn" Header="Тип устройства" DataMemberBinding="{Binding TypeDevice}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
+                            <telerik:GridViewComboBoxColumn x:Name="TypeDeviceGridViewComboBoxColumn" Header="Тип устройства" DataMemberBinding="{Binding TypeDevice}">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding TypeDevice}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="TMSGridViewDataColumn" Header="Номер телефона (TMS)" DataMemberBinding="{Binding TMS}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
+                            <telerik:GridViewMaskedInputColumn x:Name="TMSGridViewMaskedInputColumn" Header="Номер телефона (TMS)" Mask="+7-###-###-####" DataMemberBinding="{Binding TMS}">
+                                <telerik:GridViewMaskedInputColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding TMS}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
+                                </telerik:GridViewMaskedInputColumn.CellTemplate>
+                            </telerik:GridViewMaskedInputColumn>
                             <telerik:GridViewDataColumn x:Name="ICCGridViewDataColumn" Header="Уникальный серийный номер sim-card (ICC)" DataMemberBinding="{Binding ICC}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
@@ -443,24 +442,24 @@
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="IndividualEntrepreneurGridViewDataColumn" Header="Индивидуальный предприниматель (ИП)" DataMemberBinding="{Binding IndividualEntrepreneur}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                            <telerik:GridViewComboBoxColumn x:Name="IndividualEntrepreneurGridViewComboBoxColumn" Header="Индивидуальный предприниматель (ИП)" DataMemberBinding="{Binding IndividualEntrepreneur}">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding IndividualEntrepreneur}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="StatusSimCardGridViewDataColumn" Header="" DataMemberBinding="{Binding Status}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
+                            <telerik:GridViewComboBoxColumn x:Name="StatusSimCardGridViewComboBoxColumn" Header="Статус" DataMemberBinding="{Binding Status}">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Status}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
                             <telerik:GridViewColumn>
                                 <telerik:GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -517,33 +516,34 @@
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="InternalNumberGridViewDataColumn" Header="Внутренный номер" DataMemberBinding="{Binding InternalNumber}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                            <telerik:GridViewMaskedInputColumn x:Name="InternalNumberGridViewDataColumn" Header="Внутренный номер" Mask="###" DataMemberBinding="{Binding InternalNumber}">
+                                <telerik:GridViewMaskedInputColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding InternalNumber}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="MobileNumberGridViewDataColumn" Header="Мобильный номер" DataMemberBinding="{Binding MobileNumber}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewMaskedInputColumn.CellTemplate>
+                            </telerik:GridViewMaskedInputColumn>
+                            <telerik:GridViewMaskedInputColumn x:Name="MobileNumberGridViewDataColumn" Header="Мобильный номер" Mask="8-###-###-##-##"  DataMemberBinding="{Binding MobileNumber}">
+                                <telerik:GridViewMaskedInputColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding MobileNumber}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="StatusEmployeesGridViewDataColumn" Header="Статус" DataMemberBinding="{Binding Status}">
-                                <telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewMaskedInputColumn.CellTemplate>
+                            </telerik:GridViewMaskedInputColumn>
+                            <telerik:GridViewComboBoxColumn x:Name="StatusEmployeesGridViewComboBoxColumn" Header="Статус" 
+                                                            UniqueName="Status">
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Status}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
                             <telerik:GridViewDataColumn x:Name="DepartmentGridViewDataColumn" Header="Отдел" DataMemberBinding="{Binding Department}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>

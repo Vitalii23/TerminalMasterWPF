@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using TerminalMasterWPF.Model;
@@ -24,16 +25,16 @@ namespace TerminalMasterWPF.ViewModel
         private Waybill _waybill;
         private CountersPage _countersPages;
 
-        public ObservableCollection<Cartridge> CartridgesList { get; set; }
+        public IList<Cartridge> CartridgesList { get; set; }
         public ObservableCollection<CashRegister> CashRegisterList { get; set; }
-        public ObservableCollection<Employees> EmployessList { get; set; }
-        public ObservableCollection<Printer> PrinterList { get; set; }
+        public IList<Employees> EmployessList { get; set; }
+        public IList<Printer> PrinterList { get; set; }
         public ObservableCollection<SimCard> SimCardList { get; set; }
         public ObservableCollection<Holder> HolderList { get; set; }
-        public ObservableCollection<User> UserList { get; set; }
-        public ObservableCollection<IndividualEntrepreneur> IndividualList { get; set; }
-        public ObservableCollection<Waybill> WaybillList { get; set; }
-        public ObservableCollection<CountersPage> CountersPagesList { get; set; }
+        public IList<User> UserList { get; set; }
+        public IList<IndividualEntrepreneur> IndividualList { get; set; }
+        public IList<Waybill> WaybillList { get; set; }
+        public IList<CountersPage> CountersPagesList { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

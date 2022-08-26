@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
 {
     class Holder
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
-        public string FullName { get; set; }
+        public string FullNameHolder { get; set; }
     }
 }

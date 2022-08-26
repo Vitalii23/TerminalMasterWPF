@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
@@ -33,7 +34,7 @@ namespace TerminalMasterWPF.Model
         public string PaymentNumber { get; set; }
 
         [DisplayAttribute(Name = "Владелец по договору")]
-        public string Holder { get; set; }
+        public string HolderCashRegister { get; set; }
 
         [DisplayAttribute(Name = "Дата получения")]
         [Column(Name = "date_reception")]
@@ -55,8 +56,8 @@ namespace TerminalMasterWPF.Model
         public string Location { get; set; }
 
         [DisplayAttribute(AutoGenerateField = false)]
-        [Column(Name = "id_employess")]
-        public int IdEmployess { get; set; }
+        [Column(Name = "id_employees")]
+        public int IdEmployees { get; set; }
 
         public CashRegister() { }
     }

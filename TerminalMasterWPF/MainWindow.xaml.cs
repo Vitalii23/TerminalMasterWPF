@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using TerminalMasterWPF.Model.People;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Data;
 
 namespace TerminalMasterWPF
 {
@@ -33,6 +34,16 @@ namespace TerminalMasterWPF
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            MainTabControl.IsEnabled = false;
+            CartridgeDataGrid.IsEnabled = false;
+            CashRegisterDataGrid.IsEnabled = false;
+            IndividualEntrepreneurDataGrid.IsEnabled = false;
+            EmployeesDataGrid.IsEnabled = false;
+            PrinterDataGrid.IsEnabled = false;
+            SimCardDataGrid.IsEnabled = false;
+            WaybillDataGrid.IsEnabled = false;
+
             connect.ConnectRead();
         }
 
@@ -50,14 +61,42 @@ namespace TerminalMasterWPF
                         break;
                     case "cashRegister":
                         CashRegisterDataGrid.ItemsSource = list;
-                        DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
-                        HolderGridViewDataColumn.ItemsSource = holder.GetHolders();
+                        HolderGridViewDataColumn.ItemsSource = dataGets.HolderList;
+                        HolderGridViewDataColumn.DisplayMemberPath = "FullNameHolder";
+                        HolderGridViewDataColumn.DataContext = "Holder";
+                        HolderGridViewDataColumn.SelectedValueMemberPath = "Id";
+                        HolderGridViewDataColumn.DataMemberBinding = new Binding("IdEmployees");
                         break;
                     case "simCard":
                         SimCardDataGrid.ItemsSource = list;
+                        NameTerminalGridViewComboBoxColumn.ItemsSource = dataGets.CashRegisterList;
+                        NameTerminalGridViewComboBoxColumn.DisplayMemberPath = "NameDevice";
+                        NameTerminalGridViewComboBoxColumn.DataContext = "CashRegister";
+                        NameTerminalGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
+                        NameTerminalGridViewComboBoxColumn.DataMemberBinding = new Binding("IdCashRegister");
+
+                        TypeDeviceGridViewComboBoxColumn.ItemsSource = new string[] { "Автономные кассовые аппараты", "Фискальные регистраторы", "POS-терминал", "ЧПМ (МЭР)" };
+                        TypeDeviceGridViewComboBoxColumn.DataMemberBinding = new Binding("TypeDevice");
+
+                        BrandSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "AZUR", "MSPOS" };
+                        BrandSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Brand");
+
+                        //IndividualEntrepreneurGridViewComboBoxColumn.ItemsSource = dataGets.CashRegisterList;
+                        //IndividualEntrepreneurGridViewComboBoxColumn.DisplayMemberPath = "NameDevice";
+                        //IndividualEntrepreneurGridViewComboBoxColumn.DataContext = "IndividualEntrepreneur";
+                        //IndividualEntrepreneurGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
+                        //IndividualEntrepreneurGridViewComboBoxColumn.DataMemberBinding = new Binding("IdIndividual");
+
+                        OperatorGridViewComboBoxColumn.ItemsSource = new string[] { "Билайн", "MTC", "Мегафон", "Теле2", "Неизвестно" };
+                        OperatorGridViewComboBoxColumn.DataMemberBinding = new Binding("Operator");
+
+                        StatusSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Нет симкарты", "Неизвестно", "Списан", "Истек срок ФН" };
+                        StatusSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
                         break;
                     case "employees":
                         EmployeesDataGrid.ItemsSource = list;
+                        StatusEmployeesGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Уволен", "Неизвестно", "Стажировка" };
+                        StatusEmployeesGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
                         break;
                     case "ie":
                         IndividualEntrepreneurDataGrid.ItemsSource = list;
@@ -275,54 +314,36 @@ namespace TerminalMasterWPF
                     switch (tabItem)
                     {
                         case "Принтеры":
-                            DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
                             NameNavigationItem = "printer";
-                            UpdateTable(NameNavigationItem, printer.List());
+                            UpdateTable(NameNavigationItem, dataGets.PrinterList);
                             break;
                         case "Картриджи":
-                            DataManipulationLanguage<Cartridge> cartridge = new DataManipulationLanguage<Cartridge>();
                             NameNavigationItem = "cartrides";
-                            UpdateTable(NameNavigationItem, cartridge.List());
+                            UpdateTable(NameNavigationItem, dataGets.CartridgesList);
                             break;
                         case "Контрольная-кассовая машина (ККМ)":
-                            DataManipulationLanguage<CashRegister> cashRegister = new DataManipulationLanguage<CashRegister>();
                             NameNavigationItem = "cashRegister";
-                            UpdateTable(NameNavigationItem, cashRegister.GetCashRegistersList());
+                            UpdateTable(NameNavigationItem, dataGets.CashRegisterList);
                             break;
                         case "Sim-карты":
-                            DataManipulationLanguage<SimCard> simCard = new DataManipulationLanguage<SimCard>();
                             NameNavigationItem = "simCard";
-                            UpdateTable(NameNavigationItem, simCard.List());
+                            UpdateTable(NameNavigationItem, dataGets.SimCardList);
                             break;
                         case "Сотрудники":
-                            DataManipulationLanguage<Employees> employees = new DataManipulationLanguage<Employees>();
                             NameNavigationItem = "employees";
-                            UpdateTable(NameNavigationItem, employees.List());
-                            break;
-                        case "Владельцы":
-                            DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
-                            NameNavigationItem = "holder";
-                            UpdateTable(NameNavigationItem, holder.List());
-                            break;
-                        case "Пользователи":
-                            DataManipulationLanguage<User> user = new DataManipulationLanguage<User>();
-                            NameNavigationItem = "user";
-                            UpdateTable(NameNavigationItem, user.List());
+                            UpdateTable(NameNavigationItem, dataGets.EmployessList);
                             break;
                         case "Индивидуальные предприниматели":
-                            DataManipulationLanguage<IndividualEntrepreneur> ie = new DataManipulationLanguage<IndividualEntrepreneur>();
                             NameNavigationItem = "ie";
-                            UpdateTable(NameNavigationItem, ie.List());
+                            UpdateTable(NameNavigationItem, dataGets.IndividualList);
                             break;
-                        case "Накладные":
-                            DataManipulationLanguage<Waybill> waybill = new DataManipulationLanguage<Waybill>();
+                        case "Накладные": 
                             NameNavigationItem = "waybill";
-                            UpdateTable(NameNavigationItem, waybill.List());
+                            UpdateTable(NameNavigationItem, dataGets.WaybillList);
                             break;
                         case "Счетчик распечатанных страниц":
-                            DataManipulationLanguage<CountersPage> counterPage = new DataManipulationLanguage<CountersPage>();
                             NameNavigationItem = "countersPage";
-                            UpdateTable(NameNavigationItem, counterPage.List());
+                            UpdateTable(NameNavigationItem, dataGets.CountersPagesList);
                             break;
                         default:
                             break;
@@ -346,6 +367,34 @@ namespace TerminalMasterWPF
         {
             ConnectItem.Header = "Подключено";
             MainTabControl.IsEnabled = true;
+            CartridgeDataGrid.IsEnabled = true;
+            CashRegisterDataGrid.IsEnabled = true;
+            IndividualEntrepreneurDataGrid.IsEnabled = true;
+            EmployeesDataGrid.IsEnabled = true;
+            PrinterDataGrid.IsEnabled = true;
+            SimCardDataGrid.IsEnabled = true;
+            WaybillDataGrid.IsEnabled = true;
+
+            DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
+            DataManipulationLanguage<Cartridge> cartridge = new DataManipulationLanguage<Cartridge>();
+            DataManipulationLanguage<CashRegister> cashRegister = new DataManipulationLanguage<CashRegister>();
+            DataManipulationLanguage<SimCard> simCard = new DataManipulationLanguage<SimCard>();
+            DataManipulationLanguage<Employees> employees = new DataManipulationLanguage<Employees>();
+            DataManipulationLanguage<IndividualEntrepreneur> ie = new DataManipulationLanguage<IndividualEntrepreneur>();
+            //DataManipulationLanguage<Waybill> waybill = new DataManipulationLanguage<Waybill>();
+           // DataManipulationLanguage<CountersPage> counterPage = new DataManipulationLanguage<CountersPage>();
+            DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
+
+            dataGets.PrinterList = printer.List();
+            dataGets.CartridgesList = cartridge.List();
+            dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
+            dataGets.SimCardList = simCard.GetSimCardList();
+            dataGets.EmployessList = employees.List();
+            dataGets.IndividualList = ie.List();
+            //dataGets.WaybillList = waybill.List();
+           // dataGets.CountersPagesList = counterPage.List();
+            dataGets.HolderList = holder.GetHolderList();
+
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -354,13 +403,13 @@ namespace TerminalMasterWPF
             ConnectItem.Header = "Отключено";
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Warning);
             MainTabControl.IsEnabled = false;
-            CartridgeDataGrid.Columns.Clear();
-            CashRegisterDataGrid.Columns.Clear();
-            IndividualEntrepreneurDataGrid.Columns.Clear();
-            EmployeesDataGrid.Columns.Clear();
-            PrinterDataGrid.Columns.Clear();
-            SimCardDataGrid.Columns.Clear();
-            WaybillDataGrid.Columns.Clear();
+            CartridgeDataGrid.IsEnabled = false;
+            CashRegisterDataGrid.IsEnabled = false;
+            IndividualEntrepreneurDataGrid.IsEnabled = false;
+            EmployeesDataGrid.IsEnabled = false;
+            PrinterDataGrid.IsEnabled = false;
+            SimCardDataGrid.IsEnabled = false;
+            WaybillDataGrid.IsEnabled = false;
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
