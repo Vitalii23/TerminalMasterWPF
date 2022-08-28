@@ -4,8 +4,8 @@ using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
 {
-    [Table(Name = "Cartrides")]
-    class Waybill
+    [Table(Name = "Documents")]
+    class Documents
     {
         [DisplayAttribute(AutoGenerateField = false)]
         [Column(IsPrimaryKey = true, IsDbGenerated = true)]
@@ -25,13 +25,7 @@ namespace TerminalMasterWPF.Model
         public DateTime DateDocument { get; set; }
 
         [DisplayAttribute(Name = "Документ")]
-        [Column(Name = "file_pdf")]
-        public byte[] FilePDF { get; set; }
-
-        [DisplayAttribute(AutoGenerateField = false)]
-        public int IdHolder { get; set; }
-
-        [DisplayAttribute(Name = "Владелец")]
-        public string Holder { get; set; }
+        [Column(Name = "file_binary")]
+        public byte[] FileBinary { get; set; }
     }
 }

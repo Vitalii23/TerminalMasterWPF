@@ -29,6 +29,7 @@ namespace TerminalMasterWPF
         private readonly DataGets dataGets = new DataGets();
         private readonly ConnectSQL connect = new ConnectSQL();
         private readonly LogFile log = new LogFile();
+        public static NotNullDateConverter NotNullDateConverter = new NotNullDateConverter();
 
         public MainWindow()
         {
@@ -42,7 +43,7 @@ namespace TerminalMasterWPF
             EmployeesDataGrid.IsEnabled = false;
             PrinterDataGrid.IsEnabled = false;
             SimCardDataGrid.IsEnabled = false;
-            WaybillDataGrid.IsEnabled = false;
+            DocumentsDataGrid.IsEnabled = false;
 
             connect.ConnectRead();
         }
@@ -81,11 +82,11 @@ namespace TerminalMasterWPF
                         BrandSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "AZUR", "MSPOS" };
                         BrandSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Brand");
 
-                        //IndividualEntrepreneurGridViewComboBoxColumn.ItemsSource = dataGets.CashRegisterList;
-                        //IndividualEntrepreneurGridViewComboBoxColumn.DisplayMemberPath = "NameDevice";
-                        //IndividualEntrepreneurGridViewComboBoxColumn.DataContext = "IndividualEntrepreneur";
-                        //IndividualEntrepreneurGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
-                        //IndividualEntrepreneurGridViewComboBoxColumn.DataMemberBinding = new Binding("IdIndividual");
+                        IndividualEntrepreneurGridViewComboBoxColumn.ItemsSource = dataGets.IndividualList;
+                        IndividualEntrepreneurGridViewComboBoxColumn.DisplayMemberPath = "FullNameIndividualEntrepreneur";
+                        IndividualEntrepreneurGridViewComboBoxColumn.DataContext = "IndividualEntrepreneur";
+                        IndividualEntrepreneurGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
+                        IndividualEntrepreneurGridViewComboBoxColumn.DataMemberBinding = new Binding("IdIndividual");
 
                         OperatorGridViewComboBoxColumn.ItemsSource = new string[] { "Билайн", "MTC", "Мегафон", "Теле2", "Неизвестно" };
                         OperatorGridViewComboBoxColumn.DataMemberBinding = new Binding("Operator");
@@ -101,11 +102,11 @@ namespace TerminalMasterWPF
                     case "ie":
                         IndividualEntrepreneurDataGrid.ItemsSource = list;
                         break;
-                    case "waybill":
-                        WaybillDataGrid.ItemsSource = list;
+                    case "Documents":
+                        DocumentsDataGrid.ItemsSource = list;
                         break;
                     case "countersPage":
-                        WaybillDataGrid.ItemsSource = list;
+                        DocumentsDataGrid.ItemsSource = list;
                         break;
                     default:
                         break;
@@ -130,7 +131,7 @@ namespace TerminalMasterWPF
                 {
                     if (e.NewData is T newElement)
                     {
-                        element.Add(newElement);
+                         element.Add(newElement);
                     }
                 }
 
@@ -285,18 +286,18 @@ namespace TerminalMasterWPF
         }
 
         /// <summary>
-        /// Event to Waybill
+        /// Event to Documents
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void WaybillDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        private void DocumentsDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "WaybillDataGrid_RowEditEnded");
+            AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "DocumentsDataGrid_RowEditEnded");
         }
 
-        private void DeleteWaybillRadButton_Click(object sender, RoutedEventArgs e)
+        private void DeleteDocumentsRadButton_Click(object sender, RoutedEventArgs e)
         {
-            DeleteElement(WaybillDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteWaybillRadButton_Click");
+            DeleteElement(DocumentsDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteDocumentsRadButton_Click");
         }
 
         /// <summary>
@@ -338,8 +339,8 @@ namespace TerminalMasterWPF
                             UpdateTable(NameNavigationItem, dataGets.IndividualList);
                             break;
                         case "Накладные": 
-                            NameNavigationItem = "waybill";
-                            UpdateTable(NameNavigationItem, dataGets.WaybillList);
+                            NameNavigationItem = "Documents";
+                            UpdateTable(NameNavigationItem, dataGets.DocumentsList);
                             break;
                         case "Счетчик распечатанных страниц":
                             NameNavigationItem = "countersPage";
@@ -373,7 +374,7 @@ namespace TerminalMasterWPF
             EmployeesDataGrid.IsEnabled = true;
             PrinterDataGrid.IsEnabled = true;
             SimCardDataGrid.IsEnabled = true;
-            WaybillDataGrid.IsEnabled = true;
+            DocumentsDataGrid.IsEnabled = true;
 
             DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
             DataManipulationLanguage<Cartridge> cartridge = new DataManipulationLanguage<Cartridge>();
@@ -381,7 +382,7 @@ namespace TerminalMasterWPF
             DataManipulationLanguage<SimCard> simCard = new DataManipulationLanguage<SimCard>();
             DataManipulationLanguage<Employees> employees = new DataManipulationLanguage<Employees>();
             DataManipulationLanguage<IndividualEntrepreneur> ie = new DataManipulationLanguage<IndividualEntrepreneur>();
-            //DataManipulationLanguage<Waybill> waybill = new DataManipulationLanguage<Waybill>();
+            //DataManipulationLanguage<Documents> Documents = new DataManipulationLanguage<Documents>();
            // DataManipulationLanguage<CountersPage> counterPage = new DataManipulationLanguage<CountersPage>();
             DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
 
@@ -390,8 +391,8 @@ namespace TerminalMasterWPF
             dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
             dataGets.SimCardList = simCard.GetSimCardList();
             dataGets.EmployessList = employees.List();
-            dataGets.IndividualList = ie.List();
-            //dataGets.WaybillList = waybill.List();
+            dataGets.IndividualList = ie.GetIndividualEntrepreneur();
+            //dataGets.DocumentsList = Documents.List();
            // dataGets.CountersPagesList = counterPage.List();
             dataGets.HolderList = holder.GetHolderList();
 
@@ -409,7 +410,7 @@ namespace TerminalMasterWPF
             EmployeesDataGrid.IsEnabled = false;
             PrinterDataGrid.IsEnabled = false;
             SimCardDataGrid.IsEnabled = false;
-            WaybillDataGrid.IsEnabled = false;
+            DocumentsDataGrid.IsEnabled = false;
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -451,7 +452,7 @@ namespace TerminalMasterWPF
                // {
                     BinaryFormatter binaryformatter = new BinaryFormatter();
                     MemoryStream memorystream = new MemoryStream();
-                   // binaryformatter.Serialize(memorystream, dataGets.WaybillList[dataGets.SelectedXIndex].FilePDF);
+                   // binaryformatter.Serialize(memorystream, dataGets.DocumentsList[dataGets.SelectedXIndex].FilePDF);
                     byte[] data = memorystream.ToArray();
 
                     using (FileStream fileStream = File.Create(saveFileDialog.FileName))

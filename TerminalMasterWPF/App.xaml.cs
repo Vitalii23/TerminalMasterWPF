@@ -13,7 +13,7 @@ namespace TerminalMasterWPF
     /// </summary>
     public partial class App : Application
     {
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get { return "Data Source=DESKTOP-GIENFQV;Initial Catalog=TerminalMasterDB;Integrated Security=True"; } }
 
         public App()
         {

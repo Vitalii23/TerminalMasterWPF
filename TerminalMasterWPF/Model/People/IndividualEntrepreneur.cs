@@ -29,5 +29,8 @@ namespace TerminalMasterWPF.Model.People
         [DisplayAttribute(Name = "ИНН")]
         [Column(Name = "tin")]
         public string TIN { get; set; }
+
+        [DisplayAttribute(AutoGenerateField = false)]
+        public string FullNameIndividualEntrepreneur { get; set; }
     }
 }

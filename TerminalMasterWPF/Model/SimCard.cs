@@ -44,9 +44,11 @@ namespace TerminalMasterWPF.Model
         public string Status { get; set; }
 
         [DisplayAttribute(AutoGenerateField = false)]
+        [Column(Name = "id_individual")]
         public int IdIndividual { get; set; }
 
         [DisplayAttribute(AutoGenerateField = false)]
+        [Column(Name = "id_cashRegister")]
         public int IdCashRegister { get; set; }
 
         public SimCard() { }

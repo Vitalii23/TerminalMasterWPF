@@ -20,9 +20,8 @@ namespace TerminalMasterWPF.ViewModel
         private Printer _printer;
         private SimCard _simCard;
         private Holder _holder;
-        private User _user;
         private IndividualEntrepreneur _individual;
-        private Waybill _waybill;
+        private Documents _documents;
         private CountersPage _countersPages;
 
         public IList<Cartridge> CartridgesList { get; set; }
@@ -31,9 +30,8 @@ namespace TerminalMasterWPF.ViewModel
         public IList<Printer> PrinterList { get; set; }
         public ObservableCollection<SimCard> SimCardList { get; set; }
         public ObservableCollection<Holder> HolderList { get; set; }
-        public IList<User> UserList { get; set; }
         public IList<IndividualEntrepreneur> IndividualList { get; set; }
-        public IList<Waybill> WaybillList { get; set; }
+        public IList<Documents> DocumentsList { get; set; }
         public IList<CountersPage> CountersPagesList { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -107,16 +105,6 @@ namespace TerminalMasterWPF.ViewModel
             }
         }
 
-        public User User
-        {
-            get => _user;
-            set
-            {
-                _user = value;
-                OnPropertyChanged("UserList");
-            }
-        }
-
         public IndividualEntrepreneur IndividualEntrepreneur
         {
             get => _individual;
@@ -127,13 +115,13 @@ namespace TerminalMasterWPF.ViewModel
             }
         }
 
-        public Waybill Waybill
+        public Documents Documents
         {
-            get => _waybill;
+            get => _documents;
             set
             {
-                _waybill = value;
-                OnPropertyChanged("Waybill");
+                _documents = value;
+                OnPropertyChanged("Documents");
             }
         }
 

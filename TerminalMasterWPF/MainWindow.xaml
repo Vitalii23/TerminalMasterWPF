@@ -329,10 +329,10 @@
                                     </DataTemplate>
                                 </telerik:GridViewComboBoxColumn.CellTemplate>
                             </telerik:GridViewComboBoxColumn>
-                            <telerik:GridViewDataColumn x:Name="DateReceptionGridViewDataColumn" Header="Дата получения" DataFormatString="dd/MM/yyyy" DataMemberBinding="{Binding DateReception}">
+                            <telerik:GridViewDataColumn x:Name="DateReceptionGridViewDataColumn" Header="Дата получения" DataMemberBinding="{Binding DateReception}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
-                                        <telerik:RadDatePicker  SelectedDate="{Binding DateReception}" IsTooltipEnabled="False"/>
+                                        <telerik:RadDatePicker SelectedDate="{Binding DateReception}"/>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
@@ -632,59 +632,62 @@
                         </telerik:RadGridView.Columns>
                     </telerik:RadGridView>
                 </TabItem>
-                <TabItem x:Name="WaybillTabItem" Header="Накладные" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="WaybillDataGrid"
-                                         RowEditEnded="WaybillDataGrid_RowEditEnded"
-                                         ItemsSource="{Binding WaybillList, UpdateSourceTrigger=PropertyChanged}"
-                                         SelectedItem="{Binding Waybill}">
-                        <telerik:RadGridView.Columns>
-                            <telerik:GridViewDataColumn x:Name="NameDocumentGridViewDataColumn" Header="Имя документа" DataMemberBinding="{Binding NameDocument}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding NameDocument}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="NumberDocumentGridViewDataColumn" Header="Номер документа" DataMemberBinding="{Binding NumberDocument}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding NumberDocument}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="DateDocumentGridViewDataColumn" Header="Дата документы" DataMemberBinding="{Binding DateDocument}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <telerik:RadDateTimePicker SelectedDate="{Binding DateDocument}" IsTooltipEnabled="False"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="FilePDFGridViewDataColumn" Header="" DataMemberBinding="{Binding FilePDF}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button>Скачать</Button>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewColumn>
-                                <telerik:GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <telerik:RadButton x:Name="DeleteWaybillRadButton"
-                                                           Click="DeleteWaybillRadButton_Click"
+                <TabItem x:Name="DocumentsTabItem" Header="Документы" Background="#FFE5E5E5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+                            <Button Height="25" Margin="0,0,0,0">Добавить</Button>
+                            <Button Height="25" Margin="10,0,0,0">Изменить</Button>
+                            <Button Height="25" Margin="10,0,0,0">Скачать</Button>
+                        </StackPanel>
+                        <telerik:RadGridView x:Name="DocumentsDataGrid" Grid.Row="1"
+                                         RowEditEnded="DocumentsDataGrid_RowEditEnded"
+                                         IsReadOnly="False"
+                                         ItemsSource="{Binding DocumentsList, UpdateSourceTrigger=PropertyChanged}"
+                                         SelectedItem="{Binding Documents}">
+                            <telerik:RadGridView.Columns>
+                                <telerik:GridViewDataColumn x:Name="NameDocumentGridViewDataColumn" Header="Имя документа" DataMemberBinding="{Binding NameDocument}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding NameDocument}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="DateDocumentGridViewDataColumn" Header="Дата документы" DataMemberBinding="{Binding DateDocument}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <telerik:RadDateTimePicker SelectedDate="{Binding DateDocument}" IsTooltipEnabled="False"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="FilePDFGridViewDataColumn" Header="Документы" DataMemberBinding="{Binding FilePDF}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button>Скачать</Button>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewColumn>
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <telerik:RadButton x:Name="DeleteDocumentsRadButton"
+                                                           Click="DeleteDocumentsRadButton_Click"
                                                            Content="Delete" 
                                                            Command="telerik:RadGridViewCommands.Delete" 
                                                            CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </telerik:GridViewColumn.CellTemplate>
-                            </telerik:GridViewColumn>
-                        </telerik:RadGridView.Columns>
-                    </telerik:RadGridView>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                            </telerik:RadGridView.Columns>
+                        </telerik:RadGridView>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>

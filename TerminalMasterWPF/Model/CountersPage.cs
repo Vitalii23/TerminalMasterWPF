@@ -4,12 +4,12 @@ using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
 {
+    [Table(Name = "CountersPage")]
     class CountersPage
     {
         [DisplayAttribute(AutoGenerateField = false)]
         [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public int Id { get; set; }
-
 
         [DisplayAttribute(Name = "Счетчик принтера")]
         [Column(Name = "printed_page_counter")]

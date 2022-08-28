@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.Linq;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Telerik.Windows.Data;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
+using TerminalMasterWPF.Model.People;
 
 namespace TerminalMasterWPF.DML
 {
@@ -202,13 +201,13 @@ namespace TerminalMasterWPF.DML
                                              "dbo.SimCard.tms, " +
                                              "dbo.SimCard.icc, " +
                                              "dbo.SimCard.status, " +
-                                             "dbo.SimCard.id_individual_entrepreneur, " +
+                                             "dbo.SimCard.id_individual, " +
                                              "dbo.SimCard.id_cashRegister, " +
                                              "(SELECT TOP(1)(dbo.IndividualEntrepreneur.last_name + ' ' + dbo.IndividualEntrepreneur.first_name + ' ' + dbo.IndividualEntrepreneur.middle_name) " +
                                              "FROM dbo.IndividualEntrepreneur " +
-                                             "WHERE dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur) AS individual " +
+                                             "WHERE dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual) AS individual " +
                                       "FROM dbo.SimCard " +
-                                      "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
+                                      "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual " +
                                       "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister; ";
 
             ObservableCollection<SimCard> simcards = new ObservableCollection<SimCard>();
@@ -293,7 +292,55 @@ namespace TerminalMasterWPF.DML
             }
             catch (Exception eSql)
             {
-                log.WriteLogAsync(eSql.Message, "GetCashRegister");
+                log.WriteLogAsync(eSql.Message, "GetHolderList");
+            }
+            return null;
+        }
+        public ObservableCollection<IndividualEntrepreneur> GetIndividualEntrepreneur()
+        {
+            string GetHolder = "SELECT dbo.IndividualEntrepreneur.id, " +
+                                    "dbo.IndividualEntrepreneur.last_name, " +
+	                                "dbo.IndividualEntrepreneur.first_name," +
+	                                "dbo.IndividualEntrepreneur.middle_name, " +
+                                    "dbo.IndividualEntrepreneur.psrnie, dbo.IndividualEntrepreneur.tin, " +
+	                                "('ИП ' + dbo.IndividualEntrepreneur.last_name + ' ' + dbo.IndividualEntrepreneur.first_name + ' ' + dbo.IndividualEntrepreneur.middle_name) as full_name " +
+                                    "FROM dbo.IndividualEntrepreneur; ";
+
+            ObservableCollection<IndividualEntrepreneur> individuals = new ObservableCollection<IndividualEntrepreneur>();
+            try
+            {
+                using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
+                {
+                    connect.Open();
+                    if (connect.State == ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = connect.CreateCommand())
+                        {
+                            cmd.CommandText = GetHolder;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+
+                                while (reader.Read())
+                                {
+                                    IndividualEntrepreneur individual = new IndividualEntrepreneur();
+                                    individual.Id = reader.GetInt32(0);
+                                    individual.LastName = reader.GetString(1);
+                                    individual.FirstName = reader.GetString(2);
+                                    individual.MiddleName = reader.GetString(3);
+                                    individual.PSRNIE = reader.GetString(4);
+                                    individual.TIN = reader.GetString(5);
+                                    individual.FullNameIndividualEntrepreneur = reader.GetString(6);
+                                    individuals.Add(individual);
+                                }
+                            }
+                        }
+                    }
+                }
+                return individuals;
+            }
+            catch (Exception eSql)
+            {
+                log.WriteLogAsync(eSql.Message, "GetIndividualEntrepreneur");
             }
             return null;
         }
