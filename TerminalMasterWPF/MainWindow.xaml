@@ -185,20 +185,29 @@
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <telerik:RadDateTimePicker SelectedDate="{Binding Date}" IsTooltipEnabled="False"/>
+                                            <telerik:RadDatePicker SelectedDate="{Binding Date}" IsTooltipEnabled="False"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="GridViewDataColumn" Header="Имя принтера" DataMemberBinding="{Binding Printers}">
+                            <telerik:GridViewDataColumn x:Name="СonditionGridViewDataColumn" Header="Примечание" DataMemberBinding="{Binding Сondition}">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Printers}"/>
+                                            <TextBlock Text="{Binding Сondition}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
+                            <telerik:GridViewComboBoxColumn x:Name="PrintersGridViewDataColumn" Header="Имя принтера" >
+                                <telerik:GridViewComboBoxColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Printer}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </telerik:GridViewComboBoxColumn.CellTemplate>
+                            </telerik:GridViewComboBoxColumn>
                             <telerik:GridViewColumn>
                                 <telerik:GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -667,10 +676,12 @@
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
-                                <telerik:GridViewDataColumn x:Name="FilePDFGridViewDataColumn" Header="Документы" DataMemberBinding="{Binding FilePDF}">
+                                <telerik:GridViewDataColumn x:Name="FilePDFGridViewDataColumn" Header="Документы" DataMemberBinding="{Binding FileBinary}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button>Скачать</Button>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding FileBinary}"/>
+                                            </StackPanel>
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>

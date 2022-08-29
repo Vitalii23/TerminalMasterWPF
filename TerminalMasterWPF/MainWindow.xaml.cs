@@ -28,8 +28,16 @@ namespace TerminalMasterWPF
         private string NameNavigationItem;
         private readonly DataGets dataGets = new DataGets();
         private readonly ConnectSQL connect = new ConnectSQL();
+        private DataManipulationLanguage<Printer> printer;
+        private DataManipulationLanguage<Cartridge> cartridge;
+        private DataManipulationLanguage<CashRegister> cashRegister;
+        private DataManipulationLanguage<SimCard> simCard ;
+        private DataManipulationLanguage<Employees> employees;
+        private DataManipulationLanguage<IndividualEntrepreneur> ie;
+        private DataManipulationLanguage<Documents> documents;
+        private DataManipulationLanguage<CountersPage> counterPage;
+        private DataManipulationLanguage<Holder> holder;
         private readonly LogFile log = new LogFile();
-        public static NotNullDateConverter NotNullDateConverter = new NotNullDateConverter();
 
         public MainWindow()
         {
@@ -106,7 +114,12 @@ namespace TerminalMasterWPF
                         DocumentsDataGrid.ItemsSource = list;
                         break;
                     case "countersPage":
-                        DocumentsDataGrid.ItemsSource = list;
+                        CountersPageDataGrid.ItemsSource = list;
+                        PrintersGridViewDataColumn.ItemsSource = dataGets.PrinterList;
+                        PrintersGridViewDataColumn.DisplayMemberPath = "FullNamePrinters";
+                        PrintersGridViewDataColumn.DataContext = "Printer";
+                        PrintersGridViewDataColumn.SelectedValueMemberPath = "Id";
+                        PrintersGridViewDataColumn.DataMemberBinding = new Binding("IdPrinter");
                         break;
                     default:
                         break;
@@ -131,7 +144,7 @@ namespace TerminalMasterWPF
                 {
                     if (e.NewData is T newElement)
                     {
-                         element.Add(newElement);
+                        element.Add(newElement);
                     }
                 }
 
@@ -261,7 +274,7 @@ namespace TerminalMasterWPF
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EmployeesDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
-        { 
+        {
             AddAndEditElement(e, new DataManipulationLanguage<Employees>(), "EmployeesDataGrid_RowEditEnded");
         }
 
@@ -338,7 +351,7 @@ namespace TerminalMasterWPF
                             NameNavigationItem = "ie";
                             UpdateTable(NameNavigationItem, dataGets.IndividualList);
                             break;
-                        case "Накладные": 
+                        case "Накладные":
                             NameNavigationItem = "Documents";
                             UpdateTable(NameNavigationItem, dataGets.DocumentsList);
                             break;
@@ -376,24 +389,24 @@ namespace TerminalMasterWPF
             SimCardDataGrid.IsEnabled = true;
             DocumentsDataGrid.IsEnabled = true;
 
-            DataManipulationLanguage<Printer> printer = new DataManipulationLanguage<Printer>();
-            DataManipulationLanguage<Cartridge> cartridge = new DataManipulationLanguage<Cartridge>();
-            DataManipulationLanguage<CashRegister> cashRegister = new DataManipulationLanguage<CashRegister>();
-            DataManipulationLanguage<SimCard> simCard = new DataManipulationLanguage<SimCard>();
-            DataManipulationLanguage<Employees> employees = new DataManipulationLanguage<Employees>();
-            DataManipulationLanguage<IndividualEntrepreneur> ie = new DataManipulationLanguage<IndividualEntrepreneur>();
-            //DataManipulationLanguage<Documents> Documents = new DataManipulationLanguage<Documents>();
-           // DataManipulationLanguage<CountersPage> counterPage = new DataManipulationLanguage<CountersPage>();
-            DataManipulationLanguage<Holder> holder = new DataManipulationLanguage<Holder>();
+            printer = new DataManipulationLanguage<Printer>();
+            cartridge = new DataManipulationLanguage<Cartridge>();
+            cashRegister = new DataManipulationLanguage<CashRegister>();
+            simCard = new DataManipulationLanguage<SimCard>();
+            employees = new DataManipulationLanguage<Employees>();
+            ie = new DataManipulationLanguage<IndividualEntrepreneur>();
+            documents = new DataManipulationLanguage<Documents>();
+            counterPage = new DataManipulationLanguage<CountersPage>();
+            holder = new DataManipulationLanguage<Holder>();
 
-            dataGets.PrinterList = printer.List();
+            dataGets.PrinterList = printer.GetPrintersList();
             dataGets.CartridgesList = cartridge.List();
             dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
             dataGets.SimCardList = simCard.GetSimCardList();
             dataGets.EmployessList = employees.List();
             dataGets.IndividualList = ie.GetIndividualEntrepreneur();
-            //dataGets.DocumentsList = Documents.List();
-           // dataGets.CountersPagesList = counterPage.List();
+            dataGets.DocumentsList = documents.List();
+            dataGets.CountersPagesList = counterPage.GetCountersPagesList();
             dataGets.HolderList = holder.GetHolderList();
 
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -411,6 +424,27 @@ namespace TerminalMasterWPF
             PrinterDataGrid.IsEnabled = false;
             SimCardDataGrid.IsEnabled = false;
             DocumentsDataGrid.IsEnabled = false;
+
+
+            //printer.List().Clear();
+            //cartridge.List().Clear();
+            //cashRegister.GetCashRegistersList().Clear();
+            //simCard.GetSimCardList().Clear();
+            //employees.List().Clear();
+            //ie.GetIndividualEntrepreneur().Clear();
+            //documents.List().Clear();
+            //counterPage.List().Clear();
+            //holder.GetHolderList().Clear();
+
+            //dataGets.PrinterList.Clear();
+            //dataGets.CartridgesList.Clear();
+            //dataGets.CashRegisterList.Clear();
+            //dataGets.SimCardList.Clear();
+            //dataGets.EmployessList.Clear();
+            //dataGets.IndividualList.Clear();
+            //dataGets.DocumentsList.Clear();
+            //dataGets.CountersPagesList.Clear();
+            //dataGets.HolderList.Clear();
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -448,24 +482,24 @@ namespace TerminalMasterWPF
                 };
 
                 bool? result = saveFileDialog.ShowDialog();
-               // if (result == true && dataGets.SelectedXIndex >= 0)
-               // {
-                    BinaryFormatter binaryformatter = new BinaryFormatter();
-                    MemoryStream memorystream = new MemoryStream();
-                   // binaryformatter.Serialize(memorystream, dataGets.DocumentsList[dataGets.SelectedXIndex].FilePDF);
-                    byte[] data = memorystream.ToArray();
+                // if (result == true && dataGets.SelectedXIndex >= 0)
+                // {
+                BinaryFormatter binaryformatter = new BinaryFormatter();
+                MemoryStream memorystream = new MemoryStream();
+                // binaryformatter.Serialize(memorystream, dataGets.DocumentsList[dataGets.SelectedXIndex].FilePDF);
+                byte[] data = memorystream.ToArray();
 
-                    using (FileStream fileStream = File.Create(saveFileDialog.FileName))
-                    {
-                        fileStream.Write(data, 0, data.Length);
-                    }
+                using (FileStream fileStream = File.Create(saveFileDialog.FileName))
+                {
+                    fileStream.Write(data, 0, data.Length);
+                }
 
-                    MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
-              //  }
-            //    else
-             //   {
-                    MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
-           //     }
+                MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
+                //  }
+                //    else
+                //   {
+                MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //     }
 
             }
             catch (Exception ex)

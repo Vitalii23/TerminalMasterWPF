@@ -21,7 +21,7 @@ namespace TerminalMasterWPF.Model
 
         [DisplayAttribute(Name = "Дата документы")]
         [Column(Name = "date_document")]
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
         public DateTime DateDocument { get; set; }
 
         [DisplayAttribute(Name = "Документ")]

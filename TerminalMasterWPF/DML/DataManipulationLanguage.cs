@@ -127,6 +127,61 @@ namespace TerminalMasterWPF.DML
             return result;
         }
 
+        public ObservableCollection<T> GetList()
+        {
+            string GetPrinter = "SELECT dbo.Printer.id, " +
+                                        "dbo.Printer.brand, " +
+                                        "dbo.Printer.model, " +
+                                        "dbo.Printer.cartridge, " +
+                                        "dbo.Printer.name_port, " +
+                                        "dbo.Printer.location, " +
+                                        "dbo.Printer.status, " +
+                                        "dbo.Printer.vendor_code, " +
+                "(dbo.Printer.brand + ' ' + dbo.Printer.model + ' (' + dbo.Printer.vendor_code + ')') as printers " +
+                "FROM Printer;";
+
+            ObservableCollection<Printer> printers = new ObservableCollection<Printer>();
+            try
+            {
+                using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
+                {
+                    connect.Open();
+                    if (connect.State == ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = connect.CreateCommand())
+                        {
+                            cmd.CommandText = GetPrinter;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    var printer = new Printer()
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        BrandPrinter = reader.GetString(1),
+                                        ModelPrinter = reader.GetString(2),
+                                        Cartridge = reader.GetString(3),
+                                        NamePort = reader.GetString(4),
+                                        LocationPrinter = reader.GetString(5),
+                                        Status = reader.GetString(6),
+                                        VendorCodePrinter = reader.GetString(7),
+                                        FullNamePrinters = reader.GetString(8)
+                                    };
+                                    printers.Add(printer);
+                                }
+                            }
+                        }
+                    }
+                }
+                return printers;
+            }
+            catch (Exception eSql)
+            {
+                log.WriteLogAsync(eSql.Message, "GetPrinter");
+            }
+            return null;
+        }
+
         public ObservableCollection<CashRegister> GetCashRegistersList()
         {
             string GetCashRegister = "SELECT dbo.CashRegister.id, " +
@@ -201,13 +256,13 @@ namespace TerminalMasterWPF.DML
                                              "dbo.SimCard.tms, " +
                                              "dbo.SimCard.icc, " +
                                              "dbo.SimCard.status, " +
-                                             "dbo.SimCard.id_individual, " +
+                                             "dbo.SimCard.id_individual_entrepreneur, " +
                                              "dbo.SimCard.id_cashRegister, " +
                                              "(SELECT TOP(1)(dbo.IndividualEntrepreneur.last_name + ' ' + dbo.IndividualEntrepreneur.first_name + ' ' + dbo.IndividualEntrepreneur.middle_name) " +
                                              "FROM dbo.IndividualEntrepreneur " +
-                                             "WHERE dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual) AS individual " +
+                                             "WHERE dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur) AS individual " +
                                       "FROM dbo.SimCard " +
-                                      "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual " +
+                                      "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
                                       "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister; ";
 
             ObservableCollection<SimCard> simcards = new ObservableCollection<SimCard>();
@@ -296,14 +351,15 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
         public ObservableCollection<IndividualEntrepreneur> GetIndividualEntrepreneur()
         {
             string GetHolder = "SELECT dbo.IndividualEntrepreneur.id, " +
                                     "dbo.IndividualEntrepreneur.last_name, " +
-	                                "dbo.IndividualEntrepreneur.first_name," +
-	                                "dbo.IndividualEntrepreneur.middle_name, " +
+                                    "dbo.IndividualEntrepreneur.first_name," +
+                                    "dbo.IndividualEntrepreneur.middle_name, " +
                                     "dbo.IndividualEntrepreneur.psrnie, dbo.IndividualEntrepreneur.tin, " +
-	                                "('ИП ' + dbo.IndividualEntrepreneur.last_name + ' ' + dbo.IndividualEntrepreneur.first_name + ' ' + dbo.IndividualEntrepreneur.middle_name) as full_name " +
+                                    "('ИП ' + dbo.IndividualEntrepreneur.last_name + ' ' + dbo.IndividualEntrepreneur.first_name + ' ' + dbo.IndividualEntrepreneur.middle_name) as full_name " +
                                     "FROM dbo.IndividualEntrepreneur; ";
 
             ObservableCollection<IndividualEntrepreneur> individuals = new ObservableCollection<IndividualEntrepreneur>();
@@ -341,6 +397,55 @@ namespace TerminalMasterWPF.DML
             catch (Exception eSql)
             {
                 log.WriteLogAsync(eSql.Message, "GetIndividualEntrepreneur");
+            }
+            return null;
+        }
+
+        public ObservableCollection<CountersPage> GetCountersPagesList()
+        {
+            string GetCountersPage = "SELECT dbo.CountersPage.id, " +
+                                       "dbo.CountersPage.printed_page_counter, " +
+                                       "dbo.CountersPage.date, " +
+                                       "dbo.CountersPage.condition, " +
+                                       "dbo.CountersPage.id_printer, " +
+                                       "(dbo.Printer.brand + ' ' + dbo.Printer.model + ' (' + dbo.Printer.vendor_code + ')') as printers " + 
+                               "FROM dbo.CountersPage " +
+                               "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer; ";
+
+            ObservableCollection<CountersPage> countersPages = new ObservableCollection<CountersPage>();
+            try
+            {
+                using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
+                {
+                    connect.Open();
+                    if (connect.State == ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = connect.CreateCommand())
+                        {
+                            cmd.CommandText = GetCountersPage;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+
+                                while (reader.Read())
+                                {
+                                    CountersPage countersPage = new CountersPage();
+                                    countersPage.Id = reader.GetInt32(0);
+                                    countersPage.PrintedPageCounter = reader.GetInt32(1);
+                                    countersPage.Date = reader.GetDateTime(2);
+                                    countersPage.Сondition = reader.GetString(3);
+                                    countersPage.IdPrinter = reader.GetInt32(4);
+                                    countersPage.Printer = reader.GetString(5);
+                                    countersPages.Add(countersPage);
+                                }
+                            }
+                        }
+                    }
+                }
+                return countersPages;
+            }
+            catch (Exception eSql)
+            {
+                log.WriteLogAsync(eSql.Message, "GetCountersPagesList");
             }
             return null;
         }

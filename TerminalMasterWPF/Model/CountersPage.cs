@@ -13,18 +13,22 @@ namespace TerminalMasterWPF.Model
 
         [DisplayAttribute(Name = "Счетчик принтера")]
         [Column(Name = "printed_page_counter")]
-        public string PrintedPageCounter { get; set; }
+        public int PrintedPageCounter { get; set; }
 
         [DisplayAttribute(Name = "Дата")]
         [Column(Name = "date")]
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
         public DateTime Date { get; set; }
 
-        [DisplayAttribute(Name = "Имя принтера")]
+        [DisplayAttribute(Name = "Примечание")]
         [Column(Name = "condition")]
-        public string Printers { get; set; }
+        public string Сondition { get; set; }
+
+        [DisplayAttribute(Name = "Имя принтера")]
+        public string Printer { get; set; }
 
         [DisplayAttribute(AutoGenerateField = false)]
-        public string IdPrinter { get; set; }
+        [Column(Name = "id_printer")]
+        public int IdPrinter { get; set; }
     }
 }

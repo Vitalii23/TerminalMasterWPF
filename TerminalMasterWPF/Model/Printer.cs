@@ -38,6 +38,10 @@ namespace TerminalMasterWPF.Model
         [Column(Name = "vendor_code")]
         public string VendorCodePrinter { get; set; }
 
+        [DisplayAttribute(Name = "Имя принтера")]
+        [Column(Name = "printers")]
+        public string FullNamePrinters { get; set; }
+
         public Printer() { }
     }
 }

@@ -24,7 +24,7 @@ namespace TerminalMasterWPF.Settings
                 ApplicationIntent = ApplicationIntent.ReadWrite,
                 MultiSubnetFailover = SettingsUser.Default.MultiSubnetFailover
             };
-          // (App.Current as App).ConnectionString = bulder.ConnectionString;
+           (App.Current as App).ConnectionString = bulder.ConnectionString;
         }
     }
 }

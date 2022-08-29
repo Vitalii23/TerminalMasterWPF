@@ -41,7 +41,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             {
                 OpenFileDialog openFile = new OpenFileDialog
                 {
-                    //InitialDirectory = @"\\KV-SQL-N\TerminalDataFiles",
+                    InitialDirectory = @"\\KV-SQL-N\TerminalDataFiles",
                     FilterIndex = 2,
                     Filter = "File image (*.jpeg, *.jpg, .png)|*.jpeg;*.jpg;*.png|" +
                     "Documents file (*.pdf)|*.pdf",
@@ -61,7 +61,7 @@ namespace TerminalMasterWPF.ElementContentDialog
             }
         }
 
-        private void PrimaryButtonClick_Click(object sender, RoutedEventArgs e)
+        private async void PrimaryButtonClick_Click(object sender, RoutedEventArgs e)
         {
             if (SelectData.Equals("ADD"))
             {
@@ -88,6 +88,8 @@ namespace TerminalMasterWPF.ElementContentDialog
 
                 using (SqlConnection connection = new SqlConnection((App.Current as App).ConnectionString))
                 {
+                    await connection.OpenAsync();
+
                     SqlCommand command = new SqlCommand(sqlExpression, connection);
 
                     SqlParameter nameParam = new SqlParameter("@name", NameDocumentTextBox.Text);

@@ -37,14 +37,17 @@ namespace TerminalMasterWPF.Model
         public string HolderCashRegister { get; set; }
 
         [DisplayAttribute(Name = "Дата получения")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
         [Column(Name = "date_reception")]
         public DateTime DateReception { get; set; }
 
         [DisplayAttribute(Name = "Дата активации ключа ОФД")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
         [Column(Name = "date_end_fiscal_memory")]
         public DateTime DateKeyActivationFiscalDataOperator { get; set; }
 
         [DisplayAttribute(Name = "Дата окончания ФН")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
         [Column(Name = "date_key_activ_fisc_data")]
         public DateTime DateEndFiscalMemory { get; set; }
 
@@ -54,7 +57,7 @@ namespace TerminalMasterWPF.Model
 
         [DisplayAttribute(AutoGenerateField = false)]
         [Column(Name = "id_employees")]
-        public int IdEmployees {    get; set; }
+        public int IdEmployees { get; set; }
 
         public CashRegister() { }
     }
