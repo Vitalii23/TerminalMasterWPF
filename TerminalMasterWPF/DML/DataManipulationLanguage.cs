@@ -109,7 +109,6 @@ namespace TerminalMasterWPF.DML
             {
                 await log.WriteLogAsync(e.Message, "Update");
             }
-
         }
 
         private PropertyInfo GetPropertyInfo(string property)
@@ -127,7 +126,7 @@ namespace TerminalMasterWPF.DML
             return result;
         }
 
-        public ObservableCollection<T> GetList()
+        public ObservableCollection<Printer> GetPrintersList()
         {
             string GetPrinter = "SELECT dbo.Printer.id, " +
                                         "dbo.Printer.brand, " +
@@ -137,8 +136,8 @@ namespace TerminalMasterWPF.DML
                                         "dbo.Printer.location, " +
                                         "dbo.Printer.status, " +
                                         "dbo.Printer.vendor_code, " +
-                "(dbo.Printer.brand + ' ' + dbo.Printer.model + ' (' + dbo.Printer.vendor_code + ')') as printers " +
-                "FROM Printer;";
+                                "(dbo.Printer.brand + ' ' + dbo.Printer.model + ' (' + dbo.Printer.vendor_code + ')') as printers " +
+                                "FROM Printer;";
 
             ObservableCollection<Printer> printers = new ObservableCollection<Printer>();
             try
@@ -261,9 +260,9 @@ namespace TerminalMasterWPF.DML
                                              "(SELECT TOP(1)(dbo.IndividualEntrepreneur.last_name + ' ' + dbo.IndividualEntrepreneur.first_name + ' ' + dbo.IndividualEntrepreneur.middle_name) " +
                                              "FROM dbo.IndividualEntrepreneur " +
                                              "WHERE dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur) AS individual " +
-                                      "FROM dbo.SimCard " +
-                                      "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
-                                      "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister; ";
+                                  "FROM dbo.SimCard " +
+                                  "INNER JOIN dbo.IndividualEntrepreneur ON dbo.IndividualEntrepreneur.id = dbo.SimCard.id_individual_entrepreneur " +
+                                  "INNER JOIN dbo.CashRegister ON dbo.CashRegister.id = dbo.Simcard.id_cashRegister; ";
 
             ObservableCollection<SimCard> simcards = new ObservableCollection<SimCard>();
             try
@@ -409,8 +408,8 @@ namespace TerminalMasterWPF.DML
                                        "dbo.CountersPage.condition, " +
                                        "dbo.CountersPage.id_printer, " +
                                        "(dbo.Printer.brand + ' ' + dbo.Printer.model + ' (' + dbo.Printer.vendor_code + ')') as printers " + 
-                               "FROM dbo.CountersPage " +
-                               "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer; ";
+                                    "FROM dbo.CountersPage " +
+                                    "INNER JOIN dbo.Printer ON dbo.Printer.id = dbo.CountersPage.id_printer; ";
 
             ObservableCollection<CountersPage> countersPages = new ObservableCollection<CountersPage>();
             try

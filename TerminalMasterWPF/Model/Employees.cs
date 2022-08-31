@@ -30,7 +30,8 @@ namespace TerminalMasterWPF.Model
         [Column(Name = "internal_number")]
         public string InternalNumber { get; set; }
 
-        [DisplayAttribute(Name = " Мобильный номер")]
+        [DisplayAttribute(Name = "Мобильный номер")]
+        [DisplayFormat(DataFormatString = "{0:#-###-###-##-##}")]
         [Column(Name = "mobile_number")]
         public string MobileNumber { get; set; }
 

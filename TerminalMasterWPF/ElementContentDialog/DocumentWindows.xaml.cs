@@ -65,7 +65,7 @@ namespace TerminalMasterWPF.ElementContentDialog
         {
             if (SelectData.Equals("ADD"))
             {
-                string sqlExpression = $"INSERT INTO Users (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
+                string sqlExpression = $"INSERT INTO Documents (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
 
                 using (SqlConnection connection = new SqlConnection((App.Current as App).ConnectionString))
                 {
@@ -84,7 +84,7 @@ namespace TerminalMasterWPF.ElementContentDialog
 
             if (SelectData.Equals("Edit"))
             {
-                string sqlExpression = $"INSERT INTO Users (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
+                string sqlExpression = $"INSERT INTO Documents (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
 
                 using (SqlConnection connection = new SqlConnection((App.Current as App).ConnectionString))
                 {

@@ -3,10 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TerminalMasterWPF"
         xmlns:vm="clr-namespace:TerminalMasterWPF.ViewModel"
-        xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI"
-        xmlns:bd="clr-namespace:TerminalMasterWPF.DML"
         mc:Ignorable="d"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="Терминал Мастер" Height="auto" Width="auto" MaxHeight="2160" MaxWidth="3840">
@@ -17,8 +14,9 @@
 
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="1080*"></RowDefinition>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1080*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         
         <DockPanel>
@@ -36,7 +34,7 @@
             </Menu>
         </DockPanel>
 
-        <StackPanel x:Name="MainStackPanel" Grid.Row="1" Orientation="Horizontal">
+        <StackPanel x:Name="MainStackPanel" Grid.Row="0" Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="10,10,0,10"/>
@@ -66,7 +64,7 @@
             </StackPanel.Resources>
         </StackPanel>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <Grid.Resources>
                 <Style TargetType="telerik:RadGridView">
                     <Setter Property="AutoGenerateColumns" Value="False"/>
@@ -84,143 +82,158 @@
 
             <TabControl x:Name="MainTabControl"  SelectionChanged="MainTabControl_SelectionChanged">
                 <TabItem x:Name="PrinterTabItem" Header="Принтеры" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="PrinterDataGrid"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <telerik:RadGridView x:Name="PrinterDataGrid"
+                                         Grid.Row="0"    
                                          RowEditEnded="PrinterDataGrid_RowEditEnded"
-                                         ItemsSource="{Binding PrinterList, UpdateSourceTrigger=PropertyChanged}"
+                                         ItemsSource="{Binding PagedSource, UpdateSourceTrigger=PropertyChanged, ElementName=PrinterRadDataPager}"
                                          SelectedItem="{Binding Printer}">
-                        <telerik:RadGridView.Columns>
-                            <telerik:GridViewDataColumn x:Name="BrandPrinterGridViewDataColumn" Header="Фирма" DataMemberBinding="{Binding BrandPrinter}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding BrandPrinter}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="ModelPrinterGridViewDataColumn" Header="Бренд" DataMemberBinding="{Binding ModelPrinter}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding ModelPrinter}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="CartridgeGridViewDataColumn" Header="Картриджи" DataMemberBinding="{Binding Cartridge}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Cartridge}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="NamePortGridViewDataColumn" Header="Порт" DataMemberBinding="{Binding NamePort}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding NamePort}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="LocationPrinterGridViewDataColumn" Header="Месторасполажение" DataMemberBinding="{Binding LocationPrinter}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding LocationPrinter}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="StatusPrinterGridViewDataColumn" Header="Статус" DataMemberBinding="{Binding Status}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Status}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="VendorCodePrinterGridViewDataColumn" Header="Имя принтера" DataMemberBinding="{Binding VendorCodePrinter}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding VendorCodePrinter}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewColumn>
-                                <telerik:GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <telerik:RadButton x:Name="DeletePrinterRadButton"
+                            <telerik:RadGridView.Columns>
+                                <telerik:GridViewDataColumn x:Name="BrandPrinterGridViewDataColumn" Header="Фирма" DataMemberBinding="{Binding BrandPrinter}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding BrandPrinter}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="ModelPrinterGridViewDataColumn" Header="Бренд" DataMemberBinding="{Binding ModelPrinter}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding ModelPrinter}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="CartridgeGridViewDataColumn" Header="Картриджи" DataMemberBinding="{Binding Cartridge}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Cartridge}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="NamePortGridViewDataColumn" Header="Порт" DataMemberBinding="{Binding NamePort}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding NamePort}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="LocationPrinterGridViewDataColumn" Header="Месторасполажение" DataMemberBinding="{Binding LocationPrinter}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding LocationPrinter}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="StatusPrinterGridViewDataColumn" Header="Статус" DataMemberBinding="{Binding Status}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Status}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="VendorCodePrinterGridViewDataColumn" Header="Имя принтера" DataMemberBinding="{Binding VendorCodePrinter}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding VendorCodePrinter}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewColumn>
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <telerik:RadButton x:Name="DeletePrinterRadButton"
                                                            Click="DeletePrinterRadButton_Click"
                                                            Content="Delete" 
                                                            Command="telerik:RadGridViewCommands.Delete" 
                                                            CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </telerik:GridViewColumn.CellTemplate>
-                            </telerik:GridViewColumn>
-                        </telerik:RadGridView.Columns>
-                    </telerik:RadGridView>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                            </telerik:RadGridView.Columns>
+                        </telerik:RadGridView>
+                        <telerik:RadDataPager x:Name="PrinterRadDataPager" DisplayMode="All" PageSize="10" Grid.Row="1" Source="{Binding PrinterList}"/>
+                    </Grid>
                 </TabItem>
                 <TabItem x:Name="CountersPageTabItem" Header="Счетчик распечатанных страниц" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="CountersPageDataGrid"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <telerik:RadGridView x:Name="CountersPageDataGrid"
                                          RowEditEnded="CountersPageDataGrid_RowEditEnded"
                                          ItemsSource="{Binding CountersPagesList, UpdateSourceTrigger=PropertyChanged}"
                                          SelectedItem="{Binding CountersPage}">
-                        <telerik:RadGridView.Columns>
-                            <telerik:GridViewDataColumn x:Name="PrintedPageCounterGridViewDataColumn" Header="Счетчик принтера" DataMemberBinding="{Binding PrintedPageCounter}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding PrintedPageCounter}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="DateCounterPageGridViewDataColumn" Header="Дата" DataMemberBinding="{Binding Date}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <telerik:RadDatePicker SelectedDate="{Binding Date}" IsTooltipEnabled="False"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="СonditionGridViewDataColumn" Header="Примечание" DataMemberBinding="{Binding Сondition}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Сondition}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewComboBoxColumn x:Name="PrintersGridViewDataColumn" Header="Имя принтера" >
-                                <telerik:GridViewComboBoxColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Printer}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewComboBoxColumn.CellTemplate>
-                            </telerik:GridViewComboBoxColumn>
-                            <telerik:GridViewColumn>
-                                <telerik:GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <telerik:RadButton x:Name="DeleteCounterPageRadButton"
+                            <telerik:RadGridView.Columns>
+                                <telerik:GridViewDataColumn x:Name="PrintedPageCounterGridViewDataColumn" Header="Счетчик принтера" DataMemberBinding="{Binding PrintedPageCounter}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding PrintedPageCounter}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="DateCounterPageGridViewDataColumn" Header="Дата" DataMemberBinding="{Binding Date}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <telerik:RadDatePicker SelectedDate="{Binding Date}" IsTooltipEnabled="False"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="СonditionGridViewDataColumn" Header="Примечание" DataMemberBinding="{Binding Сondition}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Сondition}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewComboBoxColumn x:Name="PrintersGridViewDataColumn" Header="Имя принтера" >
+                                    <telerik:GridViewComboBoxColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Printer}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewComboBoxColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn>
+                                <telerik:GridViewColumn>
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <telerik:RadButton x:Name="DeleteCounterPageRadButton"
                                                            Click="DeleteCounterPageRadButton_Click"
                                                            Content="Delete" 
                                                            Command="telerik:RadGridViewCommands.Delete" 
                                                            CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </telerik:GridViewColumn.CellTemplate>
-                            </telerik:GridViewColumn>
-                        </telerik:RadGridView.Columns>
-                    </telerik:RadGridView>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                            </telerik:RadGridView.Columns>
+                        </telerik:RadGridView>
+                    </Grid>
+
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="CartridgeDataGrid"
@@ -534,7 +547,7 @@
                                     </DataTemplate>
                                 </telerik:GridViewMaskedInputColumn.CellTemplate>
                             </telerik:GridViewMaskedInputColumn>
-                            <telerik:GridViewMaskedInputColumn x:Name="MobileNumberGridViewDataColumn" Header="Мобильный номер" Mask="8-###-###-##-##"  DataMemberBinding="{Binding MobileNumber}">
+                            <telerik:GridViewMaskedInputColumn x:Name="MobileNumberGridViewDataColumn" Header="Мобильный номер" Mask="#-###-###-##-##" DataMemberBinding="{Binding MobileNumber}">
                                 <telerik:GridViewMaskedInputColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -543,8 +556,7 @@
                                     </DataTemplate>
                                 </telerik:GridViewMaskedInputColumn.CellTemplate>
                             </telerik:GridViewMaskedInputColumn>
-                            <telerik:GridViewComboBoxColumn x:Name="StatusEmployeesGridViewComboBoxColumn" Header="Статус" 
-                                                            UniqueName="Status">
+                            <telerik:GridViewComboBoxColumn x:Name="StatusEmployeesGridViewComboBoxColumn" Header="Статус" UniqueName="Status">
                                 <telerik:GridViewComboBoxColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">

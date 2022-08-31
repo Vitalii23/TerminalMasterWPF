@@ -63,7 +63,8 @@ namespace TerminalMasterWPF
                 switch (items)
                 {
                     case "printer":
-                        PrinterDataGrid.ItemsSource = list;
+                        //PrinterDataGrid.ItemsSource = list;
+                        //UpdateData(items);
                         break;
                     case "cartrides":
                         CartridgeDataGrid.ItemsSource = list;
@@ -75,6 +76,7 @@ namespace TerminalMasterWPF
                         HolderGridViewDataColumn.DataContext = "Holder";
                         HolderGridViewDataColumn.SelectedValueMemberPath = "Id";
                         HolderGridViewDataColumn.DataMemberBinding = new Binding("IdEmployees");
+                        //UpdateData(items);
                         break;
                     case "simCard":
                         SimCardDataGrid.ItemsSource = list;
@@ -101,6 +103,8 @@ namespace TerminalMasterWPF
 
                         StatusSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Нет симкарты", "Неизвестно", "Списан", "Истек срок ФН" };
                         StatusSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
+                        
+                        //UpdateData(items);
                         break;
                     case "employees":
                         EmployeesDataGrid.ItemsSource = list;
@@ -109,6 +113,7 @@ namespace TerminalMasterWPF
                         break;
                     case "ie":
                         IndividualEntrepreneurDataGrid.ItemsSource = list;
+                        //UpdateData(items);
                         break;
                     case "Documents":
                         DocumentsDataGrid.ItemsSource = list;
@@ -120,6 +125,7 @@ namespace TerminalMasterWPF
                         PrintersGridViewDataColumn.DataContext = "Printer";
                         PrintersGridViewDataColumn.SelectedValueMemberPath = "Id";
                         PrintersGridViewDataColumn.DataMemberBinding = new Binding("IdPrinter");
+                        //UpdateData(items);
                         break;
                     default:
                         break;
@@ -129,6 +135,53 @@ namespace TerminalMasterWPF
             {
                 await log.WriteLogAsync(ex.Message, "UpdateTable");
             }
+        }
+
+        private async void UpdateData(string items) 
+        {
+            try
+            {
+
+                switch (items)
+                {
+                    case "printer":
+                        dataGets.PrinterList = printer.GetPrintersList();
+                        break;
+                    case "cashRegister":
+                        dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
+                        break;
+                    case "simCard":
+                        dataGets.SimCardList = simCard.GetSimCardList();
+                        break;
+                    case "ie":
+                        dataGets.IndividualList = ie.GetIndividualEntrepreneur();
+                        break;
+                    case "Documents":
+                        break;
+                    case "countersPage":
+                        dataGets.CountersPagesList = counterPage.GetCountersPagesList();
+                        break;
+                    case "all":
+                        dataGets.PrinterList = printer.GetPrintersList();
+                        //dataGets.CartridgesList = cartridge.List();
+                        dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
+                        //dataGets.SimCardList = simCard.GetSimCardList();
+                        //dataGets.EmployessList = employees.List();
+                        //dataGets.IndividualList = ie.GetIndividualEntrepreneur();
+                        //dataGets.DocumentsList = documents.List();
+                        //dataGets.CountersPagesList = counterPage.GetCountersPagesList();
+                        dataGets.HolderList = holder.GetHolderList();
+                        break;
+                    default:
+                        break;
+                }
+
+            } 
+            catch (Exception e)
+            {
+                await log.WriteLogAsync(e.Message, "UpdateData");
+            }
+        
         }
 
         private async void AddAndEditElement<T>(GridViewRowEditEndedEventArgs e, DataManipulationLanguage<T> element, string voidMessage) where T : class
@@ -152,7 +205,7 @@ namespace TerminalMasterWPF
                 {
                     if (e.NewData is T newElement)
                     {
-                        element.Update(newElement);
+                       element.Update(newElement);
                     }
                 }
 
@@ -399,15 +452,7 @@ namespace TerminalMasterWPF
             counterPage = new DataManipulationLanguage<CountersPage>();
             holder = new DataManipulationLanguage<Holder>();
 
-            dataGets.PrinterList = printer.GetPrintersList();
-            dataGets.CartridgesList = cartridge.List();
-            dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
-            dataGets.SimCardList = simCard.GetSimCardList();
-            dataGets.EmployessList = employees.List();
-            dataGets.IndividualList = ie.GetIndividualEntrepreneur();
-            dataGets.DocumentsList = documents.List();
-            dataGets.CountersPagesList = counterPage.GetCountersPagesList();
-            dataGets.HolderList = holder.GetHolderList();
+            UpdateData("all");
 
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Information);
         }
