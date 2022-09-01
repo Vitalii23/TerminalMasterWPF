@@ -233,7 +233,6 @@
                             </telerik:RadGridView.Columns>
                         </telerik:RadGridView>
                     </Grid>
-
                 </TabItem>
                 <TabItem x:Name="CartridgeTabItem" Header="Картриджи" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="CartridgeDataGrid"
@@ -497,96 +496,103 @@
                     </telerik:RadGridView>
                 </TabItem>
                 <TabItem x:Name="EmployeesTabItem" Header="Сотрудники" Background="#FFE5E5E5">
-                    <telerik:RadGridView x:Name="EmployeesDataGrid"    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <telerik:RadGridView x:Name="EmployeesDataGrid"    
                                          RowEditEnded="EmployeesDataGrid_RowEditEnded"
-                                         ItemsSource="{Binding EmployessList, UpdateSourceTrigger=PropertyChanged}"
+                                         ItemsSource="{Binding PagedSource, UpdateSourceTrigger=PropertyChanged, ElementName=EmployeesRadDataPager}"
                                          SelectedItem="{Binding Employees}">
-                        <telerik:RadGridView.Columns>
-                            <telerik:GridViewDataColumn x:Name="LastNameGridViewDataColumn" Header="Фамилия" DataMemberBinding="{Binding LastName}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding LastName}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="FirstNameGridViewDataColumn" Header="Имя" DataMemberBinding="{Binding FirstName}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding FirstName}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="MiddleNameGridViewDataColumn" Header="Отчество" DataMemberBinding="{Binding MiddleName}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding MiddleName}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewDataColumn x:Name="PostGridViewDataColumn" Header="Должность" DataMemberBinding="{Binding Post}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Post}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewMaskedInputColumn x:Name="InternalNumberGridViewDataColumn" Header="Внутренный номер" Mask="###" DataMemberBinding="{Binding InternalNumber}">
-                                <telerik:GridViewMaskedInputColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding InternalNumber}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewMaskedInputColumn.CellTemplate>
-                            </telerik:GridViewMaskedInputColumn>
-                            <telerik:GridViewMaskedInputColumn x:Name="MobileNumberGridViewDataColumn" Header="Мобильный номер" Mask="#-###-###-##-##" DataMemberBinding="{Binding MobileNumber}">
-                                <telerik:GridViewMaskedInputColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding MobileNumber}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewMaskedInputColumn.CellTemplate>
-                            </telerik:GridViewMaskedInputColumn>
-                            <telerik:GridViewComboBoxColumn x:Name="StatusEmployeesGridViewComboBoxColumn" Header="Статус" UniqueName="Status">
-                                <telerik:GridViewComboBoxColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Status}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewComboBoxColumn.CellTemplate>
-                            </telerik:GridViewComboBoxColumn>
-                            <telerik:GridViewDataColumn x:Name="DepartmentGridViewDataColumn" Header="Отдел" DataMemberBinding="{Binding Department}">
-                                <telerik:GridViewDataColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Department}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </telerik:GridViewDataColumn.CellTemplate>
-                            </telerik:GridViewDataColumn>
-                            <telerik:GridViewColumn>
-                                <telerik:GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <telerik:RadButton x:Name="DeleteEmployeesRadButton"
+                            <telerik:RadGridView.Columns>
+                                <telerik:GridViewDataColumn x:Name="LastNameGridViewDataColumn" Header="Фамилия" DataMemberBinding="{Binding LastName}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding LastName}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="FirstNameGridViewDataColumn" Header="Имя" DataMemberBinding="{Binding FirstName}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding FirstName}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="MiddleNameGridViewDataColumn" Header="Отчество" DataMemberBinding="{Binding MiddleName}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding MiddleName}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn x:Name="PostGridViewDataColumn" Header="Должность" DataMemberBinding="{Binding Post}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Post}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewMaskedInputColumn x:Name="InternalNumberGridViewDataColumn" Header="Внутренный номер" Mask="###" DataMemberBinding="{Binding InternalNumber}">
+                                    <telerik:GridViewMaskedInputColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding InternalNumber}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewMaskedInputColumn.CellTemplate>
+                                </telerik:GridViewMaskedInputColumn>
+                                <telerik:GridViewDataColumn x:Name="MobileNumberGridViewDataColumn" Header="Мобильный номер" DataMemberBinding="{Binding MobileNumber}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding MobileNumber}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewComboBoxColumn x:Name="StatusEmployeesGridViewComboBoxColumn" Header="Статус" UniqueName="Status">
+                                    <telerik:GridViewComboBoxColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Status}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewComboBoxColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn>
+                                <telerik:GridViewDataColumn x:Name="DepartmentGridViewDataColumn" Header="Отдел" DataMemberBinding="{Binding Department}">
+                                    <telerik:GridViewDataColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Department}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewDataColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewColumn>
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <telerik:RadButton x:Name="DeleteEmployeesRadButton"
                                                            Click="DeleteEmployeesRadButton_Click"
                                                            Content="Delete" 
                                                            Command="telerik:RadGridViewCommands.Delete" 
                                                            CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </telerik:GridViewColumn.CellTemplate>
-                            </telerik:GridViewColumn>
-                        </telerik:RadGridView.Columns>
-                    </telerik:RadGridView>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                            </telerik:RadGridView.Columns>
+                        </telerik:RadGridView>
+                        <telerik:RadDataPager x:Name="EmployeesRadDataPager" DisplayMode="All" PageSize="10" Grid.Row="1" Source="{Binding EmployessList}"/>
+                    </Grid>
                 </TabItem>
                 <TabItem x:Name="IndividualEntrepreneurTabItem" Header="Индивидуальные предприниматели" Background="#FFE5E5E5">
                     <telerik:RadGridView x:Name="IndividualEntrepreneurDataGrid"

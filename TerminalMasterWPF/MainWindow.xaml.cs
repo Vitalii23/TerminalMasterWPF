@@ -63,7 +63,10 @@ namespace TerminalMasterWPF
                 switch (items)
                 {
                     case "printer":
-                        //PrinterDataGrid.ItemsSource = list;
+                        PrinterRadDataPager.Source = list;
+                        PrinterRadDataPager.DisplayMode = PagerDisplayModes.All;
+                        PrinterRadDataPager.PageSize = 10;
+                        PrinterDataGrid.ItemsSource = PrinterRadDataPager;
                         //UpdateData(items);
                         break;
                     case "cartrides":
@@ -163,13 +166,13 @@ namespace TerminalMasterWPF
                         break;
                     case "all":
                         dataGets.PrinterList = printer.GetPrintersList();
-                        //dataGets.CartridgesList = cartridge.List();
+                        dataGets.CartridgesList = cartridge.List();
                         dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
-                        //dataGets.SimCardList = simCard.GetSimCardList();
-                        //dataGets.EmployessList = employees.List();
-                        //dataGets.IndividualList = ie.GetIndividualEntrepreneur();
-                        //dataGets.DocumentsList = documents.List();
-                        //dataGets.CountersPagesList = counterPage.GetCountersPagesList();
+                        dataGets.SimCardList = simCard.GetSimCardList();
+                        dataGets.EmployessList = employees.List();
+                        dataGets.IndividualList = ie.GetIndividualEntrepreneur();
+                        dataGets.DocumentsList = documents.List();
+                        dataGets.CountersPagesList = counterPage.GetCountersPagesList();
                         dataGets.HolderList = holder.GetHolderList();
                         break;
                     default:

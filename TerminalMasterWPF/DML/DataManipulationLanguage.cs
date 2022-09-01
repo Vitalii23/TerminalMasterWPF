@@ -216,19 +216,21 @@ namespace TerminalMasterWPF.DML
 
                                 while (reader.Read())
                                 {
-                                    CashRegister cashRegister = new CashRegister();
-                                    cashRegister.Id = reader.GetInt32(0);
-                                    cashRegister.NameDevice = reader.GetString(1);
-                                    cashRegister.Brand = reader.GetString(2);
-                                    cashRegister.FactoryNumber = reader.GetString(3);
-                                    cashRegister.SerialNumber = reader.GetString(4);
-                                    cashRegister.PaymentNumber = reader.GetString(5);
-                                    cashRegister.DateReception = reader.GetDateTime(6);
-                                    cashRegister.DateEndFiscalMemory = reader.GetDateTime(7);
-                                    cashRegister.DateKeyActivationFiscalDataOperator = reader.GetDateTime(8);
-                                    cashRegister.Location = reader.GetString(9);
-                                    cashRegister.IdEmployees = reader.GetInt32(10);
-                                    cashRegister.HolderCashRegister = reader.GetString(11);
+                                    CashRegister cashRegister = new CashRegister
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        NameDevice = reader.GetString(1),
+                                        Brand = reader.GetString(2),
+                                        FactoryNumber = reader.GetString(3),
+                                        SerialNumber = reader.GetString(4),
+                                        PaymentNumber = reader.GetString(5),
+                                        DateReception = reader.GetDateTime(6),
+                                        DateEndFiscalMemory = reader.GetDateTime(7),
+                                        DateKeyActivationFiscalDataOperator = reader.GetDateTime(8),
+                                        Location = reader.GetString(9),
+                                        IdEmployees = reader.GetInt32(10),
+                                        HolderCashRegister = reader.GetString(11)
+                                    };
                                     cashRegisters.Add(cashRegister);
                                 }
                             }
@@ -280,19 +282,21 @@ namespace TerminalMasterWPF.DML
 
                                 while (reader.Read())
                                 {
-                                    SimCard simcard = new SimCard();
-                                    simcard.Id = reader.GetInt32(0);
-                                    simcard.NameTerminal = reader.GetString(1);
-                                    simcard.Operator = reader.GetString(2);
-                                    simcard.IdentNumber = reader.GetString(3);
-                                    simcard.Brand = reader.GetString(4);
-                                    simcard.TypeDevice = reader.GetString(5);
-                                    simcard.TMS = reader.GetString(6);
-                                    simcard.ICC = reader.GetString(7);
-                                    simcard.Status = reader.GetString(8);
-                                    simcard.IdIndividual = reader.GetInt32(9);
-                                    simcard.IdCashRegister = reader.GetInt32(10);
-                                    simcard.IndividualEntrepreneur = reader.GetString(11);
+                                    SimCard simcard = new SimCard
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        NameTerminal = reader.GetString(1),
+                                        Operator = reader.GetString(2),
+                                        IdentNumber = reader.GetString(3),
+                                        Brand = reader.GetString(4),
+                                        TypeDevice = reader.GetString(5),
+                                        TMS = reader.GetString(6),
+                                        ICC = reader.GetString(7),
+                                        Status = reader.GetString(8),
+                                        IdIndividual = reader.GetInt32(9),
+                                        IdCashRegister = reader.GetInt32(10),
+                                        IndividualEntrepreneur = reader.GetString(11)
+                                    };
                                     simcards.Add(simcard);
                                 }
                             }
@@ -333,9 +337,11 @@ namespace TerminalMasterWPF.DML
 
                                 while (reader.Read())
                                 {
-                                    Holder holder = new Holder();
-                                    holder.Id = reader.GetInt32(0);
-                                    holder.FullNameHolder = reader.GetString(1);
+                                    Holder holder = new Holder
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        FullNameHolder = reader.GetString(1)
+                                    };
                                     holders.Add(holder);
                                 }
                             }
@@ -427,13 +433,15 @@ namespace TerminalMasterWPF.DML
 
                                 while (reader.Read())
                                 {
-                                    CountersPage countersPage = new CountersPage();
-                                    countersPage.Id = reader.GetInt32(0);
-                                    countersPage.PrintedPageCounter = reader.GetInt32(1);
-                                    countersPage.Date = reader.GetDateTime(2);
-                                    countersPage.Сondition = reader.GetString(3);
-                                    countersPage.IdPrinter = reader.GetInt32(4);
-                                    countersPage.Printer = reader.GetString(5);
+                                    CountersPage countersPage = new CountersPage
+                                    {
+                                        Id = reader.GetInt32(0),
+                                        PrintedPageCounter = reader.GetInt32(1),
+                                        Date = reader.GetDateTime(2),
+                                        Сondition = reader.GetString(3),
+                                        IdPrinter = reader.GetInt32(4),
+                                        Printer = reader.GetString(5)
+                                    };
                                     countersPages.Add(countersPage);
                                 }
                             }
