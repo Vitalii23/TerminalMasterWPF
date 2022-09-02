@@ -15,8 +15,11 @@ using Microsoft.Win32;
 using System.Collections.Generic;
 using TerminalMasterWPF.Model.People;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Windows.Input;
 using System.Windows.Data;
+using System.Collections;
+using Telerik.Windows.Data;
+using System.Linq;
 
 namespace TerminalMasterWPF
 {
@@ -26,18 +29,19 @@ namespace TerminalMasterWPF
     public partial class MainWindow : Window
     {
         private string NameNavigationItem;
-        private readonly DataGets dataGets = new DataGets();
+        private DataGets dataGets = new DataGets();
         private readonly ConnectSQL connect = new ConnectSQL();
         private DataManipulationLanguage<Printer> printer;
         private DataManipulationLanguage<Cartridge> cartridge;
         private DataManipulationLanguage<CashRegister> cashRegister;
-        private DataManipulationLanguage<SimCard> simCard ;
+        private DataManipulationLanguage<SimCard> simCard;
         private DataManipulationLanguage<Employees> employees;
         private DataManipulationLanguage<IndividualEntrepreneur> ie;
         private DataManipulationLanguage<Documents> documents;
         private DataManipulationLanguage<CountersPage> counterPage;
         private DataManipulationLanguage<Holder> holder;
         private readonly LogFile log = new LogFile();
+        private int count = 0;
 
         public MainWindow()
         {
@@ -63,10 +67,7 @@ namespace TerminalMasterWPF
                 switch (items)
                 {
                     case "printer":
-                        PrinterRadDataPager.Source = list;
-                        PrinterRadDataPager.DisplayMode = PagerDisplayModes.All;
-                        PrinterRadDataPager.PageSize = 10;
-                        PrinterDataGrid.ItemsSource = PrinterRadDataPager;
+                        PrinterDataGrid.ItemsSource = list;
                         //UpdateData(items);
                         break;
                     case "cartrides":
@@ -106,7 +107,7 @@ namespace TerminalMasterWPF
 
                         StatusSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Нет симкарты", "Неизвестно", "Списан", "Истек срок ФН" };
                         StatusSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
-                        
+
                         //UpdateData(items);
                         break;
                     case "employees":
@@ -130,6 +131,9 @@ namespace TerminalMasterWPF
                         PrintersGridViewDataColumn.DataMemberBinding = new Binding("IdPrinter");
                         //UpdateData(items);
                         break;
+                    case "all":
+                        PrinterDataGrid.ItemsSource = list;
+                        break;
                     default:
                         break;
                 }
@@ -140,7 +144,7 @@ namespace TerminalMasterWPF
             }
         }
 
-        private async void UpdateData(string items) 
+        private async void UpdateData(string items)
         {
             try
             {
@@ -152,6 +156,13 @@ namespace TerminalMasterWPF
                         break;
                     case "cashRegister":
                         dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
+                        dataGets.HolderList = holder.GetHolderList();
+                        break;
+                    case "cartridge":
+                        dataGets.CartridgesList = cashRegister.GetCartridges();
+                        break;
+                    case "employees":
+                        dataGets.EmployessList = employees.GetEmployees();
                         break;
                     case "simCard":
                         dataGets.SimCardList = simCard.GetSimCardList();
@@ -160,31 +171,32 @@ namespace TerminalMasterWPF
                         dataGets.IndividualList = ie.GetIndividualEntrepreneur();
                         break;
                     case "Documents":
+                        dataGets.DocumentsList = documents.GetDocuments();
                         break;
                     case "countersPage":
                         dataGets.CountersPagesList = counterPage.GetCountersPagesList();
                         break;
                     case "all":
                         dataGets.PrinterList = printer.GetPrintersList();
-                        dataGets.CartridgesList = cartridge.List();
                         dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
-                        dataGets.SimCardList = simCard.GetSimCardList();
-                        dataGets.EmployessList = employees.List();
-                        dataGets.IndividualList = ie.GetIndividualEntrepreneur();
-                        dataGets.DocumentsList = documents.List();
-                        dataGets.CountersPagesList = counterPage.GetCountersPagesList();
+                        dataGets.CartridgesList = cashRegister.GetCartridges();
+                        dataGets.EmployessList = employees.GetEmployees();
                         dataGets.HolderList = holder.GetHolderList();
+                        dataGets.SimCardList = simCard.GetSimCardList();
+                        dataGets.IndividualList = ie.GetIndividualEntrepreneur();
+                        dataGets.DocumentsList = documents.GetDocuments();
+                        dataGets.CountersPagesList = counterPage.GetCountersPagesList();
                         break;
                     default:
                         break;
                 }
 
-            } 
+            }
             catch (Exception e)
             {
                 await log.WriteLogAsync(e.Message, "UpdateData");
             }
-        
+
         }
 
         private async void AddAndEditElement<T>(GridViewRowEditEndedEventArgs e, DataManipulationLanguage<T> element, string voidMessage) where T : class
@@ -202,17 +214,22 @@ namespace TerminalMasterWPF
                     {
                         element.Add(newElement);
                     }
+
+                    return;
                 }
 
                 if (e.EditOperationType == GridViewEditOperationType.Edit)
                 {
                     if (e.NewData is T newElement)
                     {
-                       element.Update(newElement);
+                        element.Update(newElement);
                     }
+
+                    return;
                 }
 
-                UpdateTable(NameNavigationItem, element.List());
+                UpdateData(NameNavigationItem);
+                //UpdateTable(NameNavigationItem, element.GetPrintersList());
             }
             catch (Exception ex)
             {
@@ -229,7 +246,7 @@ namespace TerminalMasterWPF
                     return;
                 }
 
-                List<T> itemsPrinterRemove = new List<T>();
+                ObservableCollection<T> itemsPrinterRemove = new ObservableCollection<T>();
 
                 foreach (object item in gridView.SelectedItems)
                 {
@@ -238,7 +255,7 @@ namespace TerminalMasterWPF
 
                 foreach (T item in itemsPrinterRemove)
                 {
-                    ((List<T>)gridView.ItemsSource).Remove(item as T);
+                    ((ObservableCollection<T>)gridView.ItemsSource).Remove(item as T);
                     element.Delete(item);
                 }
 
@@ -246,6 +263,25 @@ namespace TerminalMasterWPF
             catch (Exception ex)
             {
                 await log.WriteLogAsync(ex.Message, voidMessage);
+            }
+        }
+
+        private void GroupingdDataGrid(GridViewGroupingEventArgs e, RadDataPager radDataPager)
+        {
+            if (e.Index == null && e.Action != GroupingEventAction.Sort)
+            {
+                count--;
+            }
+
+            if (e.Action == GroupingEventAction.Place)
+            {
+                count++;
+                radDataPager.PageSize = 0;
+            }
+
+            if (e.Action == GroupingEventAction.Remove && count == 0)
+            {
+                radDataPager.PageSize = 32;
             }
         }
 
@@ -560,6 +596,50 @@ namespace TerminalMasterWPF
         {
             ConnectWindows connectWindows = new ConnectWindows();
             connectWindows.ShowDialog();
+        }
+
+        private void EmployeesDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+
+            GroupingdDataGrid(e, EmployeesRadDataPager);
+        }
+
+        private void SimCardDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, SimCardRadDataPager);
+        }
+
+        private void CartridgeDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, CartridgeRadDataPager);
+        }
+
+        private void CashRegisterDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, CashRegisterRadDataPager);
+        }
+
+        private void EmployeesDataGrid_KeyDown(object sender, KeyEventArgs e)
+        {
+            var uiElement = e.OriginalSource as UIElement;
+            if (e.Key == Key.Enter && uiElement != null)
+            {
+                e.Handled = true;
+                DependencyObject nextUIElement = uiElement.PredictFocus(System.Windows.Input.FocusNavigationDirection.Down);
+                if (nextUIElement != null)
+                {
+                    if (nextUIElement.GetType().Equals(typeof(DataGridCell)))
+                    {
+                        DataGridCellInfo nextCellInfo = new DataGridCellInfo((DataGridCell)nextUIElement);
+                        EmployeesDataGrid.SelectedItem = nextCellInfo.Item;
+                        EmployeesDataGrid.CurrentCell = nextCellInfo;
+                    }
+                    else
+                    {
+                        EmployeesDataGrid.SelectedItem = uiElement.MoveFocus(new TraversalRequest(System.Windows.Input.FocusNavigationDirection.Down));
+                    }
+                }
+            }
         }
     }
 }

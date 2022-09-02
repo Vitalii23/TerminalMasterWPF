@@ -8,12 +8,6 @@ namespace TerminalMasterWPF.DML
 
         void Update(T element);
 
-        bool Delete(T element);
-
-        void OrderBy(T element, bool trigger);
-
-        IList<T> List();
-
-        T Get(int value);
+        void Delete(T element);
     }
 }
