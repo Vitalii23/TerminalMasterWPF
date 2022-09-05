@@ -1,22 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using TerminalMasterWPF.DML;
+using System.Data;
 using TerminalMasterWPF.Logging;
-using TerminalMasterWPF.Model;
-using TerminalMasterWPF.ViewModel;
 
 namespace TerminalMasterWPF.ElementContentDialog
 {
@@ -35,7 +22,7 @@ namespace TerminalMasterWPF.ElementContentDialog
 
         public string SelectData { get; set; }
 
-        private void FileButton_Click(object sender, RoutedEventArgs e)
+        private async void FileButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -57,50 +44,63 @@ namespace TerminalMasterWPF.ElementContentDialog
             }
             catch (Exception ex)
             {
-                logFile.WriteLogAsync(ex.Message, "FileButton_Click");
+                await logFile.WriteLogAsync(ex.Message, "FileButton_Click");
             }
         }
 
         private async void PrimaryButtonClick_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectData.Equals("ADD"))
+            try
             {
-                string sqlExpression = $"INSERT INTO Documents (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
-
-                using (SqlConnection connection = new SqlConnection((App.Current as App).ConnectionString))
+                if (SelectData.Equals("ADD"))
                 {
-                    SqlCommand command = new SqlCommand(sqlExpression, connection);
+                    string sqlExpression =  $"INSERT INTO dbo.Documents (name_document, date_document, file_binary) VALUES ('{NameDocumentTextBox.Text}','{DateDocumentDatePicker.Text}',{file})";
 
-                    SqlParameter nameParam = new SqlParameter("@name", NameDocumentTextBox.Text);
-                    command.Parameters.Add(nameParam);
-
-                    SqlParameter dateParam = new SqlParameter("@date", DateDocumentDatePicker.Text);
-                    command.Parameters.Add(dateParam);
-
-                    SqlParameter fileParam = new SqlParameter("@file", file);
-                    command.Parameters.Add(fileParam);
+                    SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString);
+                    connect.Open();
+                    if (connect.State == ConnectionState.Open)
+                    {
+                        SqlCommand cmd = connect.CreateCommand();
+                        cmd.CommandText = sqlExpression;
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        reader.Read();
+                    }
                 }
-            }
 
-            if (SelectData.Equals("Edit"))
+                if (SelectData.Equals("UPDATE"))
+                {
+                    //string sqlExpression = $"UPDATE Documents (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
+
+                    using (SqlConnection connection = new SqlConnection((App.Current as App).ConnectionString))
+                    {
+                        await connection.OpenAsync();
+
+                        //SqlCommand command = new SqlCommand(sqlExpression, connection);
+
+                        SqlParameter nameParam = new SqlParameter("@name", NameDocumentTextBox.Text);
+                        // command.Parameters.Add(nameParam);
+
+                        SqlParameter dateParam = new SqlParameter("@date", DateDocumentDatePicker.Text);
+                        //  command.Parameters.Add(dateParam);
+
+                        SqlParameter fileParam = new SqlParameter("@file", file);
+                        //  command.Parameters.Add(fileParam);
+
+                        connection.Open();
+                        if (connection.State == ConnectionState.Open)
+                        {
+                            SqlCommand cmd = connection.CreateCommand();
+                            // cmd.CommandText = sqlExpression;
+                            SqlDataReader reader = cmd.ExecuteReader();
+                            reader.Read();
+                        }
+                    }
+                }
+
+                Close();
+            } catch (Exception ex)
             {
-                string sqlExpression = $"INSERT INTO Documents (name_document, date_document, file_binary) VALUES (@name, @date, @file)";
-
-                using (SqlConnection connection = new SqlConnection((App.Current as App).ConnectionString))
-                {
-                    await connection.OpenAsync();
-
-                    SqlCommand command = new SqlCommand(sqlExpression, connection);
-
-                    SqlParameter nameParam = new SqlParameter("@name", NameDocumentTextBox.Text);
-                    command.Parameters.Add(nameParam);
-
-                    SqlParameter dateParam = new SqlParameter("@date", DateDocumentDatePicker.Text);
-                    command.Parameters.Add(dateParam);
-
-                    SqlParameter fileParam = new SqlParameter("@file", file);
-                    command.Parameters.Add(fileParam);
-                }
+                await logFile.WriteLogAsync(ex.Message, "PrimaryButtonClick_Click");
             }
         }
 
@@ -112,7 +112,21 @@ namespace TerminalMasterWPF.ElementContentDialog
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                if (SelectData.Equals("GET"))
+                {
+                    //NameDocumentTextBox.Text = SelectWaybill[SelectIndex].NameDocument;
+                    //DateDocumentDatePicker.Text = SelectWaybill[SelectIndex].DateDocument.ToString();
+                    //FileNameTextblock.Text = SelectWaybill[SelectIndex].FileName;
+                    FileButton.IsEnabled = false;
+                    SelectData = "UPDATE";
+                }
+            }
+            catch (Exception ex)
+            {
+                logFile.WriteLogAsync(ex.Message, "WaybillContentDialog_ContentDialog_Opened");
+            }
         }
     }
 }

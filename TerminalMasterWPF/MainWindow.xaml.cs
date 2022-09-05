@@ -20,6 +20,8 @@ using System.Windows.Data;
 using System.Collections;
 using Telerik.Windows.Data;
 using System.Linq;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace TerminalMasterWPF
 {
@@ -68,7 +70,6 @@ namespace TerminalMasterWPF
                 {
                     case "printer":
                         PrinterDataGrid.ItemsSource = list;
-                        //UpdateData(items);
                         break;
                     case "cartrides":
                         CartridgeDataGrid.ItemsSource = list;
@@ -80,7 +81,6 @@ namespace TerminalMasterWPF
                         HolderGridViewDataColumn.DataContext = "Holder";
                         HolderGridViewDataColumn.SelectedValueMemberPath = "Id";
                         HolderGridViewDataColumn.DataMemberBinding = new Binding("IdEmployees");
-                        //UpdateData(items);
                         break;
                     case "simCard":
                         SimCardDataGrid.ItemsSource = list;
@@ -108,7 +108,6 @@ namespace TerminalMasterWPF
                         StatusSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Нет симкарты", "Неизвестно", "Списан", "Истек срок ФН" };
                         StatusSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
 
-                        //UpdateData(items);
                         break;
                     case "employees":
                         EmployeesDataGrid.ItemsSource = list;
@@ -117,9 +116,8 @@ namespace TerminalMasterWPF
                         break;
                     case "ie":
                         IndividualEntrepreneurDataGrid.ItemsSource = list;
-                        //UpdateData(items);
                         break;
-                    case "Documents":
+                    case "documents":
                         DocumentsDataGrid.ItemsSource = list;
                         break;
                     case "countersPage":
@@ -129,7 +127,6 @@ namespace TerminalMasterWPF
                         PrintersGridViewDataColumn.DataContext = "Printer";
                         PrintersGridViewDataColumn.SelectedValueMemberPath = "Id";
                         PrintersGridViewDataColumn.DataMemberBinding = new Binding("IdPrinter");
-                        //UpdateData(items);
                         break;
                     case "all":
                         PrinterDataGrid.ItemsSource = list;
@@ -152,10 +149,10 @@ namespace TerminalMasterWPF
                 switch (items)
                 {
                     case "printer":
-                        dataGets.PrinterList = printer.GetPrintersList();
+                        dataGets.PrinterList = printer.GetPrinters();
                         break;
                     case "cashRegister":
-                        dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
+                        dataGets.CashRegisterList = cashRegister.GetCashRegisters();
                         dataGets.HolderList = holder.GetHolderList();
                         break;
                     case "cartridge":
@@ -170,15 +167,15 @@ namespace TerminalMasterWPF
                     case "ie":
                         dataGets.IndividualList = ie.GetIndividualEntrepreneur();
                         break;
-                    case "Documents":
+                    case "documents":
                         dataGets.DocumentsList = documents.GetDocuments();
                         break;
                     case "countersPage":
                         dataGets.CountersPagesList = counterPage.GetCountersPagesList();
                         break;
                     case "all":
-                        dataGets.PrinterList = printer.GetPrintersList();
-                        dataGets.CashRegisterList = cashRegister.GetCashRegistersList();
+                        dataGets.PrinterList = printer.GetPrinters();
+                        dataGets.CashRegisterList = cashRegister.GetCashRegisters();
                         dataGets.CartridgesList = cashRegister.GetCartridges();
                         dataGets.EmployessList = employees.GetEmployees();
                         dataGets.HolderList = holder.GetHolderList();
@@ -229,7 +226,6 @@ namespace TerminalMasterWPF
                 }
 
                 UpdateData(NameNavigationItem);
-                //UpdateTable(NameNavigationItem, element.GetPrintersList());
             }
             catch (Exception ex)
             {
@@ -246,14 +242,14 @@ namespace TerminalMasterWPF
                     return;
                 }
 
-                ObservableCollection<T> itemsPrinterRemove = new ObservableCollection<T>();
+                ObservableCollection<T> itemsRemove = new ObservableCollection<T>();
 
                 foreach (object item in gridView.SelectedItems)
                 {
-                    itemsPrinterRemove.Add(item as T);
+                    itemsRemove.Add(item as T);
                 }
 
-                foreach (T item in itemsPrinterRemove)
+                foreach (T item in itemsRemove)
                 {
                     ((ObservableCollection<T>)gridView.ItemsSource).Remove(item as T);
                     element.Delete(item);
@@ -300,6 +296,11 @@ namespace TerminalMasterWPF
             DeleteElement(PrinterDataGrid, new DataManipulationLanguage<Printer>(), "DeletePrinterRadButton_Click");
         }
 
+        private void PrinterDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, PrinterRadDataPager);
+        }
+
         /// <summary>
         /// Event Cointers Page
         /// </summary>
@@ -313,6 +314,11 @@ namespace TerminalMasterWPF
         private void DeleteCounterPageRadButton_Click(object sender, RoutedEventArgs e)
         {
             DeleteElement(CountersPageDataGrid, new DataManipulationLanguage<CountersPage>(), "DeleteCounterPageRadButton_Click");
+        }
+
+        private void CountersPageDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, CounterRadDataPager);
         }
 
         /// <summary>
@@ -330,6 +336,11 @@ namespace TerminalMasterWPF
             DeleteElement(CartridgeDataGrid, new DataManipulationLanguage<Cartridge>(), "DeleteCartridgeRadButton_Click");
         }
 
+        private void CartridgeDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, CartridgeRadDataPager);
+        }
+
         /// <summary>
         /// Event to CashRegister
         /// </summary>
@@ -343,6 +354,11 @@ namespace TerminalMasterWPF
         private void DeleteCashRegisterRadButton_Click(object sender, RoutedEventArgs e)
         {
             DeleteElement(CashRegisterDataGrid, new DataManipulationLanguage<CashRegister>(), "DeleteCashRegisterRadButton_Click");
+        }
+
+        private void CashRegisterDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, CashRegisterRadDataPager);
         }
 
         /// <summary>
@@ -360,6 +376,11 @@ namespace TerminalMasterWPF
             DeleteElement(SimCardDataGrid, new DataManipulationLanguage<SimCard>(), "DeleteSimCardRadButton_Click");
         }
 
+        private void SimCardDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, SimCardRadDataPager);
+        }
+
         /// <summary>
         /// Event to Employees
         /// </summary>
@@ -373,6 +394,11 @@ namespace TerminalMasterWPF
         private void DeleteEmployeesRadButton_Click(object sender, RoutedEventArgs e)
         {
             DeleteElement(EmployeesDataGrid, new DataManipulationLanguage<Employees>(), "DeleteEmployeesRadButton_Click");
+        }
+
+        private void EmployeesDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, EmployeesRadDataPager);
         }
 
         /// <summary>
@@ -390,6 +416,11 @@ namespace TerminalMasterWPF
             DeleteElement(IndividualEntrepreneurDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteIndividualEntrepreneurRadButton_Click");
         }
 
+        private void IndividualEntrepreneurDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, IndRadDataPager);
+        }
+
         /// <summary>
         /// Event to Documents
         /// </summary>
@@ -398,6 +429,94 @@ namespace TerminalMasterWPF
         private void DocumentsDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
             AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "DocumentsDataGrid_RowEditEnded");
+        }
+
+        private void DocumentsDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, DocumentRadDataPager);
+        }
+
+        private async void AddFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFile = new OpenFileDialog
+                {
+                    InitialDirectory = @"\\KV-SQL-N\TerminalDataFiles",
+                    FilterIndex = 2,
+                    Filter = "File image (*.jpeg, *.jpg, .png)|*.jpeg;*.jpg;*.png|" +
+                    "Documents file (*.pdf)|*.pdf",
+                    RestoreDirectory = true
+                };
+
+                bool? result = openFile.ShowDialog();
+                if (result == true)
+                {
+                    dataGets.Documents.FileNamePath = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_binary)";
+                }
+            }
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, "AddFileButton_Click");
+            }
+        }
+
+        private async void DowloanderFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int id = 0;
+
+                if (DocumentsDataGrid.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                ObservableCollection<Documents> itemsDocumentsRemove = new ObservableCollection<Documents>();
+
+                foreach (object item in DocumentsDataGrid.SelectedItems)
+                {
+                    itemsDocumentsRemove.Add(item as Documents);
+                }
+
+                foreach (Documents item in itemsDocumentsRemove)
+                {
+                    id = item.Id;
+                }
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    FilterIndex = 4,
+                    Filter = "File image (*.jpeg)|*.jpeg|" +
+                    "File image (*.jpg)|*.jpg|" +
+                    "File image (*.png)|*.png|" +
+                    "Documents file (*.pdf)|*.pdf",
+                    RestoreDirectory = true
+                };
+
+                bool? result = saveFileDialog.ShowDialog();
+
+                if (result == true)
+                {
+                    BinaryFormatter binaryformatter = new BinaryFormatter();
+                    MemoryStream memorystream = new MemoryStream();
+                    binaryformatter.Serialize(memorystream, documents.GetByte(id));
+                    byte[] data = memorystream.ToArray();
+
+                    using (FileStream fileStream = File.Create(saveFileDialog.FileName))
+                    {
+                        fileStream.Write(data, 0, data.Length);
+                    }
+
+                    MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, "DowloanderFileButton_Click");
+            }
         }
 
         private void DeleteDocumentsRadButton_Click(object sender, RoutedEventArgs e)
@@ -450,6 +569,10 @@ namespace TerminalMasterWPF
                         case "Счетчик распечатанных страниц":
                             NameNavigationItem = "countersPage";
                             UpdateTable(NameNavigationItem, dataGets.CountersPagesList);
+                            break;
+                        case "Документы":
+                            NameNavigationItem = "documents";
+                            UpdateTable(NameNavigationItem, dataGets.DocumentsList);
                             break;
                         default:
                             break;
@@ -510,25 +633,25 @@ namespace TerminalMasterWPF
             DocumentsDataGrid.IsEnabled = false;
 
 
-            //printer.List().Clear();
-            //cartridge.List().Clear();
-            //cashRegister.GetCashRegistersList().Clear();
-            //simCard.GetSimCardList().Clear();
-            //employees.List().Clear();
-            //ie.GetIndividualEntrepreneur().Clear();
-            //documents.List().Clear();
-            //counterPage.List().Clear();
-            //holder.GetHolderList().Clear();
+            printer.GetPrinters().Clear();
+            cartridge.GetCartridges().Clear();
+            cashRegister.GetCashRegisters().Clear();
+            simCard.GetSimCardList().Clear();
+            employees.GetEmployees().Clear();
+            ie.GetIndividualEntrepreneur().Clear();
+            documents.GetDocuments().Clear();
+            counterPage.GetCountersPagesList().Clear();
+            holder.GetHolderList().Clear();
 
-            //dataGets.PrinterList.Clear();
-            //dataGets.CartridgesList.Clear();
-            //dataGets.CashRegisterList.Clear();
-            //dataGets.SimCardList.Clear();
-            //dataGets.EmployessList.Clear();
-            //dataGets.IndividualList.Clear();
-            //dataGets.DocumentsList.Clear();
-            //dataGets.CountersPagesList.Clear();
-            //dataGets.HolderList.Clear();
+            dataGets.PrinterList.Clear();
+            dataGets.CartridgesList.Clear();
+            dataGets.CashRegisterList.Clear();
+            dataGets.SimCardList.Clear();
+            dataGets.EmployessList.Clear();
+            dataGets.IndividualList.Clear();
+            dataGets.DocumentsList.Clear();
+            dataGets.CountersPagesList.Clear();
+            dataGets.HolderList.Clear();
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -551,95 +674,15 @@ namespace TerminalMasterWPF
             }
         }
 
-        private void DowloandButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    FilterIndex = 4,
-                    Filter = "File image (*.jpeg)|*.jpeg|" +
-                    "File image (*.jpg)|*.jpg|" +
-                    "File image (*.png)|*.png|" +
-                    "Documents file (*.pdf)|*.pdf",
-                    RestoreDirectory = true
-                };
-
-                bool? result = saveFileDialog.ShowDialog();
-                // if (result == true && dataGets.SelectedXIndex >= 0)
-                // {
-                BinaryFormatter binaryformatter = new BinaryFormatter();
-                MemoryStream memorystream = new MemoryStream();
-                // binaryformatter.Serialize(memorystream, dataGets.DocumentsList[dataGets.SelectedXIndex].FilePDF);
-                byte[] data = memorystream.ToArray();
-
-                using (FileStream fileStream = File.Create(saveFileDialog.FileName))
-                {
-                    fileStream.Write(data, 0, data.Length);
-                }
-
-                MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
-                //  }
-                //    else
-                //   {
-                MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //     }
-
-            }
-            catch (Exception ex)
-            {
-                log.WriteLogAsync(ex.Message, "DowloandButton_Click");
-            }
-        }
-
         private void SettingsDataBase_Click(object sender, RoutedEventArgs e)
         {
             ConnectWindows connectWindows = new ConnectWindows();
             connectWindows.ShowDialog();
         }
 
-        private void EmployeesDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        private void DocumentsDataGrid_BeginningEdit(object sender, GridViewBeginningEditRoutedEventArgs e)
         {
-
-            GroupingdDataGrid(e, EmployeesRadDataPager);
-        }
-
-        private void SimCardDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
-        {
-            GroupingdDataGrid(e, SimCardRadDataPager);
-        }
-
-        private void CartridgeDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
-        {
-            GroupingdDataGrid(e, CartridgeRadDataPager);
-        }
-
-        private void CashRegisterDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
-        {
-            GroupingdDataGrid(e, CashRegisterRadDataPager);
-        }
-
-        private void EmployeesDataGrid_KeyDown(object sender, KeyEventArgs e)
-        {
-            var uiElement = e.OriginalSource as UIElement;
-            if (e.Key == Key.Enter && uiElement != null)
-            {
-                e.Handled = true;
-                DependencyObject nextUIElement = uiElement.PredictFocus(System.Windows.Input.FocusNavigationDirection.Down);
-                if (nextUIElement != null)
-                {
-                    if (nextUIElement.GetType().Equals(typeof(DataGridCell)))
-                    {
-                        DataGridCellInfo nextCellInfo = new DataGridCellInfo((DataGridCell)nextUIElement);
-                        EmployeesDataGrid.SelectedItem = nextCellInfo.Item;
-                        EmployeesDataGrid.CurrentCell = nextCellInfo;
-                    }
-                    else
-                    {
-                        EmployeesDataGrid.SelectedItem = uiElement.MoveFocus(new TraversalRequest(System.Windows.Input.FocusNavigationDirection.Down));
-                    }
-                }
-            }
+            
         }
     }
 }

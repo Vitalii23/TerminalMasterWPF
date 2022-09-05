@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.Linq;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using TerminalMasterWPF.Logging;
 using TerminalMasterWPF.Model;
 using TerminalMasterWPF.Model.People;
@@ -100,11 +96,14 @@ namespace TerminalMasterWPF.DML
                     case Documents doc:
                         AddQuery = $"DELETE FROM dbo.Waybill WHERE id = {doc.Id}";
                         break;
+                    case CountersPage count:
+                        AddQuery = $"DELETE FROM dbo.CountersPage WHERE id = {count.Id}";
+                        break;
                     default:
                         break;
                 }
 
-                var connect = new SqlConnection((App.Current as App).ConnectionString);
+                SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString);
                 connect.Open();
                 if (connect.State == ConnectionState.Open)
                 {
@@ -175,7 +174,7 @@ namespace TerminalMasterWPF.DML
 
         }
 
-        public ObservableCollection<Printer> GetPrintersList()
+        public ObservableCollection<Printer> GetPrinters()
         {
             string GetPrinter = "SELECT dbo.Printer.id, " +
                                         "dbo.Printer.brand, " +
@@ -230,7 +229,7 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public ObservableCollection<CashRegister> GetCashRegistersList()
+        public ObservableCollection<CashRegister> GetCashRegisters()
         {
             string GetCashRegister = "SELECT dbo.CashRegister.id, " +
                                      "dbo.CashRegister.name, " +
@@ -563,9 +562,7 @@ namespace TerminalMasterWPF.DML
                     "dbo.Documents.file_binary " +
                     "FROM dbo.Documents ";
 
-
-
-            var documents = new ObservableCollection<Documents>();
+            ObservableCollection<Documents> documents = new ObservableCollection<Documents>();
             try
             {
                 using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
@@ -643,6 +640,37 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
+        public byte[] GetByte(int id)
+        {
+            string GetDocuments = $"SELECT dbo.Documents.file_binary FROM dbo.Documents WHERE dbo.Documents.id = {id}";
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
+                {
+                    connect.Open();
+                    if (connect.State == ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = connect.CreateCommand())
+                        {
+                            cmd.CommandText = GetDocuments;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    return GetDocument(id, (App.Current as App).ConnectionString);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception eSql)
+            {
+                log.WriteLogAsync(eSql.Message, "GetDocuments");
+            }
+            return null;
+        }
 
         private static byte[] GetDocument(int documentId, string connection)
         {
@@ -650,7 +678,7 @@ namespace TerminalMasterWPF.DML
             {
                 using (SqlCommand cmd = connect.CreateCommand())
                 {
-                    cmd.CommandText = @" SELECT dbo.Documents.file_binary FROM dbo.Documents WHERE  dbo.Documents.id = @Id";
+                    cmd.CommandText = @" SELECT dbo.Documents.file_binary FROM dbo.Documents WHERE dbo.Documents.id = @Id";
                     cmd.Parameters.AddWithValue("@Id", documentId);
                     connect.Open();
                     return cmd.ExecuteScalar() as byte[];

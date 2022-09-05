@@ -15,14 +15,13 @@ namespace TerminalMasterWPF.Model
         [Column(Name = "name_document")]
         public string NameDocument { get; set;}
 
-        [DisplayAttribute(Name = "Номер документа")]
-        [Column(Name = "number_document")]
-        public string NumberDocument { get; set; }
-
         [DisplayAttribute(Name = "Дата документы")]
-        [Column(Name = "date_document")]
         [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
+        [Column(Name = "date_document")]
         public DateTime DateDocument { get; set; }
+
+        [DisplayAttribute(AutoGenerateField = false)]
+        public string FileNamePath { get; set; }
 
         [DisplayAttribute(Name = "Документ")]
         [Column(Name = "file_binary")]
