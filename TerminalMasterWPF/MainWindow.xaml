@@ -46,6 +46,9 @@
                               Checked="ConnectItem_Checked"
                               Unchecked="ConnectItem_Unchecked" />
                 </MenuItem>
+                <MenuItem Header="Обновить"
+                    x:Name="UpdateTableMenuItem"
+                          Click="UpdateTableMenuItem_Click" />
             </Menu>
         </DockPanel>
 
@@ -122,9 +125,13 @@
                 </Style>
                 <Style TargetType="telerik:RadDatePicker">
                     <Setter Property="IsTooltipEnabled"
-                            Value="False" />
+                            Value="True" />
                     <Setter Property="DisplayFormat"
-                            Value="Long" />
+                            Value="Short" />
+                    <Setter Property="SelectableDateStart"
+                            Value="01.01.1900" />
+                    <Setter Property="SelectableDateEnd"
+                            Value="01.01.2100" />
                 </Style>
                 <Style TargetType="telerik:RadDataPager">
                     <Setter Property="DisplayMode"
@@ -278,10 +285,7 @@
                                                             DataMemberBinding="{Binding Date}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <telerik:RadDatePicker SelectedDate="{Binding Date}"
-                                                                       IsTooltipEnabled="False" />
-                                            </StackPanel>
+                                            <telerik:RadDatePicker SelectedDate="{Binding Date}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -484,7 +488,8 @@
                                                             DataMemberBinding="{Binding DateReception}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <telerik:RadDatePicker SelectedDate="{Binding DateReception}" />
+                                            <telerik:RadDatePicker x:Name="DateReceptionRadDateTimePicker"
+                                                                   SelectedDate="{Binding DateReception}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -493,7 +498,7 @@
                                                             DataMemberBinding="{Binding DateKeyActivationFiscalDataOperator}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <telerik:RadDatePicker SelectedDate="{Binding DateKeyActivationFiscalDataOperator}" />
+                                            <telerik:RadDatePicker SelectedDate="{Binding DateKeyActivationFiscalDataOperator}"/>
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -893,7 +898,7 @@
                             <telerik:RadGridView.Columns>
                                 <telerik:GridViewDataColumn x:Name="NameDocumentGridViewDataColumn"
                                                             Header="Имя документа"
-                                                            IsReadOnly="True"
+                                                            IsReadOnly="False"
                                                             DataMemberBinding="{Binding NameDocument}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
@@ -908,7 +913,7 @@
                                                             DataMemberBinding="{Binding DateDocument}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <telerik:RadDatePicker SelectedDate="{Binding DateDocument}"/>
+                                            <telerik:RadDatePicker SelectedDate="{Binding DateDocument}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -938,13 +943,13 @@
                                                                Click="DeleteDocumentsRadButton_Click"
                                                                Content="Delete"
                                                                Command="telerik:RadGridViewCommands.Delete"
-                                                               CommandParameter="{Binding}"/>
+                                                               CommandParameter="{Binding}" />
                                         </DataTemplate>
                                     </telerik:GridViewColumn.CellTemplate>
                                 </telerik:GridViewColumn>
                             </telerik:RadGridView.Columns>
                         </telerik:RadGridView>
-                       <telerik:RadDataPager x:Name="DocumentRadDataPager"
+                        <telerik:RadDataPager x:Name="DocumentRadDataPager"
                                               Grid.Row="1"
                                               Source="{Binding Items, ElementName=DocumentsDataGrid}" />
                     </Grid>

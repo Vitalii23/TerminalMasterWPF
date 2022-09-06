@@ -1,27 +1,23 @@
-﻿using System;
-using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.GridView;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 using TerminalMasterWPF.DML;
 using TerminalMasterWPF.ElementContentDialog;
 using TerminalMasterWPF.Logging;
+using TerminalMasterWPF.Model;
+using TerminalMasterWPF.Model.People;
 using TerminalMasterWPF.Settings;
 using TerminalMasterWPF.ViewModel;
-using TerminalMasterWPF.Model;
-using Microsoft.Win32;
-using System.Collections.Generic;
-using TerminalMasterWPF.Model.People;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Windows.Data;
-using System.Collections;
-using Telerik.Windows.Data;
-using System.Linq;
-using System.Data.SqlClient;
-using System.Data;
 
 namespace TerminalMasterWPF
 {
@@ -31,17 +27,17 @@ namespace TerminalMasterWPF
     public partial class MainWindow : Window
     {
         private string NameNavigationItem;
-        private DataGets dataGets = new DataGets();
+        private DataGets _dataGets = new DataGets();
         private readonly ConnectSQL connect = new ConnectSQL();
-        private DataManipulationLanguage<Printer> printer;
-        private DataManipulationLanguage<Cartridge> cartridge;
-        private DataManipulationLanguage<CashRegister> cashRegister;
-        private DataManipulationLanguage<SimCard> simCard;
-        private DataManipulationLanguage<Employees> employees;
-        private DataManipulationLanguage<IndividualEntrepreneur> ie;
-        private DataManipulationLanguage<Documents> documents;
-        private DataManipulationLanguage<CountersPage> counterPage;
-        private DataManipulationLanguage<Holder> holder;
+        private DataManipulationLanguage<Printer> _printer;
+        private DataManipulationLanguage<Cartridge> _cartridge;
+        private DataManipulationLanguage<CashRegister> _cashRegister;
+        private DataManipulationLanguage<SimCard> _simCard;
+        private DataManipulationLanguage<Employees> _employees;
+        private DataManipulationLanguage<IndividualEntrepreneur> _individualEntrepreneur;
+        private DataManipulationLanguage<Documents> _documents;
+        private DataManipulationLanguage<CountersPage> _counterPage;
+        private DataManipulationLanguage<Holder> _holder;
         private readonly LogFile log = new LogFile();
         private int count = 0;
 
@@ -76,7 +72,8 @@ namespace TerminalMasterWPF
                         break;
                     case "cashRegister":
                         CashRegisterDataGrid.ItemsSource = list;
-                        HolderGridViewDataColumn.ItemsSource = dataGets.HolderList;
+
+                        HolderGridViewDataColumn.ItemsSource = _dataGets.HolderList;
                         HolderGridViewDataColumn.DisplayMemberPath = "FullNameHolder";
                         HolderGridViewDataColumn.DataContext = "Holder";
                         HolderGridViewDataColumn.SelectedValueMemberPath = "Id";
@@ -84,7 +81,7 @@ namespace TerminalMasterWPF
                         break;
                     case "simCard":
                         SimCardDataGrid.ItemsSource = list;
-                        NameTerminalGridViewComboBoxColumn.ItemsSource = dataGets.CashRegisterList;
+                        NameTerminalGridViewComboBoxColumn.ItemsSource = _dataGets.CashRegisterList;
                         NameTerminalGridViewComboBoxColumn.DisplayMemberPath = "NameDevice";
                         NameTerminalGridViewComboBoxColumn.DataContext = "CashRegister";
                         NameTerminalGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
@@ -96,7 +93,7 @@ namespace TerminalMasterWPF
                         BrandSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "AZUR", "MSPOS" };
                         BrandSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Brand");
 
-                        IndividualEntrepreneurGridViewComboBoxColumn.ItemsSource = dataGets.IndividualList;
+                        IndividualEntrepreneurGridViewComboBoxColumn.ItemsSource = _dataGets.IndividualList;
                         IndividualEntrepreneurGridViewComboBoxColumn.DisplayMemberPath = "FullNameIndividualEntrepreneur";
                         IndividualEntrepreneurGridViewComboBoxColumn.DataContext = "IndividualEntrepreneur";
                         IndividualEntrepreneurGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
@@ -122,7 +119,7 @@ namespace TerminalMasterWPF
                         break;
                     case "countersPage":
                         CountersPageDataGrid.ItemsSource = list;
-                        PrintersGridViewDataColumn.ItemsSource = dataGets.PrinterList;
+                        PrintersGridViewDataColumn.ItemsSource = _dataGets.PrinterList;
                         PrintersGridViewDataColumn.DisplayMemberPath = "FullNamePrinters";
                         PrintersGridViewDataColumn.DataContext = "Printer";
                         PrintersGridViewDataColumn.SelectedValueMemberPath = "Id";
@@ -130,6 +127,56 @@ namespace TerminalMasterWPF
                         break;
                     case "all":
                         PrinterDataGrid.ItemsSource = list;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, "UpdateTable");
+            }
+        }
+
+        private async void UpdateTable(string items)
+        {
+            try
+            {
+                switch (items)
+                {
+                    case "printer":
+                        PrinterDataGrid.ItemsSource = _dataGets.PrinterList;
+                        break;
+                    case "cashRegister":
+                        CashRegisterDataGrid.ItemsSource = _dataGets.CashRegisterList;
+                        break;
+                    case "cartridge":
+                        CartridgeDataGrid.ItemsSource = _dataGets.CartridgesList;
+                        break;
+                    case "employees":
+                        EmployeesDataGrid.ItemsSource = _dataGets.EmployessList;
+                        break;
+                    case "simCard":
+                        SimCardDataGrid.ItemsSource = _dataGets.SimCardList;
+                        break;
+                    case "ie":
+                        IndividualEntrepreneurDataGrid.ItemsSource = _dataGets.IndividualList;
+                        break;
+                    case "documents":
+                        DocumentsDataGrid.ItemsSource = _dataGets.DocumentsList;
+                        break;
+                    case "countersPage":
+                        CountersPageDataGrid.ItemsSource = _dataGets.CountersPagesList;
+                        break;
+                    case "all":
+                        PrinterDataGrid.ItemsSource = _dataGets.PrinterList;
+                        CartridgeDataGrid.ItemsSource = _dataGets.CartridgesList;
+                        CashRegisterDataGrid.ItemsSource = _dataGets.CashRegisterList;
+                        SimCardDataGrid.ItemsSource = _dataGets.SimCardList;
+                        EmployeesDataGrid.ItemsSource = _dataGets.EmployessList;
+                        IndividualEntrepreneurDataGrid.ItemsSource = _dataGets.IndividualList;
+                        DocumentsDataGrid.ItemsSource = _dataGets.DocumentsList;
+                        CountersPageDataGrid.ItemsSource = _dataGets.CountersPagesList;
                         break;
                     default:
                         break;
@@ -149,40 +196,40 @@ namespace TerminalMasterWPF
                 switch (items)
                 {
                     case "printer":
-                        dataGets.PrinterList = printer.GetPrinters();
+                        _dataGets.PrinterList = _printer.GetPrinters();
                         break;
                     case "cashRegister":
-                        dataGets.CashRegisterList = cashRegister.GetCashRegisters();
-                        dataGets.HolderList = holder.GetHolderList();
+                        _dataGets.CashRegisterList = _cashRegister.GetCashRegisters();
+                        _dataGets.HolderList = _holder.GetHolderList();
                         break;
                     case "cartridge":
-                        dataGets.CartridgesList = cashRegister.GetCartridges();
+                        _dataGets.CartridgesList = _cashRegister.GetCartridges();
                         break;
                     case "employees":
-                        dataGets.EmployessList = employees.GetEmployees();
+                        _dataGets.EmployessList = _employees.GetEmployees();
                         break;
                     case "simCard":
-                        dataGets.SimCardList = simCard.GetSimCardList();
+                        _dataGets.SimCardList = _simCard.GetSimCardList();
                         break;
                     case "ie":
-                        dataGets.IndividualList = ie.GetIndividualEntrepreneur();
+                        _dataGets.IndividualList = _individualEntrepreneur.GetIndividualEntrepreneur();
                         break;
                     case "documents":
-                        dataGets.DocumentsList = documents.GetDocuments();
+                        _dataGets.DocumentsList = _documents.GetDocuments();
                         break;
                     case "countersPage":
-                        dataGets.CountersPagesList = counterPage.GetCountersPagesList();
+                        _dataGets.CountersPagesList = _counterPage.GetCountersPagesList();
                         break;
                     case "all":
-                        dataGets.PrinterList = printer.GetPrinters();
-                        dataGets.CashRegisterList = cashRegister.GetCashRegisters();
-                        dataGets.CartridgesList = cashRegister.GetCartridges();
-                        dataGets.EmployessList = employees.GetEmployees();
-                        dataGets.HolderList = holder.GetHolderList();
-                        dataGets.SimCardList = simCard.GetSimCardList();
-                        dataGets.IndividualList = ie.GetIndividualEntrepreneur();
-                        dataGets.DocumentsList = documents.GetDocuments();
-                        dataGets.CountersPagesList = counterPage.GetCountersPagesList();
+                        _dataGets.PrinterList = _printer.GetPrinters();
+                        _dataGets.CashRegisterList = _cashRegister.GetCashRegisters();
+                        _dataGets.CartridgesList = _cashRegister.GetCartridges();
+                        _dataGets.EmployessList = _employees.GetEmployees();
+                        _dataGets.HolderList = _holder.GetHolderList();
+                        _dataGets.SimCardList = _simCard.GetSimCardList();
+                        _dataGets.IndividualList = _individualEntrepreneur.GetIndividualEntrepreneur();
+                        _dataGets.DocumentsList = _documents.GetDocuments();
+                        _dataGets.CountersPagesList = _counterPage.GetCountersPagesList();
                         break;
                     default:
                         break;
@@ -428,7 +475,7 @@ namespace TerminalMasterWPF
         /// <param name="e"></param>
         private void DocumentsDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "DocumentsDataGrid_RowEditEnded");
+            AddAndEditElement(e, new DataManipulationLanguage<Documents>(), "DocumentsDataGrid_RowEditEnded");
         }
 
         private void DocumentsDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
@@ -452,7 +499,7 @@ namespace TerminalMasterWPF
                 bool? result = openFile.ShowDialog();
                 if (result == true)
                 {
-                    dataGets.Documents.FileNamePath = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_binary)";
+                   _documents.GetFileName = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_binary)";
                 }
             }
             catch (Exception ex)
@@ -501,7 +548,7 @@ namespace TerminalMasterWPF
                 {
                     BinaryFormatter binaryformatter = new BinaryFormatter();
                     MemoryStream memorystream = new MemoryStream();
-                    binaryformatter.Serialize(memorystream, documents.GetByte(id));
+                    binaryformatter.Serialize(memorystream, _documents.GetByte(id));
                     byte[] data = memorystream.ToArray();
 
                     using (FileStream fileStream = File.Create(saveFileDialog.FileName))
@@ -540,39 +587,39 @@ namespace TerminalMasterWPF
                     {
                         case "Принтеры":
                             NameNavigationItem = "printer";
-                            UpdateTable(NameNavigationItem, dataGets.PrinterList);
+                            UpdateTable(NameNavigationItem, _dataGets.PrinterList);
                             break;
                         case "Картриджи":
                             NameNavigationItem = "cartrides";
-                            UpdateTable(NameNavigationItem, dataGets.CartridgesList);
+                            UpdateTable(NameNavigationItem, _dataGets.CartridgesList);
                             break;
                         case "Контрольная-кассовая машина (ККМ)":
                             NameNavigationItem = "cashRegister";
-                            UpdateTable(NameNavigationItem, dataGets.CashRegisterList);
+                            UpdateTable(NameNavigationItem, _dataGets.CashRegisterList);
                             break;
                         case "Sim-карты":
                             NameNavigationItem = "simCard";
-                            UpdateTable(NameNavigationItem, dataGets.SimCardList);
+                            UpdateTable(NameNavigationItem, _dataGets.SimCardList);
                             break;
                         case "Сотрудники":
                             NameNavigationItem = "employees";
-                            UpdateTable(NameNavigationItem, dataGets.EmployessList);
+                            UpdateTable(NameNavigationItem, _dataGets.EmployessList);
                             break;
                         case "Индивидуальные предприниматели":
                             NameNavigationItem = "ie";
-                            UpdateTable(NameNavigationItem, dataGets.IndividualList);
+                            UpdateTable(NameNavigationItem, _dataGets.IndividualList);
                             break;
                         case "Накладные":
                             NameNavigationItem = "Documents";
-                            UpdateTable(NameNavigationItem, dataGets.DocumentsList);
+                            UpdateTable(NameNavigationItem, _dataGets.DocumentsList);
                             break;
                         case "Счетчик распечатанных страниц":
                             NameNavigationItem = "countersPage";
-                            UpdateTable(NameNavigationItem, dataGets.CountersPagesList);
+                            UpdateTable(NameNavigationItem, _dataGets.CountersPagesList);
                             break;
                         case "Документы":
                             NameNavigationItem = "documents";
-                            UpdateTable(NameNavigationItem, dataGets.DocumentsList);
+                            UpdateTable(NameNavigationItem, _dataGets.DocumentsList);
                             break;
                         default:
                             break;
@@ -604,15 +651,15 @@ namespace TerminalMasterWPF
             SimCardDataGrid.IsEnabled = true;
             DocumentsDataGrid.IsEnabled = true;
 
-            printer = new DataManipulationLanguage<Printer>();
-            cartridge = new DataManipulationLanguage<Cartridge>();
-            cashRegister = new DataManipulationLanguage<CashRegister>();
-            simCard = new DataManipulationLanguage<SimCard>();
-            employees = new DataManipulationLanguage<Employees>();
-            ie = new DataManipulationLanguage<IndividualEntrepreneur>();
-            documents = new DataManipulationLanguage<Documents>();
-            counterPage = new DataManipulationLanguage<CountersPage>();
-            holder = new DataManipulationLanguage<Holder>();
+            _printer = new DataManipulationLanguage<Printer>();
+            _cartridge = new DataManipulationLanguage<Cartridge>();
+            _cashRegister = new DataManipulationLanguage<CashRegister>();
+            _simCard = new DataManipulationLanguage<SimCard>();
+            _employees = new DataManipulationLanguage<Employees>();
+            _individualEntrepreneur = new DataManipulationLanguage<IndividualEntrepreneur>();
+            _documents = new DataManipulationLanguage<Documents>();
+            _counterPage = new DataManipulationLanguage<CountersPage>();
+            _holder = new DataManipulationLanguage<Holder>();
 
             UpdateData("all");
 
@@ -633,25 +680,25 @@ namespace TerminalMasterWPF
             DocumentsDataGrid.IsEnabled = false;
 
 
-            printer.GetPrinters().Clear();
-            cartridge.GetCartridges().Clear();
-            cashRegister.GetCashRegisters().Clear();
-            simCard.GetSimCardList().Clear();
-            employees.GetEmployees().Clear();
-            ie.GetIndividualEntrepreneur().Clear();
-            documents.GetDocuments().Clear();
-            counterPage.GetCountersPagesList().Clear();
-            holder.GetHolderList().Clear();
+            _printer.GetPrinters().Clear();
+            _cartridge.GetCartridges().Clear();
+            _cashRegister.GetCashRegisters().Clear();
+            _simCard.GetSimCardList().Clear();
+            _employees.GetEmployees().Clear();
+            _individualEntrepreneur.GetIndividualEntrepreneur().Clear();
+            _documents.GetDocuments().Clear();
+            _counterPage.GetCountersPagesList().Clear();
+            _holder.GetHolderList().Clear();
 
-            dataGets.PrinterList.Clear();
-            dataGets.CartridgesList.Clear();
-            dataGets.CashRegisterList.Clear();
-            dataGets.SimCardList.Clear();
-            dataGets.EmployessList.Clear();
-            dataGets.IndividualList.Clear();
-            dataGets.DocumentsList.Clear();
-            dataGets.CountersPagesList.Clear();
-            dataGets.HolderList.Clear();
+            _dataGets.PrinterList.Clear();
+            _dataGets.CartridgesList.Clear();
+            _dataGets.CashRegisterList.Clear();
+            _dataGets.SimCardList.Clear();
+            _dataGets.EmployessList.Clear();
+            _dataGets.IndividualList.Clear();
+            _dataGets.DocumentsList.Clear();
+            _dataGets.CountersPagesList.Clear();
+            _dataGets.HolderList.Clear();
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -683,6 +730,12 @@ namespace TerminalMasterWPF
         private void DocumentsDataGrid_BeginningEdit(object sender, GridViewBeginningEditRoutedEventArgs e)
         {
             
+        }
+
+        private void UpdateTableMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateTable(NameNavigationItem);
+            UpdateData(NameNavigationItem);
         }
     }
 }

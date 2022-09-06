@@ -44,7 +44,10 @@ namespace TerminalMasterWPF.DML
                             $"('{sim.Operator}', '{sim.IdentNumber}', '{sim.TypeDevice}', '{sim.TMS}', '{sim.ICC}', '{sim.Status}', {sim.IdIndividual}, {sim.IdCashRegister})";
                         break;
                     case Documents doc:
-                        AddQuery = $"INSERT INTO dbo.Documents (name_document, date_document, file_binary) VALUES ('{doc.NameDocument}', '{doc.DateDocument}', '{doc.FileBinary}')";
+                        AddQuery = $"INSERT INTO dbo.Documents (name_document, date_document, file_binary) VALUES ('{doc.NameDocument}', '{doc.DateDocument}', {GetFileName})";
+                        break;
+                    case CountersPage count:
+                        AddQuery = $"INSERT INTO dbo.CountersPage (printed_page_counter, date, condition, id_printer) VALUES ({count.PrintedPageCounter}, '{count.Date}', '{count.Сondition}', {count.IdPrinter})";
                         break;
                     default:
                         break;
@@ -124,33 +127,36 @@ namespace TerminalMasterWPF.DML
         {
             try
             {
-                string AddQuery = null;
+                string UpdateQuery = null;
 
                 switch (element)
                 {
                     case Cartridge cart:
-                        AddQuery = $"UPDATE dbo.Cartrides SET brand = '{cart.Brand}', model = '{cart.Model}', vendor_code = '{cart.VendorCode}', status = '{cart.Status}' WHERE id = {cart.Id}";
+                        UpdateQuery = $"UPDATE dbo.Cartrides SET brand = '{cart.Brand}', model = '{cart.Model}', vendor_code = '{cart.VendorCode}', status = '{cart.Status}' WHERE id = {cart.Id}";
                         break;
                     case Employees emp:
-                        AddQuery = $"UPDATE dbo.Employees SET first_name = '{emp.FirstName}', last_name = '{emp.LastName}', middle_name = '{emp.MiddleName}', post = '{emp.Post}', internal_number = '{emp.InternalNumber}', " +
+                        UpdateQuery = $"UPDATE dbo.Employees SET first_name = '{emp.FirstName}', last_name = '{emp.LastName}', middle_name = '{emp.MiddleName}', post = '{emp.Post}', internal_number = '{emp.InternalNumber}', " +
                             $"mobile_number = '{emp.MobileNumber}', status = '{emp.Status}', department = '{emp.Department}' WHERE id =  {emp.Id}";
                         break;
                     case IndividualEntrepreneur ind:
-                        AddQuery = $"UPDATE dbo.IndividualEntrepreneur SET last_name = '{ind.LastName}' + , first_name = '{ind.FirstName}', middle_name = '{ind.MiddleName}', psrnie = '{ind.PSRNIE}', tin = '{ind.TIN}' WHERE id = {ind.Id}";
+                        UpdateQuery = $"UPDATE dbo.IndividualEntrepreneur SET last_name = '{ind.LastName}' + , first_name = '{ind.FirstName}', middle_name = '{ind.MiddleName}', psrnie = '{ind.PSRNIE}', tin = '{ind.TIN}' WHERE id = {ind.Id}";
                         break;
                     case Printer print:
-                        AddQuery = $"UPDATE dbo.Printer SET brand = '{print.BrandPrinter}', model = '{print.ModelPrinter}', cartridge = '{print.Cartridge}', name_port = '{print.NamePort}' , location = '{print.LocationPrinter}', vendor_code = '{print.VendorCodePrinter}' WHERE id = {print.Id}";
+                        UpdateQuery = $"UPDATE dbo.Printer SET brand = '{print.BrandPrinter}', model = '{print.ModelPrinter}', cartridge = '{print.Cartridge}', name_port = '{print.NamePort}' , location = '{print.LocationPrinter}', vendor_code = '{print.VendorCodePrinter}' WHERE id = {print.Id}";
                         break;
                     case SimCard sim:
-                        AddQuery = $"UPDATE dbo.SimCard SET operator = '{sim.Operator}', identifaction_number = '{sim.IdentNumber}', type_device = '{sim.TypeDevice}', tms = '{sim.TMS}', icc = '{sim.ICC}', status = '{sim.Status}'," +
+                        UpdateQuery = $"UPDATE dbo.SimCard SET operator = '{sim.Operator}', identifaction_number = '{sim.IdentNumber}', type_device = '{sim.TypeDevice}', tms = '{sim.TMS}', icc = '{sim.ICC}', status = '{sim.Status}'," +
                             $" id_individual_entrepreneur = {sim.IdIndividual}, id_cashRegister = {sim.IdCashRegister}, WHERE id = {sim.Id}";
                         break;
                     case CashRegister cash:
-                        AddQuery = $"UPDATE dbo.CashRegister SET name = '{cash.NameDevice}', brand = '{cash.Brand}', factory_number = '{cash.FactoryNumber}', serial_number =  '{cash.SerialNumber}', payment_number = '{cash.PaymentNumber}'," +
+                        UpdateQuery = $"UPDATE dbo.CashRegister SET name = '{cash.NameDevice}', brand = '{cash.Brand}', factory_number = '{cash.FactoryNumber}', serial_number =  '{cash.SerialNumber}', payment_number = '{cash.PaymentNumber}'," +
                             $" date_reception = '{cash.DateReception}', date_end_fiscal_memory = '{cash.DateEndFiscalMemory}', date_key_activ_fisc_data = '{cash.DateKeyActivationFiscalDataOperator}', location = '{cash.Location}', id_employees = {cash.IdEmployees} WHERE Id = {cash.Id}";
                         break;
                     case Documents doc:
-                        AddQuery = $"UPDATE dbo.Documents SET name_document = '{doc.NameDocument}', date_document =  '{doc.DateDocument}', file_binary = {doc.FileBinary} WHERE Id = {doc.Id}";
+                        UpdateQuery = $"UPDATE dbo.Documents SET name_document = '{doc.NameDocument}', date_document =  '{doc.DateDocument}', file_binary = {doc.FileBinary} WHERE Id = {doc.Id}";
+                        break;
+                    case CountersPage count:
+                        UpdateQuery = $"UPDATE dbo.CountersPage SET printed_page_counter = '{count.PrintedPageCounter}', date =  '{count.Date}', condition = {count.Сondition}, id_printer = '{count.IdPrinter}'  WHERE Id = {count.Id}";
                         break;
                     default:
                         break;
@@ -162,7 +168,7 @@ namespace TerminalMasterWPF.DML
                 if (connect.State == ConnectionState.Open)
                 {
                     SqlCommand cmd = connect.CreateCommand();
-                    cmd.CommandText = AddQuery;
+                    cmd.CommandText = UpdateQuery;
                     SqlDataReader reader = cmd.ExecuteReader();
                     reader.Read();
                 }
@@ -671,6 +677,8 @@ namespace TerminalMasterWPF.DML
             }
             return null;
         }
+
+        public string GetFileName { get; set; }
 
         private static byte[] GetDocument(int documentId, string connection)
         {
