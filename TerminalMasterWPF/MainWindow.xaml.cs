@@ -52,6 +52,8 @@ namespace TerminalMasterWPF
             SimCardDataGrid.IsEnabled = false;
             DocumentsDataGrid.IsEnabled = false;
 
+            UpdateTableMenuItem.IsEnabled = false;
+
             connect.ConnectRead();
         }
 
@@ -655,6 +657,8 @@ namespace TerminalMasterWPF
             SimCardDataGrid.IsEnabled = true;
             DocumentsDataGrid.IsEnabled = true;
 
+            UpdateTableMenuItem.IsEnabled = true;
+
             _printer = new DataManipulationLanguage<Printer>();
             _cartridge = new DataManipulationLanguage<Cartridge>();
             _cashRegister = new DataManipulationLanguage<CashRegister>();
@@ -683,6 +687,7 @@ namespace TerminalMasterWPF
             SimCardDataGrid.IsEnabled = false;
             DocumentsDataGrid.IsEnabled = false;
 
+            UpdateTableMenuItem.IsEnabled = false;
 
             _printer.GetPrinters().Clear();
             _cartridge.GetCartridges().Clear();
