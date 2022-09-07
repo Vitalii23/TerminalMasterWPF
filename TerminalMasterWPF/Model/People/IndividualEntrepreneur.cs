@@ -1,12 +1,36 @@
-﻿namespace TerminalMasterWPF.Model.People
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Linq.Mapping;
+
+namespace TerminalMasterWPF.Model.People
 {
+    [Table(Name = "IndividualEntrepreneur")]
     class IndividualEntrepreneur
     {
+        [DisplayAttribute(AutoGenerateField = false)]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public int Id { get; set; }
-        public string LastName { get; set; } // Фамилия 
-        public string FirstName { get; set; } // Имя
-        public string MiddleName { get; set; } // Отчество
-        public string PSRNIE { get; set; }  // ОГРНИП
-        public string TIN { get; set; } // ИНН
+
+        [DisplayAttribute(Name = "Фамилия")]
+        [Column(Name = "last_name")]
+        public string LastName { get; set; }
+
+        [DisplayAttribute(Name = "Имя")]
+        [Column(Name = "first_name")]
+        public string FirstName { get; set; }
+
+        [DisplayAttribute(Name = "Отчество")]
+        [Column(Name = "middle_name")]
+        public string MiddleName { get; set; }
+
+        [DisplayAttribute(Name = "ОГРНИП")]
+        [Column(Name = "psrnie")]
+        public string PSRNIE { get; set; }
+
+        [DisplayAttribute(Name = "ИНН")]
+        [Column(Name = "tin")]
+        public string TIN { get; set; }
+
+        [DisplayAttribute(AutoGenerateField = false)]
+        public string FullNameIndividualEntrepreneur { get; set; }
     }
 }

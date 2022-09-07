@@ -1,22 +1,25 @@
-﻿using System;
-using System.Data;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.ComponentModel;
+using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 using TerminalMasterWPF.DML;
 using TerminalMasterWPF.ElementContentDialog;
 using TerminalMasterWPF.Logging;
+using TerminalMasterWPF.Model;
+using TerminalMasterWPF.Model.People;
 using TerminalMasterWPF.Settings;
 using TerminalMasterWPF.ViewModel;
-using TerminalMasterWPF.Model;
-using Microsoft.Win32;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 
 namespace TerminalMasterWPF
 {
@@ -25,62 +28,107 @@ namespace TerminalMasterWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string NameNavigationItem, CheckASCorDesc = null, CheckTag = null;
-        private readonly DataGets dataGets = new DataGets();
-        private GetElement Get = new GetElement();
-        private DeleteElement Delete = new DeleteElement();
-        private OrderByElement Order = new OrderByElement();
-        private ConnectSQL connect = new ConnectSQL();
-        //private Dictionary<string, string> PropertyNameDictionary;
-        private LogFile logFile = new LogFile();
+        private string NameNavigationItem, FilePath;
+        private DataGets _dataGets = new DataGets();
+        private readonly ConnectSQL connect = new ConnectSQL();
+        private DataManipulationLanguage<Printer> _printer;
+        private DataManipulationLanguage<Cartridge> _cartridge;
+        private DataManipulationLanguage<CashRegister> _cashRegister;
+        private DataManipulationLanguage<SimCard> _simCard;
+        private DataManipulationLanguage<Employees> _employees;
+        private DataManipulationLanguage<IndividualEntrepreneur> _individualEntrepreneur;
+        private DataManipulationLanguage<Documents> _documents;
+        private DataManipulationLanguage<CountersPage> _counterPage;
+        private DataManipulationLanguage<Holder> _holder;
+        private readonly LogFile log = new LogFile();
+        private int count = 0;
+
         public MainWindow()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            AddButton.IsEnabled = false;
-            EditButton.IsEnabled = false;
-            DeleteButton.IsEnabled = false;
-            UpdateButton.IsEnabled = false;
-            DowloandButton.IsEnabled = false;
+
             MainTabControl.IsEnabled = false;
+            CartridgeDataGrid.IsEnabled = false;
+            CashRegisterDataGrid.IsEnabled = false;
+            IndividualEntrepreneurDataGrid.IsEnabled = false;
+            EmployeesDataGrid.IsEnabled = false;
+            PrinterDataGrid.IsEnabled = false;
+            SimCardDataGrid.IsEnabled = false;
+            DocumentsDataGrid.IsEnabled = false;
+
             connect.ConnectRead();
         }
 
-        private void UpdateTable(string items)
+        private async void UpdateTable<T>(string items, IList<T> list)
         {
             try
             {
                 switch (items)
                 {
                     case "printer":
-                        PrinterDataGrid.ItemsSource = dataGets.PrinterList;
+                        PrinterDataGrid.ItemsSource = list;
                         break;
                     case "cartrides":
-                        CartridgeDataGrid.ItemsSource = dataGets.CartridgesList;
+                        CartridgeDataGrid.ItemsSource = list;
                         break;
                     case "cashRegister":
-                        CashRegisterDataGrid.ItemsSource = dataGets.CashRegisterList;
+                        CashRegisterDataGrid.ItemsSource = list;
+
+                        HolderGridViewDataColumn.ItemsSource = _dataGets.HolderList;
+                        HolderGridViewDataColumn.DisplayMemberPath = "FullNameHolder";
+                        HolderGridViewDataColumn.DataContext = "Holder";
+                        HolderGridViewDataColumn.SelectedValueMemberPath = "Id";
+                        HolderGridViewDataColumn.DataMemberBinding = new Binding("IdEmployees");
                         break;
                     case "simCard":
-                        SimCardDataGrid.ItemsSource = dataGets.SimCardList;
+                        SimCardDataGrid.ItemsSource = list;
+                        NameTerminalGridViewComboBoxColumn.ItemsSource = _dataGets.CashRegisterList;
+                        NameTerminalGridViewComboBoxColumn.DisplayMemberPath = "NameDevice";
+                        NameTerminalGridViewComboBoxColumn.DataContext = "CashRegister";
+                        NameTerminalGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
+                        NameTerminalGridViewComboBoxColumn.DataMemberBinding = new Binding("IdCashRegister");
+
+                        TypeDeviceGridViewComboBoxColumn.ItemsSource = new string[] { "Автономные кассовые аппараты", "Фискальные регистраторы", "POS-терминал", "ЧПМ (МЭР)" };
+                        TypeDeviceGridViewComboBoxColumn.DataMemberBinding = new Binding("TypeDevice");
+
+                        BrandSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "AZUR", "MSPOS" };
+                        BrandSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Brand");
+
+                        IndividualEntrepreneurGridViewComboBoxColumn.ItemsSource = _dataGets.IndividualList;
+                        IndividualEntrepreneurGridViewComboBoxColumn.DisplayMemberPath = "FullNameIndividualEntrepreneur";
+                        IndividualEntrepreneurGridViewComboBoxColumn.DataContext = "IndividualEntrepreneur";
+                        IndividualEntrepreneurGridViewComboBoxColumn.SelectedValueMemberPath = "Id";
+                        IndividualEntrepreneurGridViewComboBoxColumn.DataMemberBinding = new Binding("IdIndividual");
+
+                        OperatorGridViewComboBoxColumn.ItemsSource = new string[] { "Билайн", "MTC", "Мегафон", "Теле2", "Неизвестно" };
+                        OperatorGridViewComboBoxColumn.DataMemberBinding = new Binding("Operator");
+
+                        StatusSimCardGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Нет симкарты", "Неизвестно", "Списан", "Истек срок ФН" };
+                        StatusSimCardGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
+
                         break;
-                    case "phoneBook":
-                        PhoneBookDataGrid.ItemsSource = dataGets.PhoneBookList;
-                        break;
-                    case "holder":
-                        HolderDataGrid.ItemsSource = dataGets.HolderList;
-                        break;
-                    case "user":
-                        UserDataGrid.ItemsSource = dataGets.UserList;
+                    case "employees":
+                        EmployeesDataGrid.ItemsSource = list;
+                        StatusEmployeesGridViewComboBoxColumn.ItemsSource = new string[] { "Работает", "Уволен", "Неизвестно", "Стажировка" };
+                        StatusEmployeesGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
                         break;
                     case "ie":
-                        IndividualEntrepreneurDataGrid.ItemsSource = dataGets.IndividualEntrepreneurList;
+                        IndividualEntrepreneurDataGrid.ItemsSource = list;
                         break;
-                    case "waybill":
-                        WaybillDataGrid.ItemsSource = dataGets.WaybillList;
+                    case "documents":
+                        DocumentsDataGrid.ItemsSource = list;
                         break;
                     case "countersPage":
-                        WaybillDataGrid.ItemsSource = dataGets.WaybillList;
+                        CountersPageDataGrid.ItemsSource = list;
+                        PrintersGridViewDataColumn.ItemsSource = _dataGets.PrinterList;
+                        PrintersGridViewDataColumn.DisplayMemberPath = "FullNamePrinters";
+                        PrintersGridViewDataColumn.DataContext = "Printer";
+                        PrintersGridViewDataColumn.SelectedValueMemberPath = "Id";
+                        PrintersGridViewDataColumn.DataMemberBinding = new Binding("IdPrinter");
+                        break;
+                    case "all":
+                        PrinterDataGrid.ItemsSource = list;
                         break;
                     default:
                         break;
@@ -88,59 +136,210 @@ namespace TerminalMasterWPF
             }
             catch (Exception ex)
             {
-                logFile.WriteLogAsync(ex.Message, "UpdateTable");
+                await log.WriteLogAsync(ex.Message, "UpdateTable");
             }
         }
 
-        private DataGridCell GetCell(int row, int column, DataGrid dataGrid)
+        private async void UpdateTable(string items)
         {
-            DataGridRow rowContainer = GetRow(row, dataGrid);
-            if (rowContainer != null)
+            try
             {
-                DataGridCellsPresenter presenter = GetVisualChild<DataGridCellsPresenter>(rowContainer);
-                if (presenter == null)
+                switch (items)
                 {
-                    dataGrid.ScrollIntoView(rowContainer, dataGrid.Columns[column]);
-                    presenter = GetVisualChild<DataGridCellsPresenter>(rowContainer);
+                    case "printer":
+                        PrinterDataGrid.ItemsSource = _dataGets.PrinterList;
+                        break;
+                    case "cashRegister":
+                        CashRegisterDataGrid.ItemsSource = _dataGets.CashRegisterList;
+                        break;
+                    case "cartridge":
+                        CartridgeDataGrid.ItemsSource = _dataGets.CartridgesList;
+                        break;
+                    case "employees":
+                        EmployeesDataGrid.ItemsSource = _dataGets.EmployessList;
+                        break;
+                    case "simCard":
+                        SimCardDataGrid.ItemsSource = _dataGets.SimCardList;
+                        break;
+                    case "ie":
+                        IndividualEntrepreneurDataGrid.ItemsSource = _dataGets.IndividualList;
+                        break;
+                    case "documents":
+                        DocumentsDataGrid.ItemsSource = _dataGets.DocumentsList;
+                        break;
+                    case "countersPage":
+                        CountersPageDataGrid.ItemsSource = _dataGets.CountersPagesList;
+                        break;
+                    case "all":
+                        PrinterDataGrid.ItemsSource = _dataGets.PrinterList;
+                        CartridgeDataGrid.ItemsSource = _dataGets.CartridgesList;
+                        CashRegisterDataGrid.ItemsSource = _dataGets.CashRegisterList;
+                        SimCardDataGrid.ItemsSource = _dataGets.SimCardList;
+                        EmployeesDataGrid.ItemsSource = _dataGets.EmployessList;
+                        IndividualEntrepreneurDataGrid.ItemsSource = _dataGets.IndividualList;
+                        DocumentsDataGrid.ItemsSource = _dataGets.DocumentsList;
+                        CountersPageDataGrid.ItemsSource = _dataGets.CountersPagesList;
+                        break;
+                    default:
+                        break;
                 }
-                DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
-                return cell;
             }
-            return null;
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, "UpdateTable");
+            }
+        }
+
+        private async void UpdateData(string items)
+        {
+            try
+            {
+
+                switch (items)
+                {
+                    case "printer":
+                        _dataGets.PrinterList = _printer.GetPrinters();
+                        break;
+                    case "cashRegister":
+                        _dataGets.CashRegisterList = _cashRegister.GetCashRegisters();
+                        _dataGets.HolderList = _holder.GetHolderList();
+                        break;
+                    case "cartridge":
+                        _dataGets.CartridgesList = _cashRegister.GetCartridges();
+                        break;
+                    case "employees":
+                        _dataGets.EmployessList = _employees.GetEmployees();
+                        break;
+                    case "simCard":
+                        _dataGets.SimCardList = _simCard.GetSimCardList();
+                        break;
+                    case "ie":
+                        _dataGets.IndividualList = _individualEntrepreneur.GetIndividualEntrepreneur();
+                        break;
+                    case "documents":
+                        _dataGets.DocumentsList = _documents.GetDocuments();
+                        break;
+                    case "countersPage":
+                        _dataGets.CountersPagesList = _counterPage.GetCountersPagesList();
+                        break;
+                    case "all":
+                        _dataGets.PrinterList = _printer.GetPrinters();
+                        _dataGets.CashRegisterList = _cashRegister.GetCashRegisters();
+                        _dataGets.CartridgesList = _cashRegister.GetCartridges();
+                        _dataGets.EmployessList = _employees.GetEmployees();
+                        _dataGets.HolderList = _holder.GetHolderList();
+                        _dataGets.SimCardList = _simCard.GetSimCardList();
+                        _dataGets.IndividualList = _individualEntrepreneur.GetIndividualEntrepreneur();
+                        _dataGets.DocumentsList = _documents.GetDocuments();
+                        _dataGets.CountersPagesList = _counterPage.GetCountersPagesList();
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception e)
+            {
+                await log.WriteLogAsync(e.Message, "UpdateData");
+            }
 
         }
 
-        private DataGridRow GetRow(int index, DataGrid dataGrid)
+        private async void AddAndEditElement<T>(GridViewRowEditEndedEventArgs e, DataManipulationLanguage<T> element, string voidMessage) where T : class
         {
-            DataGridRow row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-            if (row == null)
+            try
             {
-                dataGrid.UpdateLayout();
-                dataGrid.ScrollIntoView(dataGrid.Items[index]);
-                row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromIndex(index);
+                if (e.EditAction == GridViewEditAction.Cancel)
+                {
+                    return;
+                }
+
+                if (e.EditOperationType == GridViewEditOperationType.Insert)
+                {
+                    if (e.NewData is T newElement)
+                    {
+                        if (FilePath != null)
+                        {
+                            element.GetFileName = FilePath;
+                            FilePath = null;
+                        }
+
+                        element.Add(newElement);
+                    }
+
+                    return;
+                }
+
+                if (e.EditOperationType == GridViewEditOperationType.Edit)
+                {
+                    if (e.NewData is T newElement)
+                    {
+                        if (FilePath != null)
+                        {
+                            element.GetFileName = FilePath;
+                            FilePath = null;
+                        }
+
+                        element.Update(newElement);
+                    }
+
+                    return;
+                }
+
+                UpdateData(NameNavigationItem);
             }
-            return row;
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, voidMessage);
+            }
         }
 
-        private static T GetVisualChild<T>(Visual parent) where T : Visual
+        private async void DeleteElement<T>(RadGridView gridView, DataManipulationLanguage<T> element, string voidMessage) where T : class
         {
-            T child = default(T);
-            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < numVisuals; i++)
+            try
             {
-                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
-                child = v as T;
-                if (child == null)
+                if (gridView.SelectedItems.Count == 0)
                 {
-                    child = GetVisualChild<T>
-                    (v);
+                    return;
                 }
-                if (child != null)
+
+                ObservableCollection<T> itemsRemove = new ObservableCollection<T>();
+
+                foreach (object item in gridView.SelectedItems)
                 {
-                    break;
+                    itemsRemove.Add(item as T);
                 }
+
+                foreach (T item in itemsRemove)
+                {
+                    ((ObservableCollection<T>)gridView.ItemsSource).Remove(item as T);
+                    element.Delete(item);
+                }
+
             }
-            return child;
+            catch (Exception ex)
+            {
+                await log.WriteLogAsync(ex.Message, voidMessage);
+            }
+        }
+
+        private void GroupingdDataGrid(GridViewGroupingEventArgs e, RadDataPager radDataPager)
+        {
+            if (e.Index == null && e.Action != GroupingEventAction.Sort)
+            {
+                count--;
+            }
+
+            if (e.Action == GroupingEventAction.Place)
+            {
+                count++;
+                radDataPager.PageSize = 0;
+            }
+
+            if (e.Action == GroupingEventAction.Remove && count == 0)
+            {
+                radDataPager.PageSize = 32;
+            }
         }
 
         /// <summary>
@@ -148,129 +347,19 @@ namespace TerminalMasterWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PrinterDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void PrinterDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "ModelPrinter":
-                        e.Column.Header = "Модель";
-                        break;
-                    case "NamePort":
-                        e.Column.Header = "IP-Адрес";
-                        break;
-                    case "VendorCodePrinter":
-                        e.Column.Header = "Артикули";
-                        break;
-                    case "LocationPrinter":
-                        e.Column.Header = "Расположение принтера";
-                        break;
-                    case "Сounters":
-                        e.Column.Header = "Распечатанных страниц";
-                        break;
-                    case "BrandPrinter":
-                        e.Column.Header = "Фирма";
-                        break;
-                    case "Cartridge":
-                        e.Column.Header = "Картридж";
-                        break;
-                    case "DatePrinter":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Дата состояния";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "DatePrinterString":
-                        e.Column.Header = "Дата состояния";
-                        break;
-                    case "Status":
-                        e.Column.Header = "Статус";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<Printer>(), "PrinterDataGrid_RowEditEnded");
         }
 
-        private void PrinterDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeletePrinterRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(PrinterDataGrid, new DataManipulationLanguage<Printer>(), "DeletePrinterRadButton_Click");
         }
 
-        private void PrinterDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void PrinterDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
-        }
-
-        private void PrinterDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void PrinterDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "BrandPrinter":
-                    CheckTag = "brand";
-                    break;
-                case "ModelPrinter":
-                    CheckTag = "model";
-                    break;
-                case "Cartridge":
-                    CheckTag = "cartridge";
-                    break;
-                case "NamePort":
-                    CheckTag = "name_port";
-                    break;
-                case "LocationPrinter":
-                    CheckTag = "location_port";
-                    break;
-                case "Status":
-                    CheckTag = "status";
-                    break;
-                case "VendorCodePrinter":
-                    CheckTag = "vendor_code";
-                    break;
-                case "Сounters":
-                    CheckTag = "counters";
-                    break;
-                case "DatePrinterString":
-                    CheckTag = "date_printer";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.PrinterList = Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-
-        }
-
-        private void PrinterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = PrinterDataGrid.Items.IndexOf(PrinterDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, PrinterDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
+            GroupingdDataGrid(e, PrinterRadDataPager);
         }
 
         /// <summary>
@@ -278,91 +367,19 @@ namespace TerminalMasterWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CountersPageDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void CountersPageDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "PrintedPageCounter":
-                        e.Column.Header = "Счет распечатанных страниц";
-                        break;
-                    case "Date":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Дата";
-                        break;
-                    case "Printers":
-                        e.Column.Header = "Имя принтера";
-                        break;
-                    case "IdPrinter":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Id_printer";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<CountersPage>(), "CountersPageDataGrid_RowEditEnded");
         }
 
-        private void CountersPageDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeleteCounterPageRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(CountersPageDataGrid, new DataManipulationLanguage<CountersPage>(), "DeleteCounterPageRadButton_Click");
         }
 
-        private void CountersPageDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void CountersPageDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
-        }
-
-        private void CountersPageDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void CountersPageDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "PrintedPageCounter":
-                    CheckTag = "printed_page_counter";
-                    break;
-                case "Date":
-                    CheckTag = "date";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.CountersPageList = Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void CountersPageDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = CountersPageDataGrid.Items.IndexOf(CountersPageDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, CountersPageDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
+            GroupingdDataGrid(e, CounterRadDataPager);
         }
 
         /// <summary>
@@ -370,262 +387,39 @@ namespace TerminalMasterWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CartridgeDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void CartridgeDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "Brand":
-                        e.Column.Header = "Бренд";
-                        break;
-                    case "Model":
-                        e.Column.Header = "Модель";
-                        break;
-                    case "VendorCode":
-                        e.Column.Header = "Артикуль";
-                        break;
-                    case "Status":
-                        e.Column.Header = "Статус";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<Cartridge>(), "CartridgeDataGrid_RowEditEnded");
         }
 
-        private void CartridgeDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeleteCartridgeRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(CartridgeDataGrid, new DataManipulationLanguage<Cartridge>(), "DeleteCartridgeRadButton_Click");
         }
 
-        private void CartridgeDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void CartridgeDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
+            GroupingdDataGrid(e, CartridgeRadDataPager);
         }
 
-        private void CartridgeDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void CartridgeDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "Brand":
-                    CheckTag = "brand";
-                    break;
-                case "Model":
-                    CheckTag = "model";
-                    break;
-                case "VendorCode":
-                    CheckTag = "vendor_code";
-                    break;
-                case "Status":
-                    CheckTag = "status";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.CartridgesList = Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void CartridgeDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = CartridgeDataGrid.Items.IndexOf(CartridgeDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, CartridgeDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
-        }
         /// <summary>
         /// Event to CashRegister
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CashRegisterDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void CashRegisterDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "NameDevice":
-                        e.Column.Header = "ККМ";
-                        break;
-                    case "FactoryNumber":
-                        e.Column.Header = "Заводской номер";
-                        break;
-                    case "Brand":
-                        e.Column.Header = "Бренд";
-                        break;
-                    case "SerialNumber":
-                        e.Column.Header = "Серийный номер";
-                        break;
-                    case "PaymentNumber":
-                        e.Column.Header = "Номер счета";
-                        break;
-                    case "Holder":
-                        e.Column.Header = "Владелец";
-                        break;
-                    case "User":
-                        e.Column.Header = "Пользователь";
-                        break;
-                    case "DateReception":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Дата получения";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "DateReceptionString":
-                        e.Column.Header = "Дата получения";
-                        break;
-                    case "DateEndFiscalMemory":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Дата окончания ФН";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "DateEndFiscalMemoryString":
-                        e.Column.Header = "Дата окончания ФН";
-                        break;
-                    case "DateKeyActivationFiscalDataOperator":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Дата активации ОФД";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "DateKeyActivationFiscalDataOperatorString":
-                        e.Column.Header = "Дата активации ОФД";
-                        break;
-                    case "Location":
-                        e.Column.Header = "Место нахождения";
-                        break;
-                    case "Status":
-                        e.Column.Header = "Статус";
-                        break;
-                    case "IdHolder":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "IdHolder";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "IdUser":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "IdUser";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<CashRegister>(), "CashRegisterDataGrid_RowEditEnded");
         }
 
-        private void CashRegisterDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeleteCashRegisterRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(CashRegisterDataGrid, new DataManipulationLanguage<CashRegister>(), "DeleteCashRegisterRadButton_Click");
         }
 
-        private void CashRegisterDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e) 
-        { 
-
-        }
-
-        private void CashRegisterDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void CashRegisterDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
-        }
-
-        private void CashRegisterDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "NameDevice":
-                    CheckTag = "name";
-                    break;
-                case "Brand":
-                    CheckTag = "brand";
-                    break;
-                case "FactoryNumber":
-                    CheckTag = "factory_number";
-                    break;
-                case "SerialNumber":
-                    CheckTag = "serial_number";
-                    break;
-                case "PaymentNumber":
-                    CheckTag = "payment_number";
-                    break;
-                case "Holder":
-                    CheckTag = "holder";
-                    break;
-                case "User":
-                    CheckTag = "user";
-                    break;
-                case "DateReception":
-                    CheckTag = "date_reception";
-                    break;
-                case "DateEndFiscalMemory":
-                    CheckTag = "date_end_fiscal_memory";
-                    break;
-                case "DateKeyActivationFiscalDataOperator":
-                    CheckTag = "date_key_activ_fisc_data";
-                    break;
-                case "Location":
-                    CheckTag = "location";
-                    break;
-                case "IdHolder":
-                    CheckTag = "id_holder";
-                    break;
-                case "IdUser":
-                    CheckTag = "id_user";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.CashRegisterList = Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void CashRegisterDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = CashRegisterDataGrid.Items.IndexOf(CashRegisterDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, CashRegisterDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
+            GroupingdDataGrid(e, CashRegisterRadDataPager);
         }
 
         /// <summary>
@@ -633,682 +427,157 @@ namespace TerminalMasterWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SimCardDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void SimCardDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "NameTerminal":
-                        e.Column.Header = "Имя терминала";
-                        break;
-                    case "Brand":
-                        e.Column.Header = "Бренд";
-                        break;
-                    case "Operator":
-                        e.Column.Header = "Оператор связи";
-                        break;
-                    case "IdentNumber":
-                        e.Column.Header = "Идентификационный номер (ИН)";
-                        break;
-                    case "TypeDevice":
-                        e.Column.Header = "Тип устройства";
-                        break;
-                    case "TMS":
-                        e.Column.Header = "Номер телефона (TMS)";
-                        break;
-                    case "ICC":
-                        e.Column.Header = "Уникальный серийный номер (ICC)";
-                        break;
-                    case "IndividualEntrepreneur":
-                        e.Column.Header = "Индивидуальный предприниматель (ИП)";
-                        break;
-                    case "IdIndividual":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "IdIndividual";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "IdCashRegister":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "IdCashRegister";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "Status":
-                        e.Column.Header = "Статус";
-                        break;
-                    default:
-                        break;
-                }
-
-                //    if (triggerPropertyNameList)
-                //    {
-                //        PropertyNameDictionary.Add(e.Column.Header.ToString(), e.PropertyName);
-                //    }
-
-                //    if (triggerHeader)
-                //    {
-                //        SelectionItemComboBox.Items.Add(e.Column.Header);
-                //    }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<SimCard>(), "SimCardDataGrid_RowEditEnded");
         }
 
-        private void SimCardDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeleteSimCardRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(SimCardDataGrid, new DataManipulationLanguage<SimCard>(), "DeleteSimCardRadButton_Click");
         }
 
-        private void SimCardDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void SimCardDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
-        }
-
-        private void SimCardDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void SimCardDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "NameTerminal":
-                    CheckTag = "name_terminal";
-                    break;
-                case "Operator":
-                    CheckTag = "operator";
-                    break;
-                case "IdentNumber":
-                    CheckTag = "identifaction_number";
-                    break;
-                case "TypeDevice":
-                    CheckTag = "type_device";
-                    break;
-                case "TMS":
-                    CheckTag = "tms";
-                    break;
-                case "ICC":
-                    CheckTag = "icc";
-                    break;
-                case "IndividualEntrepreneur":
-                    CheckTag = "individual_entrepreneur";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.SimCardList = Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void SimCardDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = SimCardDataGrid.Items.IndexOf(SimCardDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, SimCardDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
+            GroupingdDataGrid(e, SimCardRadDataPager);
         }
 
         /// <summary>
-        /// Event to PhoneBook
+        /// Event to Employees
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PhoneBookDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void EmployeesDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "LastName":
-                        e.Column.Header = "Фамилия";
-                        break;
-                    case "FirstName":
-                        e.Column.Header = "Имя";
-                        break;
-                    case "MiddleName":
-                        e.Column.Header = "Отчество";
-                        break;
-                    case "Post":
-                        e.Column.Header = "Должность";
-                        break;
-                    case "InternalNumber":
-                        e.Column.Header = "Внутренный номер";
-                        break;
-                    case "MobileNumber":
-                        e.Column.Header = "Мобильный номер";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<Employees>(), "EmployeesDataGrid_RowEditEnded");
         }
 
-        private void PhoneBookDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeleteEmployeesRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(EmployeesDataGrid, new DataManipulationLanguage<Employees>(), "DeleteEmployeesRadButton_Click");
         }
 
-        private void PhoneBookDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void EmployeesDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
+            GroupingdDataGrid(e, EmployeesRadDataPager);
         }
 
-        private void PhoneBookDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void PhoneBookDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "LastName":
-                    CheckTag = "last_name";
-                    break;
-                case "FirstName":
-                    CheckTag = "first_name";
-                    break;
-                case "MiddleName":
-                    CheckTag = "middle_name";
-                    break;
-                case "Post":
-                    CheckTag = "post";
-                    break;
-                case "InternalNumber":
-                    CheckTag = "internal_number";
-                    break;
-                case "MobileNumber":
-                    CheckTag = "mobile_number";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.PhoneBookList = Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void PhoneBookDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = PhoneBookDataGrid.Items.IndexOf(PhoneBookDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, PhoneBookDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
-        }
-
-        /// <summary>
-        /// Event to Holder
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void HolderDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "LastName":
-                        e.Column.Header = "Фамилия";
-                        break;
-                    case "FirstName":
-                        e.Column.Header = "Имя";
-                        break;
-                    case "MiddleName":
-                        e.Column.Header = "Отчество";
-                        break;
-                    case "Number":
-                        e.Column.Header = "Мобильный номер";
-                        break;
-                    case "Status":
-                        e.Column.Header = "Статус";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
-        }
-
-        private void HolderDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-
-        }
-
-        private void HolderDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-
-        }
-
-        private void HolderDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void HolderDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "LastName":
-                    CheckTag = "last_name";
-                    break;
-                case "FirstName":
-                    CheckTag = "first_name";
-                    break;
-                case "MiddleName":
-                    CheckTag = "middle_name";
-                    break;
-                case "Status":
-                    CheckTag = "status";
-                    break;
-                case "Number":
-                    CheckTag = "number";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.HolderList = Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void HolderDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                dataGets.SelectedXIndex = HolderDataGrid.Items.IndexOf(HolderDataGrid.CurrentItem);
-                DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, HolderDataGrid);
-                TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-                dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
-            } catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.InnerException);
-                Debug.WriteLine(ex.StackTrace);
-            }
-  
-        }
-
-        /// <summary>
-        /// Event to User
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void UserDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "LastName":
-                        e.Column.Header = "Фамилия";
-                        break;
-                    case "FirstName":
-                        e.Column.Header = "Имя";
-                        break;
-                    case "MiddleName":
-                        e.Column.Header = "Отчество";
-                        break;
-                    case "Number":
-                        e.Column.Header = "Мобильный номер";
-                        break;
-                    case "Status":
-                        e.Column.Header = "Статус";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
-        }
-
-        private void UserDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-
-        }
-
-        private void UserDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-
-        }
-
-        private void UserDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void UserDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "LastName":
-                    CheckTag = "last_name";
-                    break;
-                case "FirstName":
-                    CheckTag = "first_name";
-                    break;
-                case "MiddleName":
-                    CheckTag = "middle_name";
-                    break;
-                case "Status":
-                    CheckTag = "status";
-                    break;
-                case "Number":
-                    CheckTag = "number";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.UserList = Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void UserDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = UserDataGrid.Items.IndexOf(UserDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, UserDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
-        }
         /// <summary>
         /// Event to Individual Entrepreneur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void IndividualEntrepreneurDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void IndividualEntrepreneurDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
         {
-            try
-            {
-                switch (e.PropertyName)
-                {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "LastName":
-                        e.Column.Header = "Фамилия";
-                        break;
-                    case "FirstName":
-                        e.Column.Header = "Имя";
-                        break;
-                    case "MiddleName":
-                        e.Column.Header = "Отчество";
-                        break;
-                    case "Number":
-                        e.Column.Header = "Мобильный номер";
-                        break;
-                    case "PSRNIE":
-                        e.Column.Header = "ОГРНИП";
-                        break;
-                    case "TIN":
-                        e.Column.Header = "ИНН";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
-            }
+            AddAndEditElement(e, new DataManipulationLanguage<IndividualEntrepreneur>(), "IndividualEntrepreneurDataGrid_RowEditEnded");
         }
 
-        private void IndividualEntrepreneurDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void DeleteIndividualEntrepreneurRadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteElement(IndividualEntrepreneurDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteIndividualEntrepreneurRadButton_Click");
         }
 
-        private void IndividualEntrepreneurDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void IndividualEntrepreneurDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
         {
-
+            GroupingdDataGrid(e, IndRadDataPager);
         }
 
-        private void IndividualEntrepreneurDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void IndividualEntrepreneurDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
-            {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "LastName":
-                    CheckTag = "last_name";
-                    break;
-                case "FirstName":
-                    CheckTag = "first_name";
-                    break;
-                case "MiddleName":
-                    CheckTag = "middle_name";
-                    break;
-                case "PSRNIE":
-                    CheckTag = "psrnie";
-                    break;
-                case "TIN":
-                    CheckTag = "tin";
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-            else
-            {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.IndividualEntrepreneurList = Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-            }
-        }
-
-        private void IndividualEntrepreneurDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            dataGets.SelectedXIndex = IndividualEntrepreneurDataGrid.Items.IndexOf(IndividualEntrepreneurDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, IndividualEntrepreneurDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
-        }
         /// <summary>
-        /// Event to Waybill
+        /// Event to Documents
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void WaybillDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void DocumentsDataGrid_RowEditEnded(object sender, GridViewRowEditEndedEventArgs e)
+        {
+            AddAndEditElement(e, new DataManipulationLanguage<Documents>(), "DocumentsDataGrid_RowEditEnded");
+        }
+
+        private void DocumentsDataGrid_Grouping(object sender, GridViewGroupingEventArgs e)
+        {
+            GroupingdDataGrid(e, DocumentRadDataPager);
+        }
+
+        private async void AddFileButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                switch (e.PropertyName)
+                OpenFileDialog openFile = new OpenFileDialog
                 {
-                    case "Id":
-                        e.Column.Header = "ID";
-                        break;
-                    case "NameDocument":
-                        e.Column.Header = "Имя документа";
-                        break;
-                    case "NumberDocument":
-                        e.Column.Header = "Номер документа";
-                        break;
-                    case "NumberSuppliers":
-                        e.Column.Header = "Номер поставщика";
-                        break;
-                    case "DateDocument":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Дата документа";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "DateDocumentString":
-                        e.Column.Header = "Дата документа";
-                        break;
-                    case "FileName":
-                        e.Column.Header = "Имя файла";
-                        break;
-                    case "FilePDF":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "Файлы";
-                        break;
-                    case "IdHolder":
-                        e.Column.CanUserSort = false;
-                        e.Column.Header = "IdHolder";
-                        e.Column.Visibility = Visibility.Collapsed;
-                        break;
-                    case "Holder":
-                        e.Column.Header = "Владелец";
-                        break;
-                    default:
-                        break;
+                    InitialDirectory = @"\\KV-SQL-N\TerminalDataFiles",
+                    FilterIndex = 2,
+                    Filter = "File image (*.jpeg, *.jpg, .png)|*.jpeg;*.jpg;*.png|" +
+                    "Documents file (*.pdf)|*.pdf",
+                    RestoreDirectory = true
+                };
+
+                bool? result = openFile.ShowDialog();
+                if (result == true)
+                {
+                    FilePath = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_binary)";
                 }
             }
             catch (Exception ex)
             {
-                logFile.WriteLogAsync(ex.Message, "MainDataGrid_AutoGeneratingColumn");
+                await log.WriteLogAsync(ex.Message, "AddFileButton_Click");
             }
         }
 
-        private void WaybillDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private async void DowloanderFileButton_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void WaybillDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-
-        }
-
-        private void WaybillDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-        }
-
-        private void WaybillDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-        {
-            switch (e.Column.SortMemberPath.ToString())
+            try
             {
-                case "Id":
-                    CheckTag = "id";
-                    break;
-                case "NameDocument":
-                    CheckTag = "name_document";
-                    break;
-                case "NumberDocument":
-                    CheckTag = "number_document";
-                    break;
-                case "NumberSuppliers":
-                    CheckTag = "number_suppliers";
-                    break;
-                case "DateDocument":
-                    CheckTag = "date_document";
-                    break;
-                case "DateDocumentString":
-                    CheckTag = "date_document";
-                    break;
-                case "FileName":
-                    CheckTag = "file_name";
-                    break;
-                case "FilePDF":
-                    CheckTag = "file_pdf";
-                    break;
-                case "IdHolder":
-                    CheckTag = "id_holder";
-                    break;
-                case "Holder":
-                    CheckTag = "holder";
-                    break;
-                default:
-                    break;
-            }
+                int id = 0;
 
-            if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                CheckASCorDesc = ListSortDirection.Ascending.ToString();
-                dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                if (DocumentsDataGrid.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                ObservableCollection<Documents> itemsDocumentsRemove = new ObservableCollection<Documents>();
+
+                foreach (object item in DocumentsDataGrid.SelectedItems)
+                {
+                    itemsDocumentsRemove.Add(item as Documents);
+                }
+
+                foreach (Documents item in itemsDocumentsRemove)
+                {
+                    id = item.Id;
+                }
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    FilterIndex = 4,
+                    Filter = "File image (*.jpeg)|*.jpeg|" +
+                    "File image (*.jpg)|*.jpg|" +
+                    "File image (*.png)|*.png|" +
+                    "Documents file (*.pdf)|*.pdf",
+                    RestoreDirectory = true
+                };
+
+                bool? result = saveFileDialog.ShowDialog();
+
+                if (result == true)
+                {
+                    using (FileStream fileStream = File.Create(saveFileDialog.FileName))
+                    {
+                        fileStream.Write(_documents.GetDocument(id), 0, _documents.GetDocument(id).Length);
+                    }
+
+                    MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                CheckASCorDesc = ListSortDirection.Descending.ToString();
-                dataGets.WaybillList = Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
+                await log.WriteLogAsync(ex.Message, "DowloanderFileButton_Click");
             }
         }
 
-        private void WaybillDataGrid_MouseUp(object sender, MouseButtonEventArgs e)
+        private void DeleteDocumentsRadButton_Click(object sender, RoutedEventArgs e)
         {
-            dataGets.SelectedXIndex = WaybillDataGrid.Items.IndexOf(WaybillDataGrid.CurrentItem);
-            DataGridCell cell = GetCell(dataGets.SelectedXIndex, 0, WaybillDataGrid);
-            TextBlock lblsourceAddress = GetVisualChild<TextBlock>(cell);
-            dataGets.SelectedId = Convert.ToInt32(lblsourceAddress.Text);
+            DeleteElement(DocumentsDataGrid, new DataManipulationLanguage<Documents>(), "DeleteDocumentsRadButton_Click");
         }
 
         /// <summary>
@@ -1326,126 +595,40 @@ namespace TerminalMasterWPF
                     switch (tabItem)
                     {
                         case "Принтеры":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            CartridgeDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
                             NameNavigationItem = "printer";
-
-                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                            UpdateTable(NameNavigationItem, _dataGets.PrinterList);
                             break;
                         case "Картриджи":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            CartridgeDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
                             NameNavigationItem = "cartrides";
-
-                            dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                            UpdateTable(NameNavigationItem, _dataGets.CartridgesList);
                             break;
                         case "Контрольная-кассовая машина (ККМ)":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            CashRegisterDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
                             NameNavigationItem = "cashRegister";
-
-                            dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                            UpdateTable(NameNavigationItem, _dataGets.CashRegisterList);
                             break;
                         case "Sim-карты":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            SimCardDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
-
-                            dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-
                             NameNavigationItem = "simCard";
-                            UpdateTable(NameNavigationItem);
+                            UpdateTable(NameNavigationItem, _dataGets.SimCardList);
                             break;
-                        case "Телефоны сотрудников":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            PhoneBookDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
-                            NameNavigationItem = "phoneBook";
-
-                            dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0); ;
-
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "Владельцы":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            HolderDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
-                            NameNavigationItem = "holder";
-
-                            dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "Пользователи":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            UserDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
-                            NameNavigationItem = "user";
-
-                            dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                        case "Сотрудники":
+                            NameNavigationItem = "employees";
+                            UpdateTable(NameNavigationItem, _dataGets.EmployessList);
                             break;
                         case "Индивидуальные предприниматели":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            IndividualEntrepreneurDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
-
                             NameNavigationItem = "ie";
-
-                            dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                            UpdateTable(NameNavigationItem, _dataGets.IndividualList);
                             break;
                         case "Накладные":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = true;
-
-                            WaybillDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
-
-                            NameNavigationItem = "waybill";
-
-                            dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                            NameNavigationItem = "Documents";
+                            UpdateTable(NameNavigationItem, _dataGets.DocumentsList);
                             break;
                         case "Счетчик распечатанных страниц":
-                            //PropertyNameDictionary = new Dictionary<string, string>();
-                            DowloandButton.IsEnabled = false;
-
-                            CountersPageDataGrid.Columns.Clear();
-                            //PropertyNameDictionary.Clear();
                             NameNavigationItem = "countersPage";
-
-                            dataGets.CountersPageList = Get.GetCountersPage((App.Current as App).ConnectionString, "ALL", 0);
-
-                            UpdateTable(NameNavigationItem);
+                            UpdateTable(NameNavigationItem, _dataGets.CountersPagesList);
+                            break;
+                        case "Документы":
+                            NameNavigationItem = "documents";
+                            UpdateTable(NameNavigationItem, _dataGets.DocumentsList);
                             break;
                         default:
                             break;
@@ -1455,12 +638,12 @@ namespace TerminalMasterWPF
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
-                logFile.WriteLogAsync(ex.Message, "UpdateTable");
+                log.WriteLogAsync(ex.Message, "MainTabControl_SelectionChanged");
             }
         }
+
         /// <summary>
-        /// Click Button Add, Edit, Update, Delete, Dowloand
+        /// Click Button and Check
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1469,12 +652,27 @@ namespace TerminalMasterWPF
         {
             ConnectItem.Header = "Подключено";
             MainTabControl.IsEnabled = true;
+            CartridgeDataGrid.IsEnabled = true;
+            CashRegisterDataGrid.IsEnabled = true;
+            IndividualEntrepreneurDataGrid.IsEnabled = true;
+            EmployeesDataGrid.IsEnabled = true;
+            PrinterDataGrid.IsEnabled = true;
+            SimCardDataGrid.IsEnabled = true;
+            DocumentsDataGrid.IsEnabled = true;
+
+            _printer = new DataManipulationLanguage<Printer>();
+            _cartridge = new DataManipulationLanguage<Cartridge>();
+            _cashRegister = new DataManipulationLanguage<CashRegister>();
+            _simCard = new DataManipulationLanguage<SimCard>();
+            _employees = new DataManipulationLanguage<Employees>();
+            _individualEntrepreneur = new DataManipulationLanguage<IndividualEntrepreneur>();
+            _documents = new DataManipulationLanguage<Documents>();
+            _counterPage = new DataManipulationLanguage<CountersPage>();
+            _holder = new DataManipulationLanguage<Holder>();
+
+            UpdateData("all");
+
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Information);
-            AddButton.IsEnabled = true;
-            EditButton.IsEnabled = true;
-            DeleteButton.IsEnabled = true;
-            UpdateButton.IsEnabled = true;
-            PrinterDataGrid.ItemsSource = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
         }
 
         private void ConnectItem_Unchecked(object sender, RoutedEventArgs e)
@@ -1482,19 +680,34 @@ namespace TerminalMasterWPF
             ConnectItem.Header = "Отключено";
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Warning);
             MainTabControl.IsEnabled = false;
-            CartridgeDataGrid.Columns.Clear();
-            CashRegisterDataGrid.Columns.Clear();
-            IndividualEntrepreneurDataGrid.Columns.Clear();
-            HolderDataGrid.Columns.Clear();
-            UserDataGrid.Columns.Clear();
-            PhoneBookDataGrid.Columns.Clear();
-            PrinterDataGrid.Columns.Clear();
-            SimCardDataGrid.Columns.Clear();
-            WaybillDataGrid.Columns.Clear();
-            AddButton.IsEnabled = false;
-            EditButton.IsEnabled = false;
-            DeleteButton.IsEnabled = false;
-            UpdateButton.IsEnabled = false;
+            CartridgeDataGrid.IsEnabled = false;
+            CashRegisterDataGrid.IsEnabled = false;
+            IndividualEntrepreneurDataGrid.IsEnabled = false;
+            EmployeesDataGrid.IsEnabled = false;
+            PrinterDataGrid.IsEnabled = false;
+            SimCardDataGrid.IsEnabled = false;
+            DocumentsDataGrid.IsEnabled = false;
+
+
+            _printer.GetPrinters().Clear();
+            _cartridge.GetCartridges().Clear();
+            _cashRegister.GetCashRegisters().Clear();
+            _simCard.GetSimCardList().Clear();
+            _employees.GetEmployees().Clear();
+            _individualEntrepreneur.GetIndividualEntrepreneur().Clear();
+            _documents.GetDocuments().Clear();
+            _counterPage.GetCountersPagesList().Clear();
+            _holder.GetHolderList().Clear();
+
+            _dataGets.PrinterList.Clear();
+            _dataGets.CartridgesList.Clear();
+            _dataGets.CashRegisterList.Clear();
+            _dataGets.SimCardList.Clear();
+            _dataGets.EmployessList.Clear();
+            _dataGets.IndividualList.Clear();
+            _dataGets.DocumentsList.Clear();
+            _dataGets.CountersPagesList.Clear();
+            _dataGets.HolderList.Clear();
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -1509,493 +722,6 @@ namespace TerminalMasterWPF
             }
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
-                {
-                    CheckASCorDesc = null;
-                    switch (NameNavigationItem)
-                    {
-                        case "printer":
-                            PrinterWindows printer = new PrinterWindows()
-                            {
-                                SelectData = "ADD"
-                            };
-                            printer.ShowDialog();
-                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "cartrides":
-                            CartridgeWindow cartridge = new CartridgeWindow
-                            {
-                                SelectData = "ADD"
-                            };
-                            cartridge.ShowDialog();
-                            dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "cashRegister":
-                            CashRegisterWindows cashRegister = new CashRegisterWindows
-                            {
-                                SelectData = "ADD"
-                            };
-                            cashRegister.ShowDialog();
-                            dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "simCard":
-                            SimCardWindows simCard = new SimCardWindows
-                            {
-                                SelectData = "ADD"
-                            };
-                            simCard.ShowDialog();
-                            dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "phoneBook":
-                            PhoneBookWindows phoneBook = new PhoneBookWindows
-                            {
-                                SelectData = "ADD"
-                            };
-                            phoneBook.ShowDialog();
-                            dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "holder":
-                            PeopleWindow holder = new PeopleWindow
-                            {
-                                SelectData = "ADD",
-                                People = NameNavigationItem
-                            };
-                            holder.ShowDialog();
-                            dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "user":
-                            PeopleWindow user = new PeopleWindow
-                            {
-                                SelectData = "ADD",
-                                People = NameNavigationItem
-                            };
-                            user.ShowDialog();
-                            dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "ie":
-                            IndWindow individual = new IndWindow
-                            {
-                                SelectData = "ADD",
-                                People = NameNavigationItem
-                            };
-                            individual.ShowDialog();
-                            dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "waybill":
-                            WaybillWindow waybill = new WaybillWindow
-                            {
-                                SelectData = "ADD"
-                            };
-                            waybill.ShowDialog();
-                            dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "countersPage":
-                            CointersPageWindow cointersPage = new CointersPageWindow
-                            {
-                                SelectData = "ADD"
-                            };
-                            cointersPage.ShowDialog();
-                            dataGets.CountersPageList = Get.GetCountersPage((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "AppBarButtonAdd_Tapped");
-            }
-        }
-
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                switch (NameNavigationItem)
-                {
-                    case "printer":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            PrinterWindows printer = new PrinterWindows
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId
-                            };
-                            printer.SelectPrinter = CheckASCorDesc == null
-                                ? dataGets.PrinterList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByPrinter((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-
-                            printer.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "cartrides":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            CartridgeWindow cartridge = new CartridgeWindow
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId
-                            };
-                            cartridge.SelectCartrides = CheckASCorDesc == null
-                                ? dataGets.CartridgesList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByCartridges((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-
-                            cartridge.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "cashRegister":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            CashRegisterWindows cashRegister = new CashRegisterWindows
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.CashRegisterList[dataGets.SelectedXIndex].Id
-                            };
-                            cashRegister.SelectCashRegister = CheckASCorDesc == null
-                                ? dataGets.CashRegisterList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByCashRegister((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            cashRegister.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "simCard":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            SimCardWindows simCard = new SimCardWindows
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId
-                            };
-                            simCard.SelectSimCard = CheckASCorDesc == null
-                                ? dataGets.SimCardList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderBySimCard((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            simCard.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "phoneBook":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            PhoneBookWindows phoneBook = new PhoneBookWindows
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId
-                            };
-                            phoneBook.SelectPhoneBook = CheckASCorDesc == null
-                            ? dataGets.PhoneBookList
-                            : CheckASCorDesc.Equals("Descending")
-                                ? Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                : Order.GetOrderByPhoneBook((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            phoneBook.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "holder":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            PeopleWindow holder = new PeopleWindow
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId,
-                                People = NameNavigationItem
-                            };
-                            holder.SelectHolder = CheckASCorDesc == null
-                            ? dataGets.HolderList
-                            : CheckASCorDesc.Equals("Descending")
-                                ? Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                : Order.GetOrderByHolder((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            holder.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "user":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            PeopleWindow user = new PeopleWindow
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId,
-                                People = NameNavigationItem
-                            };
-                            user.SelectUser = CheckASCorDesc == null
-                           ? dataGets.UserList
-                           : CheckASCorDesc.Equals("Descending")
-                               ? Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                               : Order.GetOrderByUser((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            user.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "ie":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            IndWindow individual = new IndWindow
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId,
-                                People = NameNavigationItem
-                            };
-                            individual.SelectInd = CheckASCorDesc == null
-                           ? dataGets.IndividualEntrepreneurList
-                           : CheckASCorDesc.Equals("Descending")
-                               ? Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                               : Order.GetOrderByIndividual((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            individual.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "waybill":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            WaybillWindow waybill = new WaybillWindow
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId
-                            };
-                            waybill.SelectWaybill = CheckASCorDesc == null
-                           ? dataGets.WaybillList
-                           : CheckASCorDesc.Equals("Descending")
-                               ? Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                               : Order.GetOrderByWaybill((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-                            waybill.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    case "countersPage":
-                        if (dataGets.SelectedXIndex >= 0)
-                        {
-                            CointersPageWindow cointersPage = new CointersPageWindow
-                            {
-                                SelectData = "GET",
-                                SelectIndex = dataGets.SelectedXIndex,
-                                SelectId = dataGets.SelectedId
-                            };
-                            cointersPage.SelectCountersPage = CheckASCorDesc == null
-                                ? dataGets.CountersPageList
-                                : CheckASCorDesc.Equals("Descending")
-                                    ? Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag)
-                                    : Order.GetOrderByCountersPage((App.Current as App).ConnectionString, CheckASCorDesc, CheckTag);
-
-                            cointersPage.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Выберите строку для изменения");
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "EditButton_Click");
-            }
-        }
-
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
-                {
-                    if (dataGets.SelectedXIndex >= 0)
-                    {
-                        if (MessageBox.Show("Вы точно хотите удалить этот элемент.", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        {
-                            switch (NameNavigationItem)
-                            {
-                                case "printer":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "cartrides":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "cashRegister":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "simCard":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "phoneBook":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "holder":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "user":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "ie":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "waybill":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                case "countersPage":
-                                    Delete.DeleteDataElement((App.Current as App).ConnectionString, dataGets.SelectedId, NameNavigationItem);
-                                    dataGets.CountersPageList = Get.GetCountersPage((App.Current as App).ConnectionString, "ALL", 0);
-                                    UpdateTable(NameNavigationItem);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Выберите строку для удаления", "Удаление", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "DeleteButton_Click");
-            }
-        }
-
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (ConnectItem.Header.Equals("Подключено") && ConnectItem.IsChecked)
-                {
-                    CheckASCorDesc = null;
-                    CheckTag = null;
-                    switch (NameNavigationItem)
-                    {
-                        case "printer":
-                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "cartrides":
-                            dataGets.CartridgesList = Get.GetCartridges((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "cashRegister":
-                            dataGets.CashRegisterList = Get.GetCashRegister((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "simCard":
-                            dataGets.SimCardList = Get.GetSimCard((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "phoneBook":
-                            dataGets.PhoneBookList = Get.GetPhoneBook((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "holder":
-                            dataGets.HolderList = Get.GetHolder((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "user":
-                            dataGets.UserList = Get.GetUser((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "ie":
-                            dataGets.IndividualEntrepreneurList = Get.GetIndividual((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "waybill":
-                            dataGets.WaybillList = Get.GetWaybill((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        case "countersPage":
-                            dataGets.PrinterList = Get.GetPrinter((App.Current as App).ConnectionString, "ALL", 0);
-                            UpdateTable(NameNavigationItem);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "UpdateButton_Click");
-            }
-        }
-
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Вы точно хотите выйти", "Выход из программы", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -2004,51 +730,21 @@ namespace TerminalMasterWPF
             }
         }
 
-        private void DowloandButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    FilterIndex = 4,
-                    Filter = "File image (*.jpeg)|*.jpeg|" +
-                    "File image (*.jpg)|*.jpg|" +
-                    "File image (*.png)|*.png|" +
-                    "Documents file (*.pdf)|*.pdf",
-                    RestoreDirectory = true
-                };
-
-                bool? result = saveFileDialog.ShowDialog();
-                if (result == true && dataGets.SelectedXIndex >= 0)
-                {
-                    BinaryFormatter binaryformatter = new BinaryFormatter();
-                    MemoryStream memorystream = new MemoryStream();
-                    binaryformatter.Serialize(memorystream, dataGets.WaybillList[dataGets.SelectedXIndex].FilePDF);
-                    byte[] data = memorystream.ToArray();
-
-                    using (FileStream fileStream = File.Create(saveFileDialog.FileName))
-                    {
-                        fileStream.Write(data, 0, data.Length);
-                    }
-
-                    MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Выберите строку для скачивания", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                logFile.WriteLogAsync(ex.Message, "DowloandButton_Click");
-            }
-        }
-
         private void SettingsDataBase_Click(object sender, RoutedEventArgs e)
         {
             ConnectWindows connectWindows = new ConnectWindows();
             connectWindows.ShowDialog();
+        }
+
+        private void DocumentsDataGrid_BeginningEdit(object sender, GridViewBeginningEditRoutedEventArgs e)
+        {
+            
+        }
+
+        private void UpdateTableMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateTable(NameNavigationItem);
+            UpdateData(NameNavigationItem);
         }
     }
 }

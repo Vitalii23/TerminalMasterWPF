@@ -1,33 +1,62 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Linq.Mapping;
 
 namespace TerminalMasterWPF.Model
 {
+    [Table(Name = "CashRegister")]
     class CashRegister
     {
+        [DisplayAttribute(AutoGenerateField = false)]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public int Id { get; set; }
-        public string NameDevice { get; set; } // ККМ
-        public string Brand { get; set; } // Бренд устройства
-        public string FactoryNumber { get; set; } // Заводской номер
-        public string SerialNumber { get; set; } // Серийный номер
-        public string PaymentNumber { get; set; } // Номер счета
-        public string Holder { get; set; } // Владелец по договору
-        public string User { get; set; } // Пользователь
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
-        public DateTime DateReception { get; set; } // Дата получения
-        public string DateReceptionString { get; set; } // Дата получения ТЕХТ
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
-        public DateTime DateKeyActivationFiscalDataOperator { get; set; } // Дата активации ключа ОФД
-        public string DateKeyActivationFiscalDataOperatorString { get; set; }
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
-        public DateTime DateEndFiscalMemory { get; set; } // Дата окончания ФН
-        public string DateEndFiscalMemoryString { get; set; }
-        public string Location { get; set; } // Место нахождения
-        public int IdHolder { get; set; }
-        public int IdUser { get; set; }
 
-        public CashRegister()
-        {
-        }
+        [DisplayAttribute(Name = "ККМ")]
+        [Column(Name = "name")]
+        public string NameDevice { get; set; }
+
+        [DisplayAttribute(Name = "Бренд устройства")]
+        [Column(Name = "brand")]
+        public string Brand { get; set; }
+
+        [DisplayAttribute(Name = "Заводской номер")]
+        [Column(Name = "factory_number")]
+        public string FactoryNumber { get; set; }
+
+        [DisplayAttribute(Name = "Серийный номер")]
+        [Column(Name = "serial_number")]
+        public string SerialNumber { get; set; }
+
+        [DisplayAttribute(Name = "Номер счета")]
+        [Column(Name = "payment_number")]
+        public string PaymentNumber { get; set; }
+
+        [DisplayAttribute(Name = "Владелец по договору")]
+        public string HolderCashRegister { get; set; }
+
+        [DisplayAttribute(Name = "Дата получения")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
+        [Column(Name = "date_reception")]
+        public DateTime DateReception { get; set; }
+
+        [DisplayAttribute(Name = "Дата активации ключа ОФД")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
+        [Column(Name = "date_end_fiscal_memory")]
+        public DateTime DateKeyActivationFiscalDataOperator { get; set; }
+
+        [DisplayAttribute(Name = "Дата окончания ФН")]
+        [DisplayFormat(DataFormatString = "dd-MM-yyyy")]
+        [Column(Name = "date_key_activ_fisc_data")]
+        public DateTime DateEndFiscalMemory { get; set; }
+
+        [DisplayAttribute(Name = "Место нахождения")]
+        [Column(Name = "location")]
+        public string Location { get; set; }
+
+        [DisplayAttribute(AutoGenerateField = false)]
+        [Column(Name = "id_employees")]
+        public int IdEmployees { get; set; }
+
+        public CashRegister() { }
     }
 }
