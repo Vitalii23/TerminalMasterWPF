@@ -24,15 +24,15 @@ namespace TerminalMasterWPF.ViewModel
         private Documents _documents;
         private CountersPage _countersPages;
 
-        public IList<Cartridge> CartridgesList { get; set; }
+        public ObservableCollection<Cartridge> CartridgesList { get; set; }
         public ObservableCollection<CashRegister> CashRegisterList { get; set; }
-        public IList<Employees> EmployessList { get; set; }
-        public IList<Printer> PrinterList { get; set; }
+        public ObservableCollection<Employees> EmployessList { get; set; }
+        public ObservableCollection<Printer> PrinterList { get; set; }
         public ObservableCollection<SimCard> SimCardList { get; set; }
         public ObservableCollection<Holder> HolderList { get; set; }
-        public IList<IndividualEntrepreneur> IndividualList { get; set; }
-        public IList<Documents> DocumentsList { get; set; }
-        public IList<CountersPage> CountersPagesList { get; set; }
+        public ObservableCollection<IndividualEntrepreneur> IndividualList { get; set; }
+        public ObservableCollection<Documents> DocumentsList { get; set; }
+        public ObservableCollection<CountersPage> CountersPagesList { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

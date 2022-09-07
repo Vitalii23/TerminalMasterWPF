@@ -74,33 +74,33 @@ namespace TerminalMasterWPF.DML
         {
             try
             {
-                string AddQuery = null;
+                string DeleteQuery = null;
 
                 switch (element)
                 {
                     case Cartridge cart:
-                        AddQuery = $"DELETE FROM dbo.Cartrides WHERE id = {cart.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.Cartrides WHERE id = {cart.Id}";
                         break;
                     case CashRegister cash:
-                        AddQuery = $"DELETE FROM dbo.CashRegister WHERE id = {cash.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.CashRegister WHERE id = {cash.Id}";
                         break;
                     case Employees emp:
-                        AddQuery = $"DELETE FROM dbo.PhoneBook WHERE id = {emp.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.PhoneBook WHERE id = {emp.Id}";
                         break;
                     case Printer print:
-                        AddQuery = $"DELETE FROM dbo.Printer WHERE id = {print.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.Printer WHERE id = {print.Id}";
                         break;
                     case SimCard sim:
-                        AddQuery = $"DELETE FROM dbo.SimCard WHERE id = {sim.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.SimCard WHERE id = {sim.Id}";
                         break;
                     case IndividualEntrepreneur ind:
-                        AddQuery = $"DELETE FROM dbo.IndividualEntrepreneur WHERE id = {ind.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.IndividualEntrepreneur WHERE id = {ind.Id}";
                         break;
                     case Documents doc:
-                        AddQuery = $"DELETE FROM dbo.Waybill WHERE id = {doc.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.Documents WHERE id = {doc.Id}";
                         break;
                     case CountersPage count:
-                        AddQuery = $"DELETE FROM dbo.CountersPage WHERE id = {count.Id}";
+                        DeleteQuery = $"DELETE FROM dbo.CountersPage WHERE id = {count.Id}";
                         break;
                     default:
                         break;
@@ -111,7 +111,7 @@ namespace TerminalMasterWPF.DML
                 if (connect.State == ConnectionState.Open)
                 {
                     SqlCommand cmd = connect.CreateCommand();
-                    cmd.CommandText = AddQuery;
+                    cmd.CommandText = DeleteQuery;
                     SqlDataReader reader = cmd.ExecuteReader();
                     reader.Read();
                 }

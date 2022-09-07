@@ -568,7 +568,7 @@ namespace TerminalMasterWPF
 
         private void DeleteDocumentsRadButton_Click(object sender, RoutedEventArgs e)
         {
-            DeleteElement(DocumentsDataGrid, new DataManipulationLanguage<IndividualEntrepreneur>(), "DeleteDocumentsRadButton_Click");
+            DeleteElement(DocumentsDataGrid, new DataManipulationLanguage<Documents>(), "DeleteDocumentsRadButton_Click");
         }
 
         /// <summary>
