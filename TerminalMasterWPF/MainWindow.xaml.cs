@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -26,7 +28,7 @@ namespace TerminalMasterWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string NameNavigationItem;
+        private string NameNavigationItem, FilePath;
         private DataGets _dataGets = new DataGets();
         private readonly ConnectSQL connect = new ConnectSQL();
         private DataManipulationLanguage<Printer> _printer;
@@ -256,6 +258,12 @@ namespace TerminalMasterWPF
                 {
                     if (e.NewData is T newElement)
                     {
+                        if (FilePath != null)
+                        {
+                            element.GetFileName = FilePath;
+                            FilePath = null;
+                        }
+
                         element.Add(newElement);
                     }
 
@@ -266,6 +274,12 @@ namespace TerminalMasterWPF
                 {
                     if (e.NewData is T newElement)
                     {
+                        if (FilePath != null)
+                        {
+                            element.GetFileName = FilePath;
+                            FilePath = null;
+                        }
+
                         element.Update(newElement);
                     }
 
@@ -499,7 +513,7 @@ namespace TerminalMasterWPF
                 bool? result = openFile.ShowDialog();
                 if (result == true)
                 {
-                   _documents.GetFileName = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_binary)";
+                    FilePath = @"(SELECT * FROM  OPENROWSET(BULK '" + openFile.FileName + "', SINGLE_BLOB) AS file_binary)";
                 }
             }
             catch (Exception ex)
@@ -546,14 +560,9 @@ namespace TerminalMasterWPF
 
                 if (result == true)
                 {
-                    BinaryFormatter binaryformatter = new BinaryFormatter();
-                    MemoryStream memorystream = new MemoryStream();
-                    binaryformatter.Serialize(memorystream, _documents.GetByte(id));
-                    byte[] data = memorystream.ToArray();
-
                     using (FileStream fileStream = File.Create(saveFileDialog.FileName))
                     {
-                        fileStream.Write(data, 0, data.Length);
+                        fileStream.Write(_documents.GetDocument(id), 0, _documents.GetDocument(id).Length);
                     }
 
                     MessageBox.Show("Успешно скачанно", "Скачивание", MessageBoxButton.OK, MessageBoxImage.Information);

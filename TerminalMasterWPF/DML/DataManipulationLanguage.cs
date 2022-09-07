@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -44,7 +43,7 @@ namespace TerminalMasterWPF.DML
                             $"('{sim.Operator}', '{sim.IdentNumber}', '{sim.TypeDevice}', '{sim.TMS}', '{sim.ICC}', '{sim.Status}', {sim.IdIndividual}, {sim.IdCashRegister})";
                         break;
                     case Documents doc:
-                        AddQuery = $"INSERT INTO dbo.Documents (name_document, date_document, file_binary) VALUES ('{doc.NameDocument}', '{doc.DateDocument}', {GetFileName})";
+                        AddQuery = $"INSERT INTO dbo.Documents (name_document, file_binary) VALUES ('{doc.NameDocument}', {GetFileName})";
                         break;
                     case CountersPage count:
                         AddQuery = $"INSERT INTO dbo.CountersPage (printed_page_counter, date, condition, id_printer) VALUES ({count.PrintedPageCounter}, '{count.Date}', '{count.Сondition}', {count.IdPrinter})";
@@ -53,7 +52,7 @@ namespace TerminalMasterWPF.DML
                         break;
                 }
 
-                var connect = new SqlConnection((App.Current as App).ConnectionString);
+                SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString);
                 connect.Open();
                 if (connect.State == ConnectionState.Open)
                 {
@@ -153,7 +152,7 @@ namespace TerminalMasterWPF.DML
                             $" date_reception = '{cash.DateReception}', date_end_fiscal_memory = '{cash.DateEndFiscalMemory}', date_key_activ_fisc_data = '{cash.DateKeyActivationFiscalDataOperator}', location = '{cash.Location}', id_employees = {cash.IdEmployees} WHERE Id = {cash.Id}";
                         break;
                     case Documents doc:
-                        UpdateQuery = $"UPDATE dbo.Documents SET name_document = '{doc.NameDocument}', date_document =  '{doc.DateDocument}', file_binary = {doc.FileBinary} WHERE Id = {doc.Id}";
+                        UpdateQuery = $"UPDATE dbo.Documents SET name_document = '{doc.NameDocument}', file_binary = {GetFileName} WHERE Id = {doc.Id}";
                         break;
                     case CountersPage count:
                         UpdateQuery = $"UPDATE dbo.CountersPage SET printed_page_counter = '{count.PrintedPageCounter}', date =  '{count.Date}', condition = {count.Сondition}, id_printer = '{count.IdPrinter}'  WHERE Id = {count.Id}";
@@ -163,7 +162,7 @@ namespace TerminalMasterWPF.DML
                 }
 
 
-                var connect = new SqlConnection((App.Current as App).ConnectionString);
+                SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString);
                 connect.Open();
                 if (connect.State == ConnectionState.Open)
                 {
@@ -564,7 +563,6 @@ namespace TerminalMasterWPF.DML
         {
             string GetDocuments = "SELECT dbo.Documents.id, " +
                     "dbo.Documents.name_document, " +
-                    "dbo.Documents.date_document, " +
                     "dbo.Documents.file_binary " +
                     "FROM dbo.Documents ";
 
@@ -586,10 +584,9 @@ namespace TerminalMasterWPF.DML
                                     Documents document = new Documents
                                     {
                                         Id = reader.GetInt32(0),
-                                        NameDocument = reader.GetString(1),
-                                        DateDocument = reader.GetDateTime(2)
+                                        NameDocument = reader.GetString(1)
                                     };
-                                    document.FileBinary = GetDocument(document.Id, (App.Current as App).ConnectionString);
+                                    document.FileBinary = GetDocument(document.Id);
                                     documents.Add(document);
                                 }
                             }
@@ -646,43 +643,11 @@ namespace TerminalMasterWPF.DML
             return null;
         }
 
-        public byte[] GetByte(int id)
-        {
-            string GetDocuments = $"SELECT dbo.Documents.file_binary FROM dbo.Documents WHERE dbo.Documents.id = {id}";
-
-            try
-            {
-                using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
-                {
-                    connect.Open();
-                    if (connect.State == ConnectionState.Open)
-                    {
-                        using (SqlCommand cmd = connect.CreateCommand())
-                        {
-                            cmd.CommandText = GetDocuments;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    return GetDocument(id, (App.Current as App).ConnectionString);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception eSql)
-            {
-                log.WriteLogAsync(eSql.Message, "GetDocuments");
-            }
-            return null;
-        }
-
         public string GetFileName { get; set; }
 
-        private static byte[] GetDocument(int documentId, string connection)
+        public byte[] GetDocument(int documentId)
         {
-            using (SqlConnection connect = new SqlConnection(connection))
+            using (SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString))
             {
                 using (SqlCommand cmd = connect.CreateCommand())
                 {

@@ -908,7 +908,7 @@
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
-                                <telerik:GridViewDataColumn x:Name="DateDocumentGridViewDataColumn"
+                                <!--<telerik:GridViewDataColumn x:Name="DateDocumentGridViewDataColumn"
                                                             Header="Дата документы"
                                                             DataMemberBinding="{Binding DateDocument}">
                                     <telerik:GridViewDataColumn.CellTemplate>
@@ -916,7 +916,7 @@
                                             <telerik:RadDatePicker SelectedDate="{Binding DateDocument}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
-                                </telerik:GridViewDataColumn>
+                                </telerik:GridViewDataColumn> -->
                                 <telerik:GridViewColumn x:Name="FilePDFGridViewDataColumn"
                                                         Header="Документы">
                                     <telerik:GridViewColumn.CellTemplate>
