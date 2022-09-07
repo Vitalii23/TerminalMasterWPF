@@ -66,7 +66,6 @@ namespace TerminalMasterWPF.DML
             {
                 await log.WriteLogAsync(eSql.Message, element.ToString() + " AddDataElement");
             }
-
         }
 
         public async void Delete(T element)
@@ -119,7 +118,6 @@ namespace TerminalMasterWPF.DML
             {
                 await log.WriteLogAsync(eSql.Message, "DeleteDataElement");
             }
-
         }
 
         public async void Update(T element)
@@ -161,7 +159,6 @@ namespace TerminalMasterWPF.DML
                         break;
                 }
 
-
                 SqlConnection connect = new SqlConnection((App.Current as App).ConnectionString);
                 connect.Open();
                 if (connect.State == ConnectionState.Open)
@@ -176,7 +173,6 @@ namespace TerminalMasterWPF.DML
             {
                 await log.WriteLogAsync(eSql.Message, element.ToString() + "_UpdateDataElement");
             }
-
         }
 
         public ObservableCollection<Printer> GetPrinters()

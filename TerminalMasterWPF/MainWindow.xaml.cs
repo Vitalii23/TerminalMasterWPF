@@ -42,18 +42,7 @@ namespace TerminalMasterWPF
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            MainTabControl.IsEnabled = false;
-            CartridgeDataGrid.IsEnabled = false;
-            CashRegisterDataGrid.IsEnabled = false;
-            IndividualEntrepreneurDataGrid.IsEnabled = false;
-            EmployeesDataGrid.IsEnabled = false;
-            PrinterDataGrid.IsEnabled = false;
-            SimCardDataGrid.IsEnabled = false;
-            DocumentsDataGrid.IsEnabled = false;
-
-            UpdateTableMenuItem.IsEnabled = false;
-
+            ElementIsEnabled(false);
             connect.ConnectRead();
         }
 
@@ -65,13 +54,16 @@ namespace TerminalMasterWPF
                 {
                     case "printer":
                         PrinterDataGrid.ItemsSource = list;
+                        StatusPrinterGridViewComboBoxColumn.ItemsSource = new string[] { "Рабочий", "Неисправный", "Сервис", "Неизвестно", "Списан" };
+                        StatusPrinterGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
                         break;
                     case "cartrides":
                         CartridgeDataGrid.ItemsSource = list;
+                        StatusCartridgeGridViewComboBoxColumn.ItemsSource = new string[] { "Рабочий", "Неисправный", "Сервис", "Неизвестно", "Списан" };
+                        StatusCartridgeGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
                         break;
                     case "cashRegister":
                         CashRegisterDataGrid.ItemsSource = list;
-
                         HolderGridViewDataColumn.ItemsSource = _dataGets.HolderList;
                         HolderGridViewDataColumn.DisplayMemberPath = "FullNameHolder";
                         HolderGridViewDataColumn.DataContext = "Holder";
@@ -242,6 +234,12 @@ namespace TerminalMasterWPF
 
         }
 
+        private void UpdateTableMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateTable(NameNavigationItem);
+            UpdateData(NameNavigationItem);
+        }
+
         private async void AddAndEditElement<T>(GridViewRowEditEndedEventArgs e, DataManipulationLanguage<T> element, string voidMessage) where T : class
         {
             try
@@ -337,6 +335,19 @@ namespace TerminalMasterWPF
             {
                 radDataPager.PageSize = 32;
             }
+        }
+
+        private void ElementIsEnabled(bool flag)
+        {
+            MainTabControl.IsEnabled = flag;
+            CartridgeDataGrid.IsEnabled = flag;
+            CashRegisterDataGrid.IsEnabled = flag;
+            IndividualEntrepreneurDataGrid.IsEnabled = flag;
+            EmployeesDataGrid.IsEnabled = flag;
+            PrinterDataGrid.IsEnabled = flag;
+            SimCardDataGrid.IsEnabled = flag;
+            DocumentsDataGrid.IsEnabled = flag;
+            UpdateTableMenuItem.IsEnabled = flag;
         }
 
         /// <summary>
@@ -648,16 +659,7 @@ namespace TerminalMasterWPF
         private void ConnectItem_Checked(object sender, RoutedEventArgs e)
         {
             ConnectItem.Header = "Подключено";
-            MainTabControl.IsEnabled = true;
-            CartridgeDataGrid.IsEnabled = true;
-            CashRegisterDataGrid.IsEnabled = true;
-            IndividualEntrepreneurDataGrid.IsEnabled = true;
-            EmployeesDataGrid.IsEnabled = true;
-            PrinterDataGrid.IsEnabled = true;
-            SimCardDataGrid.IsEnabled = true;
-            DocumentsDataGrid.IsEnabled = true;
-
-            UpdateTableMenuItem.IsEnabled = true;
+            ElementIsEnabled(true);
 
             _printer = new DataManipulationLanguage<Printer>();
             _cartridge = new DataManipulationLanguage<Cartridge>();
@@ -678,16 +680,7 @@ namespace TerminalMasterWPF
         {
             ConnectItem.Header = "Отключено";
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Warning);
-            MainTabControl.IsEnabled = false;
-            CartridgeDataGrid.IsEnabled = false;
-            CashRegisterDataGrid.IsEnabled = false;
-            IndividualEntrepreneurDataGrid.IsEnabled = false;
-            EmployeesDataGrid.IsEnabled = false;
-            PrinterDataGrid.IsEnabled = false;
-            SimCardDataGrid.IsEnabled = false;
-            DocumentsDataGrid.IsEnabled = false;
-
-            UpdateTableMenuItem.IsEnabled = false;
+            ElementIsEnabled(false);
 
             _printer.GetPrinters().Clear();
             _cartridge.GetCartridges().Clear();
@@ -739,12 +732,6 @@ namespace TerminalMasterWPF
         private void DocumentsDataGrid_BeginningEdit(object sender, GridViewBeginningEditRoutedEventArgs e)
         {
             
-        }
-
-        private void UpdateTableMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateTable(NameNavigationItem);
-            UpdateData(NameNavigationItem);
         }
     }
 }

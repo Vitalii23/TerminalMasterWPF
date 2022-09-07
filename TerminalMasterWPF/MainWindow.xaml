@@ -215,17 +215,17 @@
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
-                                <telerik:GridViewDataColumn x:Name="StatusPrinterGridViewDataColumn"
+                                <telerik:GridViewComboBoxColumn x:Name="StatusPrinterGridViewComboBoxColumn"
                                                             Header="Статус"
                                                             DataMemberBinding="{Binding Status}">
-                                    <telerik:GridViewDataColumn.CellTemplate>
+                                    <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{Binding Status}" />
                                             </StackPanel>
                                         </DataTemplate>
-                                    </telerik:GridViewDataColumn.CellTemplate>
-                                </telerik:GridViewDataColumn>
+                                    </telerik:GridViewComboBoxColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn>
                                 <telerik:GridViewDataColumn x:Name="VendorCodePrinterGridViewDataColumn"
                                                             Header="Имя принтера"
                                                             DataMemberBinding="{Binding VendorCodePrinter}">
@@ -375,17 +375,17 @@
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
-                                <telerik:GridViewDataColumn x:Name="StatusGridViewDataColumn"
+                                <telerik:GridViewComboBoxColumn x:Name="StatusCartridgeGridViewComboBoxColumn"
                                                             Header="Статус"
                                                             DataMemberBinding="{Binding Status}">
-                                    <telerik:GridViewDataColumn.CellTemplate>
+                                    <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{Binding Status}" />
                                             </StackPanel>
                                         </DataTemplate>
-                                    </telerik:GridViewDataColumn.CellTemplate>
-                                </telerik:GridViewDataColumn>
+                                    </telerik:GridViewComboBoxColumn.CellTemplate>
+                                </telerik:GridViewComboBoxColumn>
                                 <telerik:GridViewColumn Header="Удаление">
                                     <telerik:GridViewColumn.CellTemplate>
                                         <DataTemplate>
