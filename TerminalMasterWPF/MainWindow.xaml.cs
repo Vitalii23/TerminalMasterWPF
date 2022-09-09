@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
+using TerminalMaster.SaveFile;
 using TerminalMasterWPF.DML;
 using TerminalMasterWPF.ElementContentDialog;
 using TerminalMasterWPF.Logging;
@@ -59,7 +60,7 @@ namespace TerminalMasterWPF
                         break;
                     case "cartrides":
                         CartridgeDataGrid.ItemsSource = list;
-                        StatusCartridgeGridViewComboBoxColumn.ItemsSource = new string[] { "Рабочий", "Неисправный", "Сервис", "Неизвестно", "Списан" };
+                        StatusCartridgeGridViewComboBoxColumn.ItemsSource = new string[] { "Рабочий", "Неисправный", "Сервис", "Заправлен", "Списан" };
                         StatusCartridgeGridViewComboBoxColumn.DataMemberBinding = new Binding("Status");
                         break;
                     case "cashRegister":
@@ -140,6 +141,7 @@ namespace TerminalMasterWPF
                         break;
                     case "cashRegister":
                         CashRegisterDataGrid.ItemsSource = _dataGets.CashRegisterList;
+                        HolderGridViewDataColumn.ItemsSource = _dataGets.HolderList;
                         break;
                     case "cartridge":
                         CartridgeDataGrid.ItemsSource = _dataGets.CartridgesList;
@@ -158,6 +160,7 @@ namespace TerminalMasterWPF
                         break;
                     case "countersPage":
                         CountersPageDataGrid.ItemsSource = _dataGets.CountersPagesList;
+                        PrintersGridViewDataColumn.ItemsSource = _dataGets.PrinterList;
                         break;
                     case "all":
                         PrinterDataGrid.ItemsSource = _dataGets.PrinterList;
@@ -282,6 +285,7 @@ namespace TerminalMasterWPF
                 }
 
                 UpdateData(NameNavigationItem);
+                UpdateTable(NameNavigationItem);
             }
             catch (Exception ex)
             {
@@ -604,6 +608,8 @@ namespace TerminalMasterWPF
                     {
                         case "Принтеры":
                             NameNavigationItem = "printer";
+                            JsonFile<Printer> json = new JsonFile<Printer>();
+                            json.WriteJsonAsync(_dataGets.PrinterList, "printers");
                             UpdateTable(NameNavigationItem, _dataGets.PrinterList);
                             break;
                         case "Картриджи":
@@ -676,31 +682,39 @@ namespace TerminalMasterWPF
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ConnectItem_Unchecked(object sender, RoutedEventArgs e)
+        private async void ConnectItem_Unchecked(object sender, RoutedEventArgs e)
         {
             ConnectItem.Header = "Отключено";
             MessageBox.Show(ConnectItem.Header.ToString(), "Настройка подключение базы данных", MessageBoxButton.OK, MessageBoxImage.Warning);
             ElementIsEnabled(false);
 
-            _printer.GetPrinters().Clear();
-            _cartridge.GetCartridges().Clear();
-            _cashRegister.GetCashRegisters().Clear();
-            _simCard.GetSimCardList().Clear();
-            _employees.GetEmployees().Clear();
-            _individualEntrepreneur.GetIndividualEntrepreneur().Clear();
-            _documents.GetDocuments().Clear();
-            _counterPage.GetCountersPagesList().Clear();
-            _holder.GetHolderList().Clear();
+            try
+            {
+                _printer.GetPrinters().Clear();
+                _cartridge.GetCartridges().Clear();
+                _cashRegister.GetCashRegisters().Clear();
+                _simCard.GetSimCardList().Clear();
+                _employees.GetEmployees().Clear();
+                _individualEntrepreneur.GetIndividualEntrepreneur().Clear();
+                _documents.GetDocuments().Clear();
+                _counterPage.GetCountersPagesList().Clear();
+                _holder.GetHolderList().Clear();
 
-            _dataGets.PrinterList.Clear();
-            _dataGets.CartridgesList.Clear();
-            _dataGets.CashRegisterList.Clear();
-            _dataGets.SimCardList.Clear();
-            _dataGets.EmployessList.Clear();
-            _dataGets.IndividualList.Clear();
-            _dataGets.DocumentsList.Clear();
-            _dataGets.CountersPagesList.Clear();
-            _dataGets.HolderList.Clear();
+                _dataGets.PrinterList.Clear();
+                _dataGets.CartridgesList.Clear();
+                _dataGets.CashRegisterList.Clear();
+                _dataGets.SimCardList.Clear();
+                _dataGets.EmployessList.Clear();
+                _dataGets.IndividualList.Clear();
+                _dataGets.DocumentsList.Clear();
+                _dataGets.CountersPagesList.Clear();
+                _dataGets.HolderList.Clear();
+            }
+            catch (Exception ex)
+            {
+               await log.WriteLogAsync(ex.Message, "ConnectItem_Unchecked");
+            }
+
         }
 
         private void ConnectItem_Click(object sender, RoutedEventArgs e)
@@ -729,9 +743,19 @@ namespace TerminalMasterWPF
             connectWindows.ShowDialog();
         }
 
+        private void PrintedPageCounterGridViewDataColumn_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            MessageBox.Show("The pressed key is: " + e.Key.ToString());
+        }
+
+        private void PrintedPageCounterGridViewDataColumn_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            MessageBox.Show("The pressed key is: " + e.Key.ToString());
+        }
+
         private void DocumentsDataGrid_BeginningEdit(object sender, GridViewBeginningEditRoutedEventArgs e)
         {
-            
+
         }
     }
 }

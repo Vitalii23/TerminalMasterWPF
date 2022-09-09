@@ -165,9 +165,7 @@
                                                             DataMemberBinding="{Binding BrandPrinter}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding BrandPrinter}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding BrandPrinter}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -176,9 +174,7 @@
                                                             DataMemberBinding="{Binding ModelPrinter}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding ModelPrinter}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding ModelPrinter}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -187,9 +183,7 @@
                                                             DataMemberBinding="{Binding Cartridge}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Cartridge}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Cartridge}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -198,9 +192,7 @@
                                                             DataMemberBinding="{Binding NamePort}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding NamePort}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding NamePort}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -209,9 +201,7 @@
                                                             DataMemberBinding="{Binding LocationPrinter}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding LocationPrinter}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding LocationPrinter}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -220,9 +210,7 @@
                                                             DataMemberBinding="{Binding Status}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Status}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Status}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -231,9 +219,7 @@
                                                             DataMemberBinding="{Binding VendorCodePrinter}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding VendorCodePrinter}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding VendorCodePrinter}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -270,13 +256,13 @@
                                              SelectedItem="{Binding CountersPage}">
                             <telerik:RadGridView.Columns>
                                 <telerik:GridViewDataColumn x:Name="PrintedPageCounterGridViewDataColumn"
+                                                            KeyDown="PrintedPageCounterGridViewDataColumn_KeyDown"
+                                                            KeyUp="PrintedPageCounterGridViewDataColumn_KeyUp"
                                                             Header="Счетчик принтера"
                                                             DataMemberBinding="{Binding PrintedPageCounter}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding PrintedPageCounter}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding PrintedPageCounter}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -294,9 +280,7 @@
                                                             DataMemberBinding="{Binding Сondition}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Сondition}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Сondition}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -304,9 +288,7 @@
                                                                 Header="Имя принтера">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Printer}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Printer}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -347,9 +329,7 @@
                                                             DataMemberBinding="{Binding Brand}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Brand}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Brand}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -358,9 +338,7 @@
                                                             DataMemberBinding="{Binding Model}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Model}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Model}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -369,9 +347,7 @@
                                                             DataMemberBinding="{Binding VendorCode}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding VendorCode}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding VendorCode}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -380,9 +356,7 @@
                                                             DataMemberBinding="{Binding Status}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Status}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Status}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -423,9 +397,7 @@
                                                             DataMemberBinding="{Binding NameDevice}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding NameDevice}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding NameDevice}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -434,9 +406,7 @@
                                                             DataMemberBinding="{Binding Brand}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Brand}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Brand}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -445,9 +415,7 @@
                                                             DataMemberBinding="{Binding FactoryNumber}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding FactoryNumber}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding FactoryNumber}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -456,9 +424,7 @@
                                                             DataMemberBinding="{Binding SerialNumber}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding SerialNumber}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding SerialNumber}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -467,9 +433,7 @@
                                                             DataMemberBinding="{Binding PaymentNumber}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding PaymentNumber}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding PaymentNumber}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -516,9 +480,7 @@
                                                             DataMemberBinding="{Binding Location}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Location}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Location}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -559,9 +521,7 @@
                                                                 DataMemberBinding="{Binding NameTerminal}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding NameTerminal}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding NameTerminal}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -570,9 +530,7 @@
                                                                 DataMemberBinding="{Binding Operator}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Operator}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Operator}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -581,9 +539,7 @@
                                                             DataMemberBinding="{Binding IdentNumber}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding IdentNumber}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding IdentNumber}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -592,9 +548,7 @@
                                                                 DataMemberBinding="{Binding Brand}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Brand}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Brand}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -603,9 +557,7 @@
                                                                 DataMemberBinding="{Binding TypeDevice}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding TypeDevice}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding TypeDevice}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -615,9 +567,7 @@
                                                                    DataMemberBinding="{Binding TMS}">
                                     <telerik:GridViewMaskedInputColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding TMS}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding TMS}" />
                                         </DataTemplate>
                                     </telerik:GridViewMaskedInputColumn.CellTemplate>
                                 </telerik:GridViewMaskedInputColumn>
@@ -626,9 +576,7 @@
                                                             DataMemberBinding="{Binding ICC}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding ICC}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding ICC}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -637,9 +585,7 @@
                                                                 DataMemberBinding="{Binding IndividualEntrepreneur}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding IndividualEntrepreneur}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding IndividualEntrepreneur}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -648,9 +594,7 @@
                                                                 DataMemberBinding="{Binding Status}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Status}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Status}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -690,9 +634,7 @@
                                                             DataMemberBinding="{Binding LastName}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding LastName}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding LastName}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -701,9 +643,7 @@
                                                             DataMemberBinding="{Binding FirstName}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding FirstName}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding FirstName}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -712,9 +652,7 @@
                                                             DataMemberBinding="{Binding MiddleName}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding MiddleName}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding MiddleName}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -723,9 +661,7 @@
                                                             DataMemberBinding="{Binding Post}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Post}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Post}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -735,9 +671,7 @@
                                                                    DataMemberBinding="{Binding InternalNumber}">
                                     <telerik:GridViewMaskedInputColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding InternalNumber}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding InternalNumber}" />
                                         </DataTemplate>
                                     </telerik:GridViewMaskedInputColumn.CellTemplate>
                                 </telerik:GridViewMaskedInputColumn>
@@ -746,9 +680,7 @@
                                                             DataMemberBinding="{Binding MobileNumber}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding MobileNumber}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding MobileNumber}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -757,9 +689,7 @@
                                                                 UniqueName="Status">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Status}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Status}" />
                                         </DataTemplate>
                                     </telerik:GridViewComboBoxColumn.CellTemplate>
                                 </telerik:GridViewComboBoxColumn>
@@ -768,9 +698,7 @@
                                                             DataMemberBinding="{Binding Department}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Department}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding Department}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -811,9 +739,7 @@
                                                             DataMemberBinding="{Binding LastName}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding LastName}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding LastName}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -822,9 +748,7 @@
                                                             DataMemberBinding="{Binding FirstName}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding FirstName}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding FirstName}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -833,9 +757,7 @@
                                                             DataMemberBinding="{Binding MiddleName}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding MiddleName}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding MiddleName}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -844,9 +766,7 @@
                                                             DataMemberBinding="{Binding PSRNIE}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding PSRNIE}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding PSRNIE}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -855,9 +775,7 @@
                                                             DataMemberBinding="{Binding TIN}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding TIN}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding TIN}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
@@ -902,9 +820,7 @@
                                                             DataMemberBinding="{Binding NameDocument}">
                                     <telerik:GridViewDataColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding NameDocument}" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding NameDocument}" />
                                         </DataTemplate>
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>

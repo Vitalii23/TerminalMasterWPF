@@ -153,7 +153,7 @@ namespace TerminalMasterWPF.DML
                         UpdateQuery = $"UPDATE dbo.Documents SET name_document = '{doc.NameDocument}', file_binary = {GetFileName} WHERE Id = {doc.Id}";
                         break;
                     case CountersPage count:
-                        UpdateQuery = $"UPDATE dbo.CountersPage SET printed_page_counter = '{count.PrintedPageCounter}', date =  '{count.Date}', condition = {count.Сondition}, id_printer = '{count.IdPrinter}'  WHERE Id = {count.Id}";
+                        UpdateQuery = $"UPDATE dbo.CountersPage SET printed_page_counter = '{count.PrintedPageCounter}', date =  '{count.Date}', condition = '{count.Сondition}', id_printer = '{count.IdPrinter}'  WHERE Id = {count.Id}";
                         break;
                     default:
                         break;
@@ -187,7 +187,6 @@ namespace TerminalMasterWPF.DML
                                         "dbo.Printer.vendor_code, " +
                                 "(dbo.Printer.brand + ' ' + dbo.Printer.model + ' (' + dbo.Printer.vendor_code + ')') as printers " +
                                 "FROM Printer;";
-
             ObservableCollection<Printer> printers = new ObservableCollection<Printer>();
             try
             {
@@ -203,7 +202,7 @@ namespace TerminalMasterWPF.DML
                             {
                                 while (reader.Read())
                                 {
-                                    var printer = new Printer()
+                                    Printer printer = new Printer()
                                     {
                                         Id = reader.GetInt32(0),
                                         BrandPrinter = reader.GetString(1),
