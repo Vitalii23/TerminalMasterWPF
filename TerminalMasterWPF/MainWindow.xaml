@@ -142,7 +142,7 @@
                             Value="32" />
                 </Style>
             </Grid.Resources>
-
+            
             <TabControl x:Name="MainTabControl"
                         SelectionChanged="MainTabControl_SelectionChanged"
                         Grid.Row="0">
@@ -216,8 +216,8 @@
                                     </telerik:GridViewDataColumn.CellTemplate>
                                 </telerik:GridViewDataColumn>
                                 <telerik:GridViewComboBoxColumn x:Name="StatusPrinterGridViewComboBoxColumn"
-                                                            Header="Статус"
-                                                            DataMemberBinding="{Binding Status}">
+                                                                Header="Статус"
+                                                                DataMemberBinding="{Binding Status}">
                                     <telerik:GridViewComboBoxColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -889,7 +889,6 @@
                         </Grid.RowDefinitions>
                         <telerik:RadGridView x:Name="DocumentsDataGrid"
                                              Grid.Row="0"
-                                             BeginningEdit="DocumentsDataGrid_BeginningEdit"
                                              Grouping="DocumentsDataGrid_Grouping"
                                              RowEditEnded="DocumentsDataGrid_RowEditEnded"
                                              IsReadOnly="False"

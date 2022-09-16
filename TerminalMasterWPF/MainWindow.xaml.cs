@@ -729,9 +729,19 @@ namespace TerminalMasterWPF
             connectWindows.ShowDialog();
         }
 
+        private void PrintedPageCounterGridViewDataColumn_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            MessageBox.Show("The pressed key is: " + e.Key.ToString());
+        }
+
+        private void PrintedPageCounterGridViewDataColumn_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            MessageBox.Show("The pressed key is: " + e.Key.ToString());
+        }
+
         private void DocumentsDataGrid_BeginningEdit(object sender, GridViewBeginningEditRoutedEventArgs e)
         {
-            
+
         }
     }
 }
